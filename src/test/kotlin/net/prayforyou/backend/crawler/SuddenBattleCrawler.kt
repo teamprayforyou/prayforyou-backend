@@ -1,9 +1,9 @@
 package net.prayforyou.backend.crawler
 
-import net.prayforyou.backend.domain.battlelog.service.SaveBattleLogService
-import net.prayforyou.backend.domain.model.UserType
-import net.prayforyou.backend.infra.crawler.parser.SuddenBattleParser
-import net.prayforyou.backend.infra.crawler.webclient.client.ClanUserClient
+import net.prayforyou.backend.application.SaveBattleLogService
+import net.prayforyou.backend.domain.user.UserType
+import net.prayforyou.backend.infrastructure.crawler.parser.SuddenBattleParser
+import net.prayforyou.backend.infrastructure.crawler.webclient.client.ClanUserClient
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
