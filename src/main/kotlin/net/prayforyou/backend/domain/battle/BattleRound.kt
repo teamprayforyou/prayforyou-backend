@@ -1,7 +1,6 @@
 package net.prayforyou.backend.domain.battle
 
-import net.prayforyou.backend.domain.battle.enums.BattlePlaceType
-import net.prayforyou.backend.domain.user.User
+import net.prayforyou.backend.infrastructure.crawler.webclient.dto.BattleLog
 import java.time.LocalDateTime
 import javax.persistence.*
 
@@ -28,4 +27,24 @@ class BattleRound(
 
     @Column(name = "updated_at")
     var updatedAt: LocalDateTime = LocalDateTime.now()
-)
+) {
+    fun updateKill(): BattleRound? {
+        this.kill += 1
+        return this
+    }
+
+    fun updateDeath(): BattleRound? {
+        this.death += 1
+        return this
+    }
+
+    companion object {
+        fun from(battleLog: BattleLog, stats: BattleStats, kill: Int = 0, death: Int = 0): BattleRound =
+            BattleRound(
+                battleStats = stats,
+                round = battleLog.round?.toInt()!!,
+                kill = kill,
+                death = death
+            )
+    }
+}

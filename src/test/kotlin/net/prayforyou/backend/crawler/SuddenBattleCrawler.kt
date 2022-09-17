@@ -1,12 +1,14 @@
 package net.prayforyou.backend.crawler
 
-import net.prayforyou.backend.application.SaveBattleStatsService
+import net.prayforyou.backend.application.CrawlerBattleLogService
 import net.prayforyou.backend.domain.user.enums.UserType
 import net.prayforyou.backend.infrastructure.crawler.parser.SuddenBattleParser
 import net.prayforyou.backend.infrastructure.crawler.webclient.client.ClanUserClient
+import net.prayforyou.backend.infrastructure.persistence.jpa.provider.UserProvider
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.data.domain.PageRequest
 
 @SpringBootTest
 class SuddenBattleCrawler {
@@ -18,7 +20,10 @@ class SuddenBattleCrawler {
     lateinit var clanUserClient: ClanUserClient
 
     @Autowired
-    lateinit var saveBattleStatsService: SaveBattleStatsService
+    lateinit var crawlerBattleLogService: CrawlerBattleLogService
+
+    @Autowired
+    lateinit var userProvider: UserProvider
 
     @Test
     fun `서든 배틀 유저의 모든 배틀로그 저장`() {
@@ -28,7 +33,15 @@ class SuddenBattleCrawler {
         val userInfoIdList = clanUserClient.fetchUserInfoIdListByClanId(parseClanId)
         for (userInfoId in userInfoIdList) {
             println("유저 정보 id 값 $userInfoId")
-            saveBattleStatsService.saveBattleLogByUserId(userInfoId!!, UserType.SUDDEN_BATTLE)
+//            crawlerBattleLogService.saveBattleLogByUserId(userInfoId!!, UserType.SUDDEN_BATTLE)
         }
+    }
+
+    @Test
+    fun test() {
+        println("=======")
+        val result = userProvider.findAllByPageable(PageRequest.of(0, 10))
+        println(result.totalElements)
+        println(result.content)
     }
 }

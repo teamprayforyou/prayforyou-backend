@@ -31,10 +31,13 @@ data class BattleLog(
     val target_user_nick: String?,
     @JsonProperty("target_event_type")
     val targetEventType: String,
-    val user_nexon_sn: Int?,
+    @JsonProperty("user_nexon_sn")
+    val userNexonSn: Int?,
     @JsonProperty("target_weapon")
     val targetWeapon: String,
     val user_nick: String?,
     @JsonProperty("weapon")
     val weapon: String?
-)
+) {
+    fun isKill(): Boolean = eventType == "kill"
+}
