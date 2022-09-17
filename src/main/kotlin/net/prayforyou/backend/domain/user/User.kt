@@ -1,24 +1,31 @@
 package net.prayforyou.backend.domain.user
 
+import net.prayforyou.backend.domain.user.enums.UserType
+import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
+import javax.persistence.Table
 
 @Entity
+@Table(name = "user")
 class User (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private val id: Long? = null,
+    var id: Long? = null,
 
-    private var nickname: String,
+    @Column(name = "nickname")
+    var nickname: String,
 
-    private var userNexonId: Int,
+    @Column(name = "user_nexon_id")
+    var userNexonId: Int,
 
     @Enumerated(EnumType.STRING)
-    private var userType: UserType,
+    @Column(name = "user_type")
+    var userType: UserType,
 
     ) {
     fun updateNickname(nickname: String) {

@@ -1,7 +1,7 @@
 package net.prayforyou.backend.crawler
 
 import net.prayforyou.backend.application.SaveBattleLogService
-import net.prayforyou.backend.domain.user.UserType
+import net.prayforyou.backend.domain.user.enums.UserType
 import net.prayforyou.backend.infrastructure.crawler.parser.SuddenBattleParser
 import net.prayforyou.backend.infrastructure.crawler.webclient.client.ClanUserClient
 import org.junit.jupiter.api.Test
