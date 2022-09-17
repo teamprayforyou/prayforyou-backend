@@ -13,11 +13,11 @@ class UserProvider(
     private val userRepository: UserRepository
 ) {
 
-    fun findByUserNexonId(userId: Int): User? {
-        return userRepository.findByUserNexonId(userId)
-    }
+    fun findNullableByUserNexonId(userId: Int): User? =
+        userRepository.findByUserNexonId(userId)
 
-    fun save(user: User) {
-        userRepository.save(user)
-    }
+    fun findContainsByNickname(nickname: String): List<User> =
+        userRepository.findByNicknameContains(nickname)
+
+    fun save(user: User): User = userRepository.save(user)
 }

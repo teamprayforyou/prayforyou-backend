@@ -22,7 +22,7 @@ class BattleLogClient(
 
     val logger: Logger = Logger.getLogger(BattleLog::class.java.name)
 
-    fun fetchBattleLog(userId: Int): MutableList<BattleLog> {
+    fun fetchBattleLog(userId: Int): List<BattleLog> {
         val headers = setBattleLogHeaders()
         val gameListId = matchClient.fetchGameListId(userId)
         val battleLogList = mutableListOf<BattleLog>()

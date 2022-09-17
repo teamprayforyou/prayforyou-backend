@@ -2,6 +2,7 @@ package net.prayforyou.backend.domain.battle
 
 import net.prayforyou.backend.domain.battle.enums.BattleMapType
 import net.prayforyou.backend.domain.user.User
+import net.prayforyou.backend.infrastructure.crawler.webclient.dto.BattleLog
 import java.time.LocalDateTime
 import javax.persistence.*
 
@@ -22,4 +23,12 @@ class BattleStats(
 
     @Column(name = "updated_at")
     var updatedAt: LocalDateTime = LocalDateTime.now()
-)
+) {
+    companion object {
+        fun from(battleLog: BattleLog, user: User): BattleStats =
+            BattleStats(
+                user = user,
+                mapType = BattleMapType.ALL_SUPPLY
+            )
+    }
+}

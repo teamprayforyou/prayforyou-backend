@@ -1,6 +1,6 @@
 package net.prayforyou.backend.crawler
 
-import net.prayforyou.backend.application.SaveBattleLogService
+import net.prayforyou.backend.application.SaveBattleStatsService
 import net.prayforyou.backend.domain.user.enums.UserType
 import net.prayforyou.backend.infrastructure.crawler.parser.SuddenBattleParser
 import net.prayforyou.backend.infrastructure.crawler.webclient.client.ClanUserClient
@@ -18,7 +18,7 @@ class SuddenBattleCrawler {
     lateinit var clanUserClient: ClanUserClient
 
     @Autowired
-    lateinit var saveBattleLogService: SaveBattleLogService
+    lateinit var saveBattleStatsService: SaveBattleStatsService
 
     @Test
     fun `서든 배틀 유저의 모든 배틀로그 저장`() {
@@ -28,7 +28,7 @@ class SuddenBattleCrawler {
         val userInfoIdList = clanUserClient.fetchUserInfoIdListByClanId(parseClanId)
         for (userInfoId in userInfoIdList) {
             println("유저 정보 id 값 $userInfoId")
-            saveBattleLogService.saveBattleLogByUserId(userInfoId!!, UserType.SUDDEN_BATTLE)
+            saveBattleStatsService.saveBattleLogByUserId(userInfoId!!, UserType.SUDDEN_BATTLE)
         }
     }
 }

@@ -12,23 +12,33 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "user")
-class User (
+class User(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
     @Column(name = "nickname")
-    var nickname: String,
+    var nickname: String?,
 
     @Column(name = "user_nexon_id")
     var userNexonId: Int,
 
     @Enumerated(EnumType.STRING)
     @Column(name = "user_type")
-    var userType: UserType,
+    var userType: UserType
+) {
 
-    ) {
-    fun updateNickname(nickname: String) {
-        nickname.let { this.nickname = nickname }
+    fun updateNickname(nickname: String): User {
+        this.nickname = nickname
+        return this
+    }
+
+    companion object {
+        fun from(userNick: String, userNexonId: Int, userType: UserType): User =
+            User(
+                nickname = userNick,
+                userNexonId = userNexonId,
+                userType = userType
+            )
     }
 }
