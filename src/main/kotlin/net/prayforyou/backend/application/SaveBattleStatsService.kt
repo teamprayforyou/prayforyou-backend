@@ -53,7 +53,6 @@ class SaveBattleStatsService(
                 ?: battlePlaceProvider.save(BattlePlace.from(stats = stats, kill = 0, death = 1))
         }
 
-
         // 해당 총으로 싸운적이 없을 경우 데이터 생성
         battleGunList.firstOrNull { it.type == logGunType }?.updateUseCount()
             ?: battleGunProvider.save(BattleGun.from(type = logGunType, stats = stats, useCount = 1))

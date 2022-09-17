@@ -26,7 +26,8 @@ class CrawlerBattleLogService(
             return
         }
 
-        val battleStatsMap = battleStats.associateBy { it.user.userNexonId }
+        val battleStatsMap =
+            battleStats.associateBy { it.user.userNexonId }
 
         // 유저닉네임 저장
         user.updateNickname(fetchBattleLog[FIRST_INDEX].user_nick!!)

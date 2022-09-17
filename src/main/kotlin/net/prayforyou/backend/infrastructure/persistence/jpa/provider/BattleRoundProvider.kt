@@ -2,6 +2,7 @@ package net.prayforyou.backend.infrastructure.persistence.jpa.provider
 
 import net.prayforyou.backend.domain.battle.BattleRound
 import net.prayforyou.backend.domain.battle.BattleStats
+import net.prayforyou.backend.domain.user.User
 import net.prayforyou.backend.infrastructure.persistence.jpa.repository.BattleRoundRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
