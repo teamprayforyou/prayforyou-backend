@@ -1,7 +1,5 @@
 package net.prayforyou.backend.domain.battle
 
-import net.prayforyou.backend.domain.battle.enums.BattlePlaceType
-import net.prayforyou.backend.infrastructure.crawler.webclient.dto.BattleLog
 import java.time.LocalDateTime
 import javax.persistence.*
 
@@ -17,18 +15,19 @@ class BattlePlace(
     @JoinColumn(name = "battle_stats_id")
     var battleStats: BattleStats,
 
-    @Column(name = "type")
-    var type: BattlePlaceType,
+    @OneToOne(fetch = FetchType.LAZY)
+    var battlePosition: BattlePosition? = null,
 
-    @Column(name = "kill")
+    @Column(name = "kill_count")
     var kill: Int = 0,
 
-    @Column(name = "death")
+    @Column(name = "death_count")
     var death: Int = 0,
 
     @Column(name = "updated_at")
     var updatedAt: LocalDateTime = LocalDateTime.now()
 ) {
+
     fun updateKill(): BattlePlace {
         this.kill += 1
         return this
@@ -43,9 +42,8 @@ class BattlePlace(
         fun from(stats: BattleStats, kill: Int = 0, death: Int = 0): BattlePlace =
             BattlePlace(
                 battleStats = stats,
-                type = BattlePlaceType.SITE_A, // FIXME 위치 맵핑시키는 작업 필요
                 kill = kill,
-                death = death
+                death = death,
             )
     }
 }

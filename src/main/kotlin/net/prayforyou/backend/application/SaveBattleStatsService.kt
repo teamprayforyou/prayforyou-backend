@@ -43,13 +43,13 @@ class SaveBattleStatsService(
             battleRoundList.firstOrNull { it.round == battleLog.round?.toInt() }?.updateKill()
                 ?: battleRoundProvider.save(BattleRound.from(battleLog, stats, kill = 1, death = 0))
 
-            battlePlaceList.firstOrNull { it.type == placeType }?.updateKill()
+            battlePlaceList.firstOrNull { it.battlePosition!!.battlePlaceType == placeType }?.updateKill()
                 ?: battlePlaceProvider.save(BattlePlace.from(stats = stats, kill = 1, death = 0))
         } else {
             battleRoundList.firstOrNull { it.round == battleLog.round?.toInt() }?.updateDeath()
                 ?: battleRoundProvider.save(BattleRound.from(battleLog, stats, kill = 0, death = 1))
 
-            battlePlaceList.firstOrNull { it.type == placeType }?.updateDeath()
+            battlePlaceList.firstOrNull { it.battlePosition!!.battlePlaceType == placeType }?.updateDeath()
                 ?: battlePlaceProvider.save(BattlePlace.from(stats = stats, kill = 0, death = 1))
         }
 

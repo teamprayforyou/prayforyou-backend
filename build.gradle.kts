@@ -1,11 +1,16 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
 
 plugins {
     id("org.springframework.boot") version "2.7.3"
     id("io.spring.dependency-management") version "1.0.13.RELEASE"
-    kotlin("jvm") version "1.6.21"
-    kotlin("plugin.spring") version "1.6.21"
-    kotlin("plugin.jpa") version "1.6.21"
+
+    val kotlinVersion = "1.6.21"
+
+    kotlin("jvm") version kotlinVersion
+    kotlin("plugin.spring") version kotlinVersion
+    kotlin("plugin.jpa") version kotlinVersion
+    kotlin("kapt") version kotlinVersion
 }
 
 allOpen {
@@ -35,6 +40,18 @@ dependencies {
     implementation("org.jsoup:jsoup:1.15.3")
 
     implementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.0")
+
+    implementation("org.hibernate:hibernate-spatial:5.6.2.Final")
+
+    implementation("com.querydsl:querydsl-jpa")
+
+    kapt(group = "com.querydsl", name = "querydsl-apt", classifier = "jpa")
+
+    sourceSets.main {
+        withConvention(org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet::class) {
+            kotlin.srcDir("$buildDir/generated/source/kapt/main")
+        }
+    }
 }
 
 tasks.withType<KotlinCompile> {

@@ -19,10 +19,10 @@ class BattleRound(
     @Column(name = "round")
     var round: Int,
 
-    @Column(name = "kill")
+    @Column(name = "kill_count")
     var kill: Int,
 
-    @Column(name = "death")
+    @Column(name = "death_count")
     var death: Int,
 
     @Column(name = "updated_at")

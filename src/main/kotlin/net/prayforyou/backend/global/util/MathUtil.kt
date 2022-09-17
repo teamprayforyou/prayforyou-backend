@@ -8,5 +8,6 @@ class MathUtil {
             val result = (kill * 100).toDouble() / (kill + death).toDouble()
             return round((result * 100) / 100)
         }
+
     }
 }
