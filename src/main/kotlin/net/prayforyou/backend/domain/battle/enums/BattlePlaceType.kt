@@ -52,5 +52,6 @@ enum class BattlePlaceType(
     SUPPLY48("짝방"),
     SUPPLY49("홀입"),
     SUPPLY50("홀입투깡"),
-    SUPPLY51("달방");
+    SUPPLY51("달방"),
+    NO_POSITION("X");
 }

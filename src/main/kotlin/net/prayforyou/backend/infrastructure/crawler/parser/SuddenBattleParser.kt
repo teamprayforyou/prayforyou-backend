@@ -3,13 +3,14 @@ package net.prayforyou.backend.infrastructure.crawler.parser
 import net.prayforyou.backend.infrastructure.crawler.webclient.client.SuddenBattleClient
 import org.jsoup.Jsoup
 import org.springframework.stereotype.Component
+import kotlin.streams.toList
 
 @Component
 class SuddenBattleParser(
     private val suddenBattleClient: SuddenBattleClient
 ) {
 
-    fun parseClanLink(): MutableList<String>? {
+    fun parseClanLink(): List<String> {
         val suddenBattleHtml = suddenBattleClient.fetchClan()
         val jsoup = Jsoup.parse(suddenBattleHtml!!)
         val eachAttr = jsoup.select("td.viewcname > a").eachAttr("href")

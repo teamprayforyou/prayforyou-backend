@@ -38,7 +38,6 @@ class SaveBattleStatsService(
         val logGunType = BattleGunType.convert(battleLog.weapon)
         val placeType = getBattlePositionService
             .getBattlePositionByXandY(battleLog.killX!!, battleLog.killY!!)
-            .battlePlaceType
 
 
         // TODO 정리 필요

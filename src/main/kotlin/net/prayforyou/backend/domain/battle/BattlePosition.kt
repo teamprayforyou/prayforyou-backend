@@ -1,9 +1,11 @@
 package net.prayforyou.backend.domain.battle
 
+import net.prayforyou.backend.domain.battle.enums.BattleMapType
 import net.prayforyou.backend.domain.battle.enums.BattlePlaceType
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
 import org.locationtech.jts.geom.Polygon
+import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
@@ -23,9 +25,8 @@ class BattlePosition (
     var polygon: Polygon,
 
     @Enumerated(EnumType.STRING)
-    var battlePlaceType: BattlePlaceType,
+    var battlePlaceType: BattlePlaceType
 ) {
-    fun isContainsBattlePosition(x: Double, y: Double): Boolean {
-        return this.polygon.contains(GeometryFactory().createPoint(Coordinate(x, y)))
-    }
+    fun isContainsBattlePosition(x: Double, y: Double): Boolean =
+        this.polygon.contains(GeometryFactory().createPoint(Coordinate(x, y)))
 }

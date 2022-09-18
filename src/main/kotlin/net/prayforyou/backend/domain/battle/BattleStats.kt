@@ -17,25 +17,12 @@ class BattleStats(
     @JoinColumn(name = "user_id")
     var user: User,
 
-    @OneToMany(cascade = [CascadeType.ALL], mappedBy = "battleStats")
-    var battlePlace: MutableList<BattlePlace> = mutableListOf(),
-
-    @OneToMany(cascade = [CascadeType.ALL], mappedBy = "battleStats")
-    var battleRound: MutableList<BattleRound> = mutableListOf(),
-
-    @OneToMany(cascade = [CascadeType.ALL], mappedBy = "battleStats")
-    var battleGun: MutableList<BattleGun> = mutableListOf(),
-
     @Column(name = "map_type")
     var mapType: BattleMapType,
 
     @Column(name = "updated_at")
     var updatedAt: LocalDateTime = LocalDateTime.now()
 ) {
-    fun addAll(battleRound: BattleRound, battlePlave: BattlePlace, from2: Unit) {
-        TODO("Not yet implemented")
-    }
-
     companion object {
         fun from(user: User, mapType: BattleMapType): BattleStats =
             BattleStats(

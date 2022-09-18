@@ -10,5 +10,5 @@ import org.springframework.transaction.annotation.Transactional
 class BattlePositionProvider(
     private val battlePositionRepository: BattlePositionRepository
 ) {
-    fun findAll(): MutableList<BattlePosition> = battlePositionRepository.findAll()
+    fun findAll(): List<BattlePosition> = battlePositionRepository.findAll()
 }
