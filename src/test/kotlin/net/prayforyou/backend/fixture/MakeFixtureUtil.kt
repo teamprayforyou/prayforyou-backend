@@ -1,5 +1,6 @@
 package net.prayforyou.backend.fixture
 
+import net.prayforyou.backend.application.dto.SubBattleStatsDto
 import net.prayforyou.backend.domain.battle.BattleStats
 import net.prayforyou.backend.domain.battle.enums.BattleMapType
 import net.prayforyou.backend.domain.user.User
@@ -12,5 +13,11 @@ class MakeFixtureUtil {
 
         fun createBattleStats(id: Long, type: BattleMapType, user: User): BattleStats =
             BattleStats(id = id, user = user, mapType = type)
+
+        fun createAllSubStats(user: User, battleStats: BattleStats) {
+            SubBattleStatsDto(
+                battlePlace =
+            )
+        }
     }
 }

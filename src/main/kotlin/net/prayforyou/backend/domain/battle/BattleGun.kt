@@ -30,6 +30,9 @@ class BattleGun(
         return this
     }
 
+    fun isSameGun(gunType: BattleGunType): Boolean =
+        this.type == gunType
+
     companion object {
         fun from(type: BattleGunType, stats: BattleStats, useCount: Int = 0): BattleGun =
             BattleGun(

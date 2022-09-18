@@ -1,6 +1,5 @@
 package net.prayforyou.backend.domain.battle
 
-import net.prayforyou.backend.infrastructure.crawler.webclient.dto.BattleLog
 import java.time.LocalDateTime
 import javax.persistence.*
 
@@ -38,11 +37,13 @@ class BattleRound(
         return this
     }
 
+    fun isSameRound(round: Int): Boolean = this.round == round
+
     companion object {
-        fun from(battleLog: BattleLog, stats: BattleStats, kill: Int = 0, death: Int = 0): BattleRound =
+        fun from(round: Int, stats: BattleStats, kill: Int = 0, death: Int = 0): BattleRound =
             BattleRound(
                 battleStats = stats,
-                round = battleLog.round?.toInt()!!,
+                round = round,
                 kill = kill,
                 death = death
             )

@@ -1,5 +1,6 @@
 package net.prayforyou.backend.domain.battle
 
+import net.prayforyou.backend.domain.battle.enums.BattlePlaceType
 import java.time.LocalDateTime
 import javax.persistence.*
 
@@ -37,6 +38,9 @@ class BattlePlace(
         this.death += 1
         return this
     }
+
+    fun isSamePosition(placeType: BattlePlaceType): Boolean =
+        this.battlePosition!!.battlePlaceType == placeType
 
     companion object {
         fun from(stats: BattleStats, kill: Int = 0, death: Int = 0): BattlePlace =

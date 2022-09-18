@@ -1,0 +1,61 @@
+package net.prayforyou.backend.application
+
+import net.prayforyou.backend.domain.battle.BattleGun
+import net.prayforyou.backend.domain.battle.BattlePlace
+import net.prayforyou.backend.domain.battle.BattleRound
+import net.prayforyou.backend.domain.battle.BattleStats
+import net.prayforyou.backend.domain.battle.enums.BattleGunType
+import net.prayforyou.backend.domain.user.User
+import net.prayforyou.backend.infrastructure.crawler.webclient.dto.BattleLog
+import net.prayforyou.backend.infrastructure.persistence.jpa.provider.BattleGunProvider
+import net.prayforyou.backend.infrastructure.persistence.jpa.provider.BattlePlaceProvider
+import net.prayforyou.backend.infrastructure.persistence.jpa.provider.BattleRoundProvider
+import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+
+@Service
+@Transactional
+class SaveSubBattleStatsService(
+    private val battleGunProvider: BattleGunProvider,
+    private val battlePlaceProvider: BattlePlaceProvider,
+    private val battleRoundProvider: BattleRoundProvider,
+    private val getBattlePositionService: GetBattlePositionService,
+    private val getBattleStatsService: GetBattleStatsService
+) {
+
+    fun saveByKill(battleLog: BattleLog, stats: BattleStats, user: User) {
+        val subBattleStats = getBattleStatsService.getSubStatsByUser(user)
+        val placeType = getBattlePositionService
+            .getBattlePositionByXandY(battleLog.killX!!, battleLog.killY!!)
+
+        subBattleStats.battleRound.firstOrNull { it.isSameRound(battleLog.round?.toInt()!!) }?.updateKill()
+            ?: battleRoundProvider.save(BattleRound.from(battleLog.round?.toInt()!!, stats, kill = 1, death = 0))
+
+        subBattleStats.battlePlace.firstOrNull { it.isSamePosition(placeType) }?.updateKill()
+            ?: battlePlaceProvider.save(BattlePlace.from(stats = stats, kill = 1, death = 0))
+
+        saveUseGun(battleLog, stats)
+    }
+
+    fun saveByDeath(battleLog: BattleLog, stats: BattleStats, user: User) {
+        val subBattleStats = getBattleStatsService.getSubStatsByUser(user)
+        val placeType = getBattlePositionService
+            .getBattlePositionByXandY(battleLog.killX!!, battleLog.killY!!)
+
+        subBattleStats.battleRound.firstOrNull { it.isSameRound(battleLog.round?.toInt()!!) }?.updateDeath()
+            ?: battleRoundProvider.save(BattleRound.from(battleLog.round?.toInt()!!, stats, kill = 0, death = 1))
+
+        subBattleStats.battlePlace.firstOrNull { it.isSamePosition(placeType) }?.updateDeath()
+            ?: battlePlaceProvider.save(BattlePlace.from(stats = stats, kill = 0, death = 1))
+
+        saveUseGun(battleLog, stats)
+    }
+
+    fun saveUseGun(battleLog: BattleLog, stats: BattleStats) {
+        val battleGunList = battleGunProvider.findByStats(stats)
+        val gunType = BattleGunType.convert(battleLog.weapon)
+
+        battleGunList.firstOrNull { it.isSameGun(gunType) }?.updateUseCount()
+            ?: battleGunProvider.save(BattleGun.from(type = gunType, stats = stats, useCount = 1))
+    }
+}
