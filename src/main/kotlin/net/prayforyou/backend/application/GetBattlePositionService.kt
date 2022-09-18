@@ -12,7 +12,7 @@ class GetBattlePositionService(
     private val battlePositionProvider: BattlePositionProvider
 ) {
 
-    fun getBattlePositionByXandY(x: Int, y: Int): BattlePosition {
+    fun getBattlePositionByXandY(x: Double, y: Double): BattlePosition {
         val battlePositions = battlePositionProvider.findAll()
         return try {
             battlePositions.first { it.isContainsBattlePosition(x, y) }

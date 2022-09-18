@@ -3,13 +3,54 @@ package net.prayforyou.backend.domain.battle.enums
 enum class BattlePlaceType(
     val description: String
 ) {
-    SITE_A("기억자");
-
-    companion object {
-        fun convert(killX: Double?, killY: Double?): BattlePlaceType {
-            // TODO 범위 계산
-
-            return SITE_A
-        }
-    }
+    SUPPLY01("기억자"),
+    SUPPLY02("3빡"),
+    SUPPLY03("홀"),
+    SUPPLY04("왼벽"),
+    SUPPLY05("텔포자리"),
+    SUPPLY06("매박"),
+    SUPPLY07("숏"),
+    SUPPLY08("롱길"),
+    SUPPLY09("머리"),
+    SUPPLY10("머리녹깡"),
+    SUPPLY11("에롱가로등"),
+    SUPPLY12("쓰리깡"),
+    SUPPLY13("설컨위"),
+    SUPPLY14("에설대"),
+    SUPPLY15("중컨뒤"),
+    SUPPLY17("3미리"),
+    SUPPLY18("니은자"),
+    SUPPLY19("숏녹깡"),
+    SUPPLY20("중길"),
+    SUPPLY21("중통녹깡"),
+    SUPPLY22("창숏"),
+    SUPPLY23("삼거리"),
+    SUPPLY24("사무실"),
+    SUPPLY25("와리"),
+    SUPPLY26("반계"),
+    SUPPLY27("2층"),
+    SUPPLY28("앞창"),
+    SUPPLY29("뺵창"),
+    SUPPLY30("계끝"),
+    SUPPLY31("일문"),
+    SUPPLY32("4기둥"),
+    SUPPLY33("3기둥"),
+    SUPPLY34("2기둥"),
+    SUPPLY35("1기둥"),
+    SUPPLY36("앵글"),
+    SUPPLY37("비인코스"),
+    SUPPLY38("비아웃코스"),
+    SUPPLY39("비설대"),
+    SUPPLY40("오빡"),
+    SUPPLY41("좌빡"),
+    SUPPLY42("비입구"),
+    SUPPLY43("디귿자"),
+    SUPPLY44("비롱"),
+    SUPPLY45("비허리"),
+    SUPPLY46("비롱투깡"),
+    SUPPLY47("포트리스"),
+    SUPPLY48("짝방"),
+    SUPPLY49("홀입"),
+    SUPPLY50("홀입투깡"),
+    SUPPLY51("달방");
 }

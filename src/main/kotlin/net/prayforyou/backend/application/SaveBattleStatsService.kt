@@ -22,7 +22,8 @@ class SaveBattleStatsService(
     private val battleStatsProvider: BattleStatsProvider,
     private val battleGunProvider: BattleGunProvider,
     private val battlePlaceProvider: BattlePlaceProvider,
-    private val battleRoundProvider: BattleRoundProvider
+    private val battleRoundProvider: BattleRoundProvider,
+    private val getBattlePositionService: GetBattlePositionService
 ) {
 
     fun save(battleLog: BattleLog, user: User, battleStatsMap: Map<Int, BattleStats>) {
@@ -35,7 +36,9 @@ class SaveBattleStatsService(
         val battlePlaceList = battlePlaceProvider.findByStats(stats)
 
         val logGunType = BattleGunType.convert(battleLog.weapon)
-        val placeType = BattlePlaceType.convert(battleLog.killX, battleLog.killY)
+        val placeType = getBattlePositionService
+            .getBattlePositionByXandY(battleLog.killX!!, battleLog.killY!!)
+            .battlePlaceType
 
 
         // TODO 정리 필요

@@ -25,7 +25,7 @@ class BattlePosition (
     @Enumerated(EnumType.STRING)
     var battlePlaceType: BattlePlaceType,
 ) {
-    fun isContainsBattlePosition(x: Int, y: Int): Boolean {
-        return this.polygon.contains(GeometryFactory().createPoint(Coordinate(x.toDouble(), y.toDouble())))
+    fun isContainsBattlePosition(x: Double, y: Double): Boolean {
+        return this.polygon.contains(GeometryFactory().createPoint(Coordinate(x, y)))
     }
 }
