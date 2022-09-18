@@ -1,6 +1,7 @@
 package net.prayforyou.backend.infrastructure.persistence.jpa.provider
 
 import net.prayforyou.backend.domain.user.User
+import net.prayforyou.backend.domain.user.enums.UserType
 import net.prayforyou.backend.global.common.exception.NotFoundDataException
 import net.prayforyou.backend.infrastructure.persistence.jpa.repository.UserRepository
 import org.springframework.data.domain.Page
@@ -18,6 +19,15 @@ class UserProvider(
 ) {
     fun findContainsByNickname(nickname: String): List<User> =
         userRepository.findByNicknameContains(nickname)
+
     fun findByUserId(userId: Int): User =
         userRepository.findByIdOrNull(userId.toLong()) ?: throw NotFoundDataException(message = "유저를 찾을 수 없습니다.")
+
+    fun findAll(): List<User> = userRepository.findAll()
+
+    fun findAllPaging(type: UserType, pageable: Pageable): Page<User> =
+        userRepository.findAllByUserType(type, pageable)
+
+    fun findLastUserByUserType(type: UserType, pageable: Pageable): Page<User> =
+        userRepository.findAllByUserType(type, pageable)
 }

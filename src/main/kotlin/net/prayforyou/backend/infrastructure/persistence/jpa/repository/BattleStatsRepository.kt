@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface BattleStatsRepository : JpaRepository<BattleStats, Long> {
     fun findByUser(user: User): BattleStats
+    fun findAllByUserIdIn(userId: Collection<Long>): List<BattleStats>
 }

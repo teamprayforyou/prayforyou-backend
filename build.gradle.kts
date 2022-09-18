@@ -46,6 +46,9 @@ dependencies {
     implementation("com.querydsl:querydsl-jpa")
     kapt(group = "com.querydsl", name = "querydsl-apt", classifier = "jpa")
 
+    // logging
+    implementation("io.github.microutils:kotlin-logging:2.1.20")
+
     // mockk
     testImplementation("io.mockk:mockk:1.12.8")
 

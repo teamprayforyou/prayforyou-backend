@@ -3,6 +3,7 @@ package net.prayforyou.backend.application
 import net.prayforyou.backend.domain.battle.BattleGun
 import net.prayforyou.backend.domain.battle.BattlePlace
 import net.prayforyou.backend.domain.battle.BattleRound
+import net.prayforyou.backend.domain.battle.BattleStats
 import net.prayforyou.backend.domain.user.User
 import net.prayforyou.backend.infrastructure.persistence.jpa.provider.*
 import org.springframework.stereotype.Service
