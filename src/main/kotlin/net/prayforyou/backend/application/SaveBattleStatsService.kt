@@ -8,6 +8,7 @@ import net.prayforyou.backend.domain.battle.enums.BattleGunType
 import net.prayforyou.backend.domain.battle.enums.BattleMapType
 import net.prayforyou.backend.domain.battle.enums.BattlePlaceType
 import net.prayforyou.backend.domain.user.User
+import net.prayforyou.backend.global.common.ApplicationService
 import net.prayforyou.backend.infrastructure.crawler.webclient.dto.BattleLog
 import net.prayforyou.backend.infrastructure.persistence.jpa.provider.BattleGunProvider
 import net.prayforyou.backend.infrastructure.persistence.jpa.provider.BattlePlaceProvider

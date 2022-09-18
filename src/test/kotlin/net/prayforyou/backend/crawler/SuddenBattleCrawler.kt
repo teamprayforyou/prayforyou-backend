@@ -36,12 +36,4 @@ class SuddenBattleCrawler {
 //            crawlerBattleLogService.saveBattleLogByUserId(userInfoId!!, UserType.SUDDEN_BATTLE)
         }
     }
-
-    @Test
-    fun test() {
-        println("=======")
-        val result = userProvider.findAllByPageable(PageRequest.of(0, 10))
-        println(result.totalElements)
-        println(result.content)
-    }
 }

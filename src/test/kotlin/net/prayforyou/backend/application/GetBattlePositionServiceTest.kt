@@ -12,7 +12,7 @@ internal class GetBattlePositionServiceTest {
 
     @Test
     fun `사용자 x, y 좌표를 통해 포지션을 가져오는지`() {
-        val battlePositionByXandY = getBattlePositionService.getBattlePositionByXandY(166, 191)
-        println(battlePositionByXandY!!.battlePlaceType!!.name)
+//        val battlePositionByXandY = getBattlePositionService.getBattlePositionByXandY(166, 191)
+//        println(battlePositionByXandY!!.battlePlaceType!!.name)
     }
 }

@@ -12,7 +12,6 @@ import java.util.NoSuchElementException
 class GetBattlePositionService(
     private val battlePositionProvider: BattlePositionProvider
 ) {
-
     fun getBattlePositionByXandY(x: Double, y: Double): BattlePlaceType =
         battlePositionProvider.findAll().firstOrNull { it.isContainsBattlePosition(x, y) }
             ?.battlePlaceType ?: BattlePlaceType.NO_POSITION

@@ -44,8 +44,11 @@ dependencies {
     implementation("org.hibernate:hibernate-spatial:5.6.2.Final")
 
     implementation("com.querydsl:querydsl-jpa")
-
     kapt(group = "com.querydsl", name = "querydsl-apt", classifier = "jpa")
+
+    // mockk
+    testImplementation("io.mockk:mockk:1.12.8")
+
 
     sourceSets.main {
         withConvention(org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet::class) {

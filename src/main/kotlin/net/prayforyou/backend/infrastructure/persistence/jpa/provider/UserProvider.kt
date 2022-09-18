@@ -16,18 +16,8 @@ import javax.transaction.Transactional
 class UserProvider(
     private val userRepository: UserRepository
 ) {
-
-    fun findNullableByUserNexonId(userId: Int): User? =
-        userRepository.findByUserNexonId(userId)
-
     fun findContainsByNickname(nickname: String): List<User> =
         userRepository.findByNicknameContains(nickname)
-
-    fun save(user: User): User = userRepository.save(user)
-
-    fun findAllByPageable(pageable: Pageable): Page<User> =
-        userRepository.findAll(pageable)
-
     fun findByUserId(userId: Int): User =
         userRepository.findByIdOrNull(userId.toLong()) ?: throw NotFoundDataException(message = "유저를 찾을 수 없습니다.")
 }
