@@ -1,4 +1,4 @@
-package net.prayforyou.backend.application
+package net.prayforyou.backend.application.battle
 
 import mu.KotlinLogging
 import net.prayforyou.backend.domain.battle.BattleStats

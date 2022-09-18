@@ -1,14 +1,12 @@
 package net.prayforyou.backend.crawler
 
-import net.prayforyou.backend.application.CrawlerBattleLogService
-import net.prayforyou.backend.domain.user.enums.UserType
+import net.prayforyou.backend.application.battle.CrawlerBattleLogService
 import net.prayforyou.backend.infrastructure.crawler.parser.SuddenBattleParser
 import net.prayforyou.backend.infrastructure.crawler.webclient.client.ClanUserClient
-import net.prayforyou.backend.infrastructure.persistence.jpa.provider.UserProvider
+import net.prayforyou.backend.infrastructure.persistence.jpa.provider.user.UserProvider
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.data.domain.PageRequest
 
 @SpringBootTest
 class SuddenBattleCrawler {

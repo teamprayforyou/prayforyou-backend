@@ -1,4 +1,4 @@
-package net.prayforyou.backend.application.dto
+package net.prayforyou.backend.application.battle.dto
 
 import net.prayforyou.backend.domain.battle.BattleGun
 import net.prayforyou.backend.domain.battle.BattlePlace

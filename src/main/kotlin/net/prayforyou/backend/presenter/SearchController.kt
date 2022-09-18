@@ -1,12 +1,11 @@
 package net.prayforyou.backend.presenter
 
-import net.prayforyou.backend.application.SearchApplicationService
-import net.prayforyou.backend.application.dto.BattleGunUsageDto
-import net.prayforyou.backend.application.dto.BattlePlaceRateDto
-import net.prayforyou.backend.application.dto.BattleRoundRateDto
+import net.prayforyou.backend.application.battle.SearchApplicationService
+import net.prayforyou.backend.application.battle.dto.BattleGunUsageDto
+import net.prayforyou.backend.application.battle.dto.BattlePlaceRateDto
+import net.prayforyou.backend.application.battle.dto.BattleRoundRateDto
 import net.prayforyou.backend.domain.user.User
 import net.prayforyou.backend.global.common.CommonResponse
-import org.jetbrains.annotations.NotNull
 import org.springframework.web.bind.annotation.*
 
 @RestController

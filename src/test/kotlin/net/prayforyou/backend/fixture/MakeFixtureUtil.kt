@@ -1,6 +1,5 @@
 package net.prayforyou.backend.fixture
 
-import net.prayforyou.backend.application.dto.SubBattleStatsDto
 import net.prayforyou.backend.domain.battle.BattleStats
 import net.prayforyou.backend.domain.battle.enums.BattleMapType
 import net.prayforyou.backend.domain.user.User

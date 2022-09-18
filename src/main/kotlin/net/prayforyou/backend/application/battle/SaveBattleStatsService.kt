@@ -1,10 +1,10 @@
-package net.prayforyou.backend.application
+package net.prayforyou.backend.application.battle
 
 import net.prayforyou.backend.domain.battle.BattleStats
 import net.prayforyou.backend.domain.battle.enums.BattleMapType
 import net.prayforyou.backend.domain.user.User
 import net.prayforyou.backend.infrastructure.crawler.webclient.dto.BattleLog
-import net.prayforyou.backend.infrastructure.persistence.jpa.provider.BattleStatsProvider
+import net.prayforyou.backend.infrastructure.persistence.jpa.provider.battle.BattleStatsProvider
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

@@ -1,11 +1,14 @@
-package net.prayforyou.backend.application
+package net.prayforyou.backend.application.battle
 
-import net.prayforyou.backend.application.dto.SubBattleStatsDto
+import net.prayforyou.backend.application.battle.dto.SubBattleStatsDto
 import net.prayforyou.backend.domain.battle.BattleGun
 import net.prayforyou.backend.domain.battle.BattlePlace
 import net.prayforyou.backend.domain.battle.BattleRound
 import net.prayforyou.backend.domain.user.User
-import net.prayforyou.backend.infrastructure.persistence.jpa.provider.*
+import net.prayforyou.backend.infrastructure.persistence.jpa.provider.battle.BattleGunProvider
+import net.prayforyou.backend.infrastructure.persistence.jpa.provider.battle.BattlePlaceProvider
+import net.prayforyou.backend.infrastructure.persistence.jpa.provider.battle.BattleRoundProvider
+import net.prayforyou.backend.infrastructure.persistence.jpa.provider.battle.BattleStatsProvider
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

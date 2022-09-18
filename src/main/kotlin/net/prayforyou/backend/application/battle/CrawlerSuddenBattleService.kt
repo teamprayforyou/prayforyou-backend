@@ -1,10 +1,10 @@
-package net.prayforyou.backend.application
+package net.prayforyou.backend.application.battle
 
 import mu.KotlinLogging
 import net.prayforyou.backend.domain.user.enums.UserType
 import net.prayforyou.backend.global.common.ApplicationService
-import net.prayforyou.backend.infrastructure.persistence.jpa.provider.BattleStatsProvider
-import net.prayforyou.backend.infrastructure.persistence.jpa.provider.UserProvider
+import net.prayforyou.backend.infrastructure.persistence.jpa.provider.battle.BattleStatsProvider
+import net.prayforyou.backend.infrastructure.persistence.jpa.provider.user.UserProvider
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 

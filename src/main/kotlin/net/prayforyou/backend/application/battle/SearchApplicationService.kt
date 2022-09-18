@@ -1,14 +1,13 @@
-package net.prayforyou.backend.application
+package net.prayforyou.backend.application.battle
 
-import net.prayforyou.backend.application.dto.BattleGunUsageDto
-import net.prayforyou.backend.application.dto.BattlePlaceRateDto
-import net.prayforyou.backend.application.dto.BattleRoundRateDto
+import net.prayforyou.backend.application.battle.dto.BattleGunUsageDto
+import net.prayforyou.backend.application.battle.dto.BattlePlaceRateDto
+import net.prayforyou.backend.application.battle.dto.BattleRoundRateDto
 import net.prayforyou.backend.domain.user.User
 import net.prayforyou.backend.global.common.ApplicationService
-import net.prayforyou.backend.global.common.exception.NotFoundDataException
 import net.prayforyou.backend.global.common.exception.ValidationException
 import net.prayforyou.backend.global.util.MathUtil
-import net.prayforyou.backend.infrastructure.persistence.jpa.provider.UserProvider
+import net.prayforyou.backend.infrastructure.persistence.jpa.provider.user.UserProvider
 import org.springframework.transaction.annotation.Transactional
 
 

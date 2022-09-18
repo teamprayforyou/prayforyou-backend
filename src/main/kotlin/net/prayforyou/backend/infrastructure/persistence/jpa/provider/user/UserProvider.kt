@@ -1,11 +1,10 @@
-package net.prayforyou.backend.infrastructure.persistence.jpa.provider
+package net.prayforyou.backend.infrastructure.persistence.jpa.provider.user
 
 import net.prayforyou.backend.domain.user.User
 import net.prayforyou.backend.domain.user.enums.UserType
 import net.prayforyou.backend.global.common.exception.NotFoundDataException
-import net.prayforyou.backend.infrastructure.persistence.jpa.repository.UserRepository
+import net.prayforyou.backend.infrastructure.persistence.jpa.repository.user.UserRepository
 import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service

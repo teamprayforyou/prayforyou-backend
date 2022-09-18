@@ -1,4 +1,4 @@
-package net.prayforyou.backend.infrastructure.persistence.jpa.repository
+package net.prayforyou.backend.infrastructure.persistence.jpa.repository.user
 
 import net.prayforyou.backend.domain.user.User
 import net.prayforyou.backend.domain.user.enums.UserType

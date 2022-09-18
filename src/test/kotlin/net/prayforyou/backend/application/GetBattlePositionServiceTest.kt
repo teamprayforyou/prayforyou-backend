@@ -1,5 +1,6 @@
 package net.prayforyou.backend.application
 
+import net.prayforyou.backend.application.battle.GetBattlePositionService
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest

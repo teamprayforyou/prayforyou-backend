@@ -1,4 +1,4 @@
-package net.prayforyou.backend.infrastructure.persistence.jpa.repository
+package net.prayforyou.backend.infrastructure.persistence.jpa.repository.battle
 
 import net.prayforyou.backend.domain.battle.BattleGun
 import net.prayforyou.backend.domain.battle.BattleStats

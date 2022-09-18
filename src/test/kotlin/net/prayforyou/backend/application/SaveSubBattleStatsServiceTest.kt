@@ -5,7 +5,7 @@
 //import io.mockk.junit5.MockKExtension
 //import io.mockk.mockk
 //import io.mockk.spyk
-//import net.prayforyou.backend.application.dto.SubBattleStatsDto
+//import net.prayforyou.backend.application.battle.SubBattleStatsDto
 //import net.prayforyou.backend.domain.battle.*
 //import net.prayforyou.backend.domain.battle.enums.BattleGunType
 //import net.prayforyou.backend.domain.battle.enums.BattleMapType
@@ -14,9 +14,9 @@
 //import net.prayforyou.backend.domain.user.enums.UserType
 //import net.prayforyou.backend.fixture.MakeFixtureUtil
 //import net.prayforyou.backend.infrastructure.crawler.webclient.dto.BattleLog
-//import net.prayforyou.backend.infrastructure.persistence.jpa.provider.BattleGunProvider
-//import net.prayforyou.backend.infrastructure.persistence.jpa.provider.BattlePlaceProvider
-//import net.prayforyou.backend.infrastructure.persistence.jpa.provider.BattleRoundProvider
+//import net.prayforyou.backend.infrastructure.persistence.jpa.provider.battle.BattleGunProvider
+//import net.prayforyou.backend.infrastructure.persistence.jpa.provider.battle.BattlePlaceProvider
+//import net.prayforyou.backend.infrastructure.persistence.jpa.provider.battle.BattleRoundProvider
 //import org.junit.jupiter.api.Test
 //import org.junit.jupiter.api.extension.ExtendWith
 //import org.mockito.InjectMocks

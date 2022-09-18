@@ -1,7 +1,7 @@
-package net.prayforyou.backend.infrastructure.persistence.jpa.provider
+package net.prayforyou.backend.infrastructure.persistence.jpa.provider.battle
 
 import net.prayforyou.backend.domain.battle.BattlePosition
-import net.prayforyou.backend.infrastructure.persistence.jpa.repository.BattlePositionRepository
+import net.prayforyou.backend.infrastructure.persistence.jpa.repository.battle.BattlePositionRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

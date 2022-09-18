@@ -1,11 +1,9 @@
-package net.prayforyou.backend.application
+package net.prayforyou.backend.application.battle
 
-import net.prayforyou.backend.domain.battle.BattlePosition
 import net.prayforyou.backend.domain.battle.enums.BattlePlaceType
-import net.prayforyou.backend.infrastructure.persistence.jpa.provider.BattlePositionProvider
+import net.prayforyou.backend.infrastructure.persistence.jpa.provider.battle.BattlePositionProvider
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.util.NoSuchElementException
 
 @Service
 @Transactional(readOnly = true)
