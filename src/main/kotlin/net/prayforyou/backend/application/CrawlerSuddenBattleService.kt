@@ -18,12 +18,13 @@ class CrawlerSuddenBattleService(
 
     private companion object {
         val logger = KotlinLogging.logger {}
+        const val CHUNK_SIZE = 50
     }
 
     fun craw(userType: UserType = UserType.SUDDEN_BATTLE) {
         logger.info { " START CRAWLING ${LocalDateTime.now()} " }
 
-        userProvider.findAll().chunked(50)
+        userProvider.findAll().chunked(CHUNK_SIZE)
             .forEachIndexed { index, user ->
                 logger.info { " CRAWLING... Time :  ${LocalDateTime.now()},  index : $index" }
                 val battleStats = battleStatsProvider.findAllByUserIdIn(user.map { it.id!! })

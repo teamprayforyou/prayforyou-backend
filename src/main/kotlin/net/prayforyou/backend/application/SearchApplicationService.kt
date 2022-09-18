@@ -18,6 +18,7 @@ class SearchApplicationService(
 ) {
     fun searchByNickname(nickname: String): List<User> =
         userProvider.findContainsByNickname(nickname)
+
     fun searchPlaceByUserId(userId: Int): List<BattlePlaceRateDto> {
         val user = userProvider.findByUserId(userId)
         val place = getBattleStatsService.getPlaceByUser(user)

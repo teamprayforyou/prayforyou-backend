@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RestController
 class CrawlerController(
     private val crawlerSuddenBattleService: CrawlerSuddenBattleService
 ) {
-
-
     @PostMapping("/suddenBattle")
     fun crawlerBySuddenBattle(): String {
         crawlerSuddenBattleService.craw()
