@@ -17,6 +17,7 @@ class BattleGun(
     var battleStats: BattleStats,
 
     @Column(name = "type")
+    @Enumerated(EnumType.STRING)
     var type: BattleGunType,
 
     @Column(name = "use_count")

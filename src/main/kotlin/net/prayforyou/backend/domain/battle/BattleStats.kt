@@ -18,6 +18,7 @@ class BattleStats(
     var user: User,
 
     @Column(name = "map_type")
+    @Enumerated(EnumType.STRING)
     var mapType: BattleMapType,
 
     @Column(name = "updated_at")

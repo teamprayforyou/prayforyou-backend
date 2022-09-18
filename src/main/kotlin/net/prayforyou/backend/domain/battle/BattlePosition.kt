@@ -5,6 +5,7 @@ import net.prayforyou.backend.domain.battle.enums.BattlePlaceType
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
 import org.locationtech.jts.geom.Polygon
+import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
@@ -15,15 +16,17 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "battle_position")
-class BattlePosition (
+class BattlePosition(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
     // column datatype polygon 으로 변경할것
+    @Column(name = "polygon")
     var polygon: Polygon,
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "battle_place_type")
     var battlePlaceType: BattlePlaceType
 ) {
     fun isContainsBattlePosition(x: Double, y: Double): Boolean =

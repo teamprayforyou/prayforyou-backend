@@ -6,6 +6,7 @@ import net.prayforyou.backend.application.dto.BattlePlaceRateDto
 import net.prayforyou.backend.application.dto.BattleRoundRateDto
 import net.prayforyou.backend.domain.user.User
 import net.prayforyou.backend.global.common.CommonResponse
+import org.jetbrains.annotations.NotNull
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -22,7 +23,7 @@ class SearchController(
             searchApplicationService.searchByNickname(nickname)
         )
 
-    @GetMapping("/place")
+    @GetMapping("{userId}/place")
     fun searchPlace(
         @PathVariable("userId") userId: Int
     ): CommonResponse<List<BattlePlaceRateDto>> =
@@ -30,7 +31,7 @@ class SearchController(
             searchApplicationService.searchPlaceByUserId(userId)
         )
 
-    @GetMapping("/round")
+    @GetMapping("{userId}/round")
     fun searchRound(
         @PathVariable("userId") userId: Int
     ): CommonResponse<List<BattleRoundRateDto>> =
@@ -38,7 +39,7 @@ class SearchController(
             searchApplicationService.searchRoundByUserId(userId)
         )
 
-    @GetMapping("/gun")
+    @GetMapping("{userId}/gun")
     fun searchGun(
         @PathVariable("userId") userId: Int
     ): CommonResponse<List<BattleGunUsageDto>> =
