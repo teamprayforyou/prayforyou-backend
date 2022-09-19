@@ -2,7 +2,7 @@ package net.prayforyou.backend.application.battle
 
 import mu.KotlinLogging
 import net.prayforyou.backend.domain.user.enums.UserType
-import net.prayforyou.backend.global.common.ApplicationService
+import net.prayforyou.backend.global.common.annotation.ApplicationService
 import net.prayforyou.backend.infrastructure.persistence.jpa.provider.battle.BattleStatsProvider
 import net.prayforyou.backend.infrastructure.persistence.jpa.provider.user.UserProvider
 import org.springframework.transaction.annotation.Transactional

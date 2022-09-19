@@ -1,4 +1,4 @@
-package net.prayforyou.backend.global.common
+package net.prayforyou.backend.global.common.annotation
 
 import org.springframework.stereotype.Component
 

@@ -6,6 +6,7 @@ import net.prayforyou.backend.application.battle.dto.BattlePlaceRateDto
 import net.prayforyou.backend.application.battle.dto.BattleRoundRateDto
 import net.prayforyou.backend.domain.user.User
 import net.prayforyou.backend.global.common.CommonResponse
+import net.prayforyou.backend.presenter.response.SearchUserResponse
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -17,9 +18,10 @@ class SearchController(
     @GetMapping("/user")
     fun searchUser(
         @RequestParam("nickname") nickname: String
-    ): CommonResponse<List<User>> =
+    ): CommonResponse<List<SearchUserResponse>> =
         CommonResponse.convert(
             searchApplicationService.searchByNickname(nickname)
+                .map { SearchUserResponse.convert(it) }
         )
 
     @GetMapping("{userId}/place")
