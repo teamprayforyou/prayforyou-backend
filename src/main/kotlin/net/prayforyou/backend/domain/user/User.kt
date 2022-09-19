@@ -34,7 +34,7 @@ class User(
     }
 
     companion object {
-        fun from(userNick: String, userNexonId: Int, userType: UserType): User =
+        fun from(userNick: String? = null, userNexonId: Int, userType: UserType): User =
             User(
                 nickname = userNick,
                 userNexonId = userNexonId,

@@ -29,4 +29,8 @@ class UserProvider(
 
     fun findLastUserByUserType(type: UserType, pageable: Pageable): Page<User> =
         userRepository.findAllByUserType(type, pageable)
+
+    fun saveAllUser(users: List<User>) {
+        userRepository.saveAll(users)
+    }
 }

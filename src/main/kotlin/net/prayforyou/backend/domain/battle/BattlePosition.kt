@@ -1,6 +1,5 @@
 package net.prayforyou.backend.domain.battle
 
-import net.prayforyou.backend.domain.battle.enums.BattleMapType
 import net.prayforyou.backend.domain.battle.enums.BattlePlaceType
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
@@ -21,8 +20,7 @@ class BattlePosition(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
-    // column datatype polygon 으로 변경할것
-    @Column(name = "polygon")
+    @Column(name = "polygon", columnDefinition = "polygon")
     var polygon: Polygon,
 
     @Enumerated(EnumType.STRING)

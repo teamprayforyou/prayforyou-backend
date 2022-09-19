@@ -26,8 +26,9 @@ class BattleLogClient(
         val headers = setBattleLogHeaders()
         val gameListId = matchClient.fetchGameListId(userId)
         val battleLogList = mutableListOf<BattleLog>()
+        var gameCount = 0
         for (i in 0..gameListId.lastIndex) {
-            if (i == 30) {
+            if (gameCount == 1) {
                 break
             }
             while (true) {
@@ -40,6 +41,10 @@ class BattleLogClient(
                     )
                     logger.log(LogRecord(Level.INFO, "배틀로그 데이터 : ${result.body!!.battleLog!!}"))
                     battleLogList.addAll(result.body!!.battleLog!!)
+                    gameCount++
+                    if(gameCount == 1) {
+                        break
+                    }
                 } catch (ex: Exception) {
                     when(ex) {
                         is HttpClientErrorException.TooManyRequests -> {
