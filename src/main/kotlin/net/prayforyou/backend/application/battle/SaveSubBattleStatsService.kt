@@ -41,7 +41,7 @@ class SaveSubBattleStatsService(
     fun saveByDeath(battleLog: BattleLog, stats: BattleStats, user: User) {
         val subBattleStats = getBattleStatsService.getSubStatsByUser(user)
         val placeType = getBattlePositionService
-            .getBattlePositionByXandY(battleLog.killX!!, battleLog.killY!!)
+            .getBattlePositionByXandY(battleLog.deathX!!, battleLog.deathY!!)
 
         subBattleStats.battleRound.firstOrNull { it.isSameRound(battleLog.round?.toInt()!!) }?.updateDeath()
             ?: battleRoundProvider.save(BattleRound.from(battleLog.round?.toInt()!!, stats, kill = 0, death = 1))
