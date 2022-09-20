@@ -15,6 +15,6 @@ class BattleController(
     @GetMapping("/positions")
     fun positions(): List<BattlePositionResponse> {
         return getBattlePositionService.getSupplyBattlePosition()
-            .map { BattlePositionResponse(it.polygon.toString(), it.battlePlaceType.name) }
+            .map { BattlePositionResponse(it.polygon.toString(), it.battlePlaceType.description) }
     }
 }
