@@ -17,14 +17,6 @@ class SearchApplicationService(
     private val userProvider: UserProvider,
     private val getBattleStatsService: GetBattleStatsService
 ) {
-    fun searchByNickname(nickname: String): List<User> {
-        if (nickname.isBlank()) {
-            throw ValidationException("닉네임을 입력해주세요")
-        }
-
-        return userProvider.findContainsByNickname(nickname)
-    }
-
     fun searchPlaceByUserId(userId: Int): List<BattlePlaceRateDto> {
         val user = userProvider.findByUserId(userId)
         val place = getBattleStatsService.getPlaceByUser(user)
