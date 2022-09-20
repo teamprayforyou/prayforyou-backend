@@ -26,12 +26,12 @@ jobs:
         shell: bash
 
       - name: Grant execute permission for whatapp
-        working-directory: ./whatap
+        working-directory: .
         run: chmod +x ./whatap
         shell: bash
 
       - name: execute whatap
-        working-directory: ./whatap
+        working-directory: .
         run: sh ./whatap/start.sh
         shell: bash
 
