@@ -4,6 +4,7 @@ import net.prayforyou.backend.application.battle.dto.SubBattleStatsDto
 import net.prayforyou.backend.domain.battle.BattleGun
 import net.prayforyou.backend.domain.battle.BattlePlace
 import net.prayforyou.backend.domain.battle.BattleRound
+import net.prayforyou.backend.domain.battle.enums.BattleMapType
 import net.prayforyou.backend.domain.user.User
 import net.prayforyou.backend.infrastructure.persistence.jpa.provider.battle.BattleGunProvider
 import net.prayforyou.backend.infrastructure.persistence.jpa.provider.battle.BattlePlaceProvider
@@ -21,17 +22,17 @@ class GetBattleStatsService(
     private val battleGunProvider: BattleGunProvider
 ) {
     fun getPlaceByUser(user: User): List<BattlePlace> {
-        val stats = battleStatsProvider.findByUser(user)
+        val stats = battleStatsProvider.finByUserAndMapType(user, BattleMapType.ALL_SUPPLY)
         return battlePlaceProvider.findByStats(stats)
     }
 
     fun getRoundByUser(user: User): List<BattleRound> {
-        val stats = battleStatsProvider.findByUser(user)
+        val stats = battleStatsProvider.finByUserAndMapType(user, BattleMapType.ALL_SUPPLY)
         return battleRoundProvider.findByStats(stats)
     }
 
     fun getGunByUser(user: User): List<BattleGun> {
-        val stats = battleStatsProvider.findByUser(user)
+        val stats = battleStatsProvider.finByUserAndMapType(user, BattleMapType.ALL_SUPPLY)
         return battleGunProvider.findByStats(stats)
     }
 
