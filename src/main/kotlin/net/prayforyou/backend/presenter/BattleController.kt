@@ -1,6 +1,7 @@
 package net.prayforyou.backend.presenter
 
 import net.prayforyou.backend.application.battle.GetBattlePositionService
+import net.prayforyou.backend.global.common.CommonResponse
 import net.prayforyou.backend.presenter.response.BattlePositionResponse
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -13,8 +14,8 @@ class BattleController(
 ) {
 
     @GetMapping("/positions")
-    fun positions(): List<BattlePositionResponse> {
-        return getBattlePositionService.getSupplyBattlePosition()
-            .map { BattlePositionResponse(it.polygon.toString(), it.battlePlaceType.description) }
+    fun positions(): CommonResponse<List<BattlePositionResponse>> {
+        return CommonResponse.convert(getBattlePositionService.getSupplyBattlePosition()
+            .map { BattlePositionResponse(it.polygon.toString(), it.battlePlaceType.description) })
     }
 }
