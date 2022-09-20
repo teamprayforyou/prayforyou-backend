@@ -28,9 +28,8 @@ class User(
     var userType: UserType
 ) {
 
-    fun updateNickname(nickname: String): User {
+    fun updateNickname(nickname: String) {
         this.nickname = nickname
-        return this
     }
 
     companion object {

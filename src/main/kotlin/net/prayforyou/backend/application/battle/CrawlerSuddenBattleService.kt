@@ -16,14 +16,13 @@ import java.time.LocalDateTime
 class CrawlerSuddenBattleService(
     private val userProvider: UserProvider,
     private val crawlerBattleLogService: CrawlerBattleLogService,
-    private val battleStatsProvider: BattleStatsProvider,
     private val suddenBattleParser: SuddenBattleParser,
     private val clanUserClient: ClanUserClient
 ) {
 
     private companion object {
         val logger = KotlinLogging.logger {}
-        const val CHUNK_SIZE = 2
+        const val CHUNK_SIZE = 50
     }
 
     fun crawSuddenBattleLog(userType: UserType = UserType.SUDDEN_BATTLE) {
@@ -32,7 +31,6 @@ class CrawlerSuddenBattleService(
         userProvider.findAll().chunked(CHUNK_SIZE)
             .forEachIndexed { index, user ->
                 logger.info { " CRAWLING... Time :  ${LocalDateTime.now()},  index : $index" }
-
                 crawlerBattleLogService.saveBattleLogByUserId(user, userType)
             }
 

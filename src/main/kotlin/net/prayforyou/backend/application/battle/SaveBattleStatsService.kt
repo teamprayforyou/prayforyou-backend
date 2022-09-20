@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 @Transactional
 class SaveBattleStatsService(
-    private val getBattleStatsService: GetBattleStatsService,
     private val battleStatsProvider: BattleStatsProvider,
     private val saveSubBattleStatsService: SaveSubBattleStatsService
 ) {
