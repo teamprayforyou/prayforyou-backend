@@ -13,7 +13,7 @@ class BannerController(
     private val getBannerService: GetBannerService
 ) {
 
-    @GetMapping("/")
+    @GetMapping("")
     fun getBanner(): CommonResponse<BannerResponse> =
         CommonResponse.convert(
             BannerResponse.convert(getBannerService.getAvailableBanner())
