@@ -1,6 +1,7 @@
 package net.prayforyou.backend.infrastructure.crawler.webclient.client
 
 import net.prayforyou.backend.infrastructure.crawler.webclient.ApiService
+import net.prayforyou.backend.infrastructure.crawler.webclient.RandomProxy
 import net.prayforyou.backend.infrastructure.crawler.webclient.RandomProxy.changeIp
 import net.prayforyou.backend.infrastructure.crawler.webclient.dto.GetMatchListRequestDto
 import net.prayforyou.backend.infrastructure.crawler.webclient.dto.GetMatchListResponseDto
@@ -42,11 +43,17 @@ class MatchClient(
             } catch (ex: Exception) {
                 when(ex) {
                     is HttpClientErrorException.TooManyRequests -> {
+                        if (!RandomProxy.useProxy) {
+                            Thread.sleep(30000)
+                        }
                         changeIp = true
                         logger.log(LogRecord(Level.INFO, "크롤링 재시도 matchId: ${num} userId: ${userId} "))
                         continue
                     }
                     is ResourceAccessException -> {
+                        if (!RandomProxy.useProxy) {
+                            Thread.sleep(30000)
+                        }
                         logger.log(LogRecord(Level.INFO, "ip가 차단 되었습니다"))
                         changeIp = true
                         continue

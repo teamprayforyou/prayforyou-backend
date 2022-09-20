@@ -2,6 +2,7 @@ package net.prayforyou.backend.infrastructure.crawler.webclient.client
 
 import net.prayforyou.backend.infrastructure.crawler.webclient.ApiService
 import net.prayforyou.backend.infrastructure.crawler.webclient.RandomProxy
+import net.prayforyou.backend.infrastructure.crawler.webclient.RandomProxy.useProxy
 import net.prayforyou.backend.infrastructure.crawler.webclient.dto.BattleLog
 import net.prayforyou.backend.infrastructure.crawler.webclient.dto.BattleLogResponseDto
 import net.prayforyou.backend.infrastructure.crawler.webclient.dto.DummyRequestDto
@@ -48,11 +49,17 @@ class BattleLogClient(
                 } catch (ex: Exception) {
                     when(ex) {
                         is HttpClientErrorException.TooManyRequests -> {
+                            if (!useProxy) {
+                                Thread.sleep(30000)
+                            }
                             RandomProxy.changeIp = true
                             logger.log(LogRecord(Level.INFO, "크롤링 재시도 matchId: ${gameListId[i]} userId: ${userId} "))
                             continue
                         }
                         is ResourceAccessException -> {
+                            if (!useProxy) {
+                                Thread.sleep(30000)
+                            }
                             logger.log(LogRecord(Level.INFO, "ip가 차단 되었습니다"))
                             RandomProxy.changeIp = true
                             continue

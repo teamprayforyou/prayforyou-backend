@@ -1,6 +1,7 @@
 package net.prayforyou.backend.infrastructure.crawler.webclient
 
 import net.prayforyou.backend.infrastructure.crawler.webclient.RandomProxy.changeIp
+import net.prayforyou.backend.infrastructure.crawler.webclient.RandomProxy.useProxy
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.ResponseEntity
@@ -21,7 +22,7 @@ class ApiService<T>(
     val logger: Logger = Logger.getLogger(ApiService::class.java.name)
 
     fun post(url: String, httpHeaders: MultiValueMap<String, String>, body: Any, clazz: Class<T>): ResponseEntity<T> {
-        if (changeIp) {
+        if (changeIp && useProxy) {
             val ip = RandomProxy.getRandomProxy().ip
             logger.log(LogRecord(Level.INFO, "ip 변경 ${ip}"))
             val factory = SimpleClientHttpRequestFactory()

@@ -1,6 +1,7 @@
 package net.prayforyou.backend.infrastructure.crawler.webclient.client
 
 import net.prayforyou.backend.infrastructure.crawler.webclient.ApiService
+import net.prayforyou.backend.infrastructure.crawler.webclient.RandomProxy
 import net.prayforyou.backend.infrastructure.crawler.webclient.dto.ClanUserRequestDto
 import net.prayforyou.backend.infrastructure.crawler.webclient.dto.ClanUserResponseDto
 import net.prayforyou.backend.infrastructure.crawler.webclient.setDummyHeaders
@@ -20,6 +21,9 @@ class ClanUserClient(
                 ClanUserRequestDto(clanId),
                 ClanUserResponseDto::class.java
             )
+            if (!RandomProxy.useProxy) {
+                Thread.sleep(30000)
+            }
             val resultClanUserList = post.body?.resultClanUserList?.map { it?.user_nexon_sn }
                 ?: continue
             clanUserList.add(resultClanUserList)

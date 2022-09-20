@@ -9,7 +9,6 @@ import kotlin.streams.toList
 class SuddenBattleParser(
     private val suddenBattleClient: SuddenBattleClient
 ) {
-
     fun parseClanLink(): List<String> {
         val suddenBattleHtml = suddenBattleClient.fetchClan()
         val jsoup = Jsoup.parse(suddenBattleHtml!!)

@@ -23,7 +23,7 @@ class CrawlerSuddenBattleService(
 
     private companion object {
         val logger = KotlinLogging.logger {}
-        const val CHUNK_SIZE = 50
+        const val CHUNK_SIZE = 1
     }
 
     fun crawSuddenBattleLog(userType: UserType = UserType.SUDDEN_BATTLE) {
