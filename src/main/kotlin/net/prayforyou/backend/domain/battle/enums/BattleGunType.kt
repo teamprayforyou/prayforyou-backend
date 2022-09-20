@@ -11,11 +11,12 @@ enum class BattleGunType(
     THROW("throw", "투척무기"),
     ASSIST("assist", "어시스트"),
     C4_INSTALL("c4-install", ""),
-    C4_DISMANTLE("c4-dismantle", "");
+    C4_DISMANTLE("c4-dismantle", ""),
+    NOT_WEAPON("", "");
 
 
     companion object {
         fun convert(type: String?): BattleGunType =
-            values().firstOrNull { it.title == type } ?: throw NotFoundDataException("존재하지 않는 무기입니다")
+            values().firstOrNull { it.title == type } ?: NOT_WEAPON
     }
 }

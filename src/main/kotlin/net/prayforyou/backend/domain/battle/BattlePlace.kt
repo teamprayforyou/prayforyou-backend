@@ -40,7 +40,7 @@ class BattlePlace(
     }
 
     fun isSamePosition(placeType: BattlePlaceType): Boolean =
-        this.battlePosition!!.battlePlaceType == placeType
+        this.battlePosition?.battlePlaceType == placeType
 
     companion object {
         fun from(stats: BattleStats, kill: Int = 0, death: Int = 0): BattlePlace =

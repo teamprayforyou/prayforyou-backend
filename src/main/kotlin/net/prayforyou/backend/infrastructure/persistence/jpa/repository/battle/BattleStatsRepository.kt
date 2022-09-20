@@ -10,4 +10,5 @@ import org.springframework.stereotype.Repository
 interface BattleStatsRepository : JpaRepository<BattleStats, Long> {
     fun findAllByUserIdIn(userId: Collection<Long>): List<BattleStats>
     fun findByUserAndMapType(user: User, type: BattleMapType): BattleStats
+    fun findNullableByUserAndMapType(user: User, type: BattleMapType): BattleStats?
 }

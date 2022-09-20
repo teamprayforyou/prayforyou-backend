@@ -22,17 +22,17 @@ class GetBattleStatsService(
     private val battleGunProvider: BattleGunProvider
 ) {
     fun getPlaceByUser(user: User): List<BattlePlace> {
-        val stats = battleStatsProvider.finByUserAndMapType(user, BattleMapType.ALL_SUPPLY)
+        val stats = battleStatsProvider.findByUserAndMapType(user, BattleMapType.ALL_SUPPLY)
         return battlePlaceProvider.findByStats(stats)
     }
 
     fun getRoundByUser(user: User): List<BattleRound> {
-        val stats = battleStatsProvider.finByUserAndMapType(user, BattleMapType.ALL_SUPPLY)
+        val stats = battleStatsProvider.findByUserAndMapType(user, BattleMapType.ALL_SUPPLY)
         return battleRoundProvider.findByStats(stats)
     }
 
     fun getGunByUser(user: User): List<BattleGun> {
-        val stats = battleStatsProvider.finByUserAndMapType(user, BattleMapType.ALL_SUPPLY)
+        val stats = battleStatsProvider.findByUserAndMapType(user, BattleMapType.ALL_SUPPLY)
         return battleGunProvider.findByStats(stats)
     }
 

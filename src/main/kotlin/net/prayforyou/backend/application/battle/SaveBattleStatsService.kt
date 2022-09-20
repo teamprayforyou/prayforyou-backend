@@ -11,15 +11,15 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 @Transactional
 class SaveBattleStatsService(
+    private val getBattleStatsService: GetBattleStatsService,
     private val battleStatsProvider: BattleStatsProvider,
     private val saveSubBattleStatsService: SaveSubBattleStatsService
 ) {
 
-    fun save(battleLog: BattleLog, user: User, battleStatsMap: Map<Int, BattleStats>) {
+    fun save(battleLog: BattleLog, user: User) {
         // BattleStats가 존재할 경우 사용하고, 사용하지 않을 경우 저장
-        val stats = battleStatsMap[battleLog.userNexonSn!!] ?: battleStatsProvider.save(
-            BattleStats.from(user, BattleMapType.ALL_SUPPLY)
-        )
+        val stats = battleStatsProvider.findNullableByUserAndMapType(user, BattleMapType.ALL_SUPPLY)
+            ?: battleStatsProvider.save(BattleStats.from(user, BattleMapType.ALL_SUPPLY))
 
         // SubBattleStats를 kill, death에 따라 저장
         if (battleLog.isKill()) {

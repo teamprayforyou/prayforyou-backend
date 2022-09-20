@@ -31,6 +31,7 @@ class SaveSubBattleStatsService(
         subBattleStats.battleRound.firstOrNull { it.isSameRound(battleLog.round?.toInt()!!) }?.updateKill()
             ?: battleRoundProvider.save(BattleRound.from(battleLog.round?.toInt()!!, stats, kill = 1, death = 0))
 
+
         subBattleStats.battlePlace.firstOrNull { it.isSamePosition(placeType) }?.updateKill()
             ?: battlePlaceProvider.save(BattlePlace.from(stats = stats, kill = 1, death = 0))
 
@@ -47,8 +48,6 @@ class SaveSubBattleStatsService(
 
         subBattleStats.battlePlace.firstOrNull { it.isSamePosition(placeType) }?.updateDeath()
             ?: battlePlaceProvider.save(BattlePlace.from(stats = stats, kill = 0, death = 1))
-
-        saveUseGun(battleLog, stats)
     }
 
     fun saveUseGun(battleLog: BattleLog, stats: BattleStats) {

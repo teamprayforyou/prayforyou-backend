@@ -24,21 +24,16 @@ class CrawlerBattleLogService(
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    fun saveBattleLogByUserId(user: List<User>, battleStats: List<BattleStats>, userType: UserType) {
+    fun saveBattleLogByUserId(user: List<User>, userType: UserType) {
         user.map { targetUser ->
-            logger.info { "START USER : userId : ${targetUser.id}, time :${LocalDateTime.now()}" }
-
             val fetchBattleLog = battleLogClient.fetchBattleLog(targetUser.userNexonId)
 
             if (fetchBattleLog.isNotEmpty()) {
-                val battleStatsMap =
-                    battleStats.associateBy { it.user.userNexonId }
-
                 // 유저닉네임 저장
                 targetUser.updateNickname(fetchBattleLog[FIRST_INDEX].user_nick!!)
 
                 fetchBattleLog.forEach { log ->
-                    saveBattleStatsService.save(log, targetUser, battleStatsMap)
+                    saveBattleStatsService.save(log, targetUser)
                 }
             }
         }
