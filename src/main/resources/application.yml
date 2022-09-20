@@ -12,7 +12,7 @@ spring:
     database-platform: org.hibernate.spatial.dialect.mysql.MySQL8SpatialDialect
     hibernate:
       # 반드시 none or validate 설정 할것
-      ddl-auto: none
+      ddl-auto: update
     show-sql: true
     properties:
       database-platform: org.hibernate.spatial.dialect.mysql.MySQL8SpatialDialect
