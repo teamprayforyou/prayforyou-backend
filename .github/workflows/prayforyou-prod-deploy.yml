@@ -25,6 +25,16 @@ jobs:
         run: chmod +x ./gradlew
         shell: bash
 
+      - name: Grant execute permission for whatapp
+        working-directory: .
+        run: chmod +x ./whatap
+        shell: bash
+
+      - name: execute whatap
+        working-directory: .
+        run: sh ./whatap/start.sh
+        shell: bash
+
       - name: Build with Gradle
         working-directory: .
         run: ./gradlew clean bootJar
