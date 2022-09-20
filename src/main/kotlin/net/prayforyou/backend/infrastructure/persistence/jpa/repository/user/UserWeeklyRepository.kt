@@ -4,6 +4,6 @@ import net.prayforyou.backend.domain.user.UserWeeklyView
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
-@Repository
-interface UserWeeklyRepository : JpaRepository<UserWeeklyView, Long> {
-}
+//@Repository
+//interface UserWeeklyRepository : JpaRepository<UserWeeklyView, Long> {
+//}
