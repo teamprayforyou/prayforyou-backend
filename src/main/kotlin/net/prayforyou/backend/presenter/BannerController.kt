@@ -5,7 +5,6 @@ import net.prayforyou.backend.global.common.CommonResponse
 import net.prayforyou.backend.presenter.response.BannerResponse
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -15,10 +14,8 @@ class BannerController(
 ) {
 
     @GetMapping("/")
-    fun getBanner(
-        @RequestParam("type") type: String
-    ): CommonResponse<BannerResponse> =
+    fun getBanner(): CommonResponse<BannerResponse> =
         CommonResponse.convert(
-            BannerResponse.convert(getBannerService.getBannerByDateTIme())
+            BannerResponse.convert(getBannerService.getAvailableBanner())
         )
 }

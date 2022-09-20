@@ -12,7 +12,7 @@ class GetBannerService(
     private val bannerProvider: BannerProvider
 ) {
 
-    fun getBannerByDateTIme(now: LocalDateTime = LocalDateTime.now()): GetBannerDto {
+    fun getAvailableBanner(now: LocalDateTime = LocalDateTime.now()): GetBannerDto {
         val allBanner = bannerProvider.findBanner()
             .filter { it.isAvailable(now) }
 
