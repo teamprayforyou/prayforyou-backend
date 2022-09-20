@@ -5,7 +5,7 @@ import java.util.Random
 object RandomProxy {
     private val proxy = hashMapOf<Int, Proxy>()
     var changeIp = false
-    var useProxy = false
+    var useProxy = true
 
     init {
         proxy[1] = Proxy("121.126.26.31",5463)

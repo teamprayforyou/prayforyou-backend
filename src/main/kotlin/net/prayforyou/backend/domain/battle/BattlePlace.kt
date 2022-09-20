@@ -43,11 +43,12 @@ class BattlePlace(
         this.battlePosition?.battlePlaceType == placeType
 
     companion object {
-        fun from(stats: BattleStats, kill: Int = 0, death: Int = 0): BattlePlace =
+        fun from(stats: BattleStats, kill: Int = 0, death: Int = 0, battlePosition: BattlePosition?): BattlePlace =
             BattlePlace(
                 battleStats = stats,
                 kill = kill,
                 death = death,
+                battlePosition = battlePosition
             )
     }
 }

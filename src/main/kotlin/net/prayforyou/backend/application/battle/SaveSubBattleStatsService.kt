@@ -25,29 +25,29 @@ class SaveSubBattleStatsService(
 
     fun saveByKill(battleLog: BattleLog, stats: BattleStats, user: User) {
         val subBattleStats = getBattleStatsService.getSubStatsByUser(user)
-        val placeType = getBattlePositionService
+        val battlePosition = getBattlePositionService
             .getBattlePositionByXandY(battleLog.killX!!, battleLog.killY!!)
 
         subBattleStats.battleRound.firstOrNull { it.isSameRound(battleLog.round?.toInt()!!) }?.updateKill()
             ?: battleRoundProvider.save(BattleRound.from(battleLog.round?.toInt()!!, stats, kill = 1, death = 0))
 
 
-        subBattleStats.battlePlace.firstOrNull { it.isSamePosition(placeType) }?.updateKill()
-            ?: battlePlaceProvider.save(BattlePlace.from(stats = stats, kill = 1, death = 0))
+        subBattleStats.battlePlace.firstOrNull { it.isSamePosition(battlePosition.battlePlaceType) }?.updateKill()
+            ?: battlePlaceProvider.save(BattlePlace.from(stats = stats, kill = 1, death = 0, battlePosition = battlePosition))
 
         saveUseGun(battleLog, stats)
     }
 
     fun saveByDeath(battleLog: BattleLog, stats: BattleStats, user: User) {
         val subBattleStats = getBattleStatsService.getSubStatsByUser(user)
-        val placeType = getBattlePositionService
+        val battlePosition = getBattlePositionService
             .getBattlePositionByXandY(battleLog.deathX!!, battleLog.deathY!!)
 
         subBattleStats.battleRound.firstOrNull { it.isSameRound(battleLog.round?.toInt()!!) }?.updateDeath()
             ?: battleRoundProvider.save(BattleRound.from(battleLog.round?.toInt()!!, stats, kill = 0, death = 1))
 
-        subBattleStats.battlePlace.firstOrNull { it.isSamePosition(placeType) }?.updateDeath()
-            ?: battlePlaceProvider.save(BattlePlace.from(stats = stats, kill = 0, death = 1))
+        subBattleStats.battlePlace.firstOrNull { it.isSamePosition(battlePosition.battlePlaceType) }?.updateDeath()
+            ?: battlePlaceProvider.save(BattlePlace.from(stats = stats, kill = 0, death = 1, battlePosition = battlePosition))
     }
 
     fun saveUseGun(battleLog: BattleLog, stats: BattleStats) {

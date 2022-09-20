@@ -21,12 +21,13 @@ class BattlePosition(
     var id: Long? = null,
 
     @Column(name = "polygon", columnDefinition = "polygon")
-    var polygon: Polygon,
+    var polygon: Polygon?,
 
     @Enumerated(EnumType.STRING)
     @Column(name = "battle_place_type")
     var battlePlaceType: BattlePlaceType
 ) {
     fun isContainsBattlePosition(x: Double, y: Double): Boolean =
-        this.polygon.contains(GeometryFactory().createPoint(Coordinate(x, y)))
+        this.polygon?.contains(GeometryFactory().createPoint(Coordinate(x, y)))
+            ?: false
 }
