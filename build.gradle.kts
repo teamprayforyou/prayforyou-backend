@@ -43,6 +43,8 @@ dependencies {
 
     implementation("org.hibernate:hibernate-spatial:5.6.2.Final")
 
+    implementation("org.springframework.boot:spring-boot-starter-security")
+
     implementation("com.querydsl:querydsl-jpa")
     kapt(group = "com.querydsl", name = "querydsl-apt", classifier = "jpa")
 

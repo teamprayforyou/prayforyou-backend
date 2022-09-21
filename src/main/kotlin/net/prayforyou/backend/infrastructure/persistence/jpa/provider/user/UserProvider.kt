@@ -19,8 +19,8 @@ class UserProvider(
     fun findContainsByNickname(nickname: String): List<User> =
         userRepository.findByNicknameContains(nickname)
 
-    fun findByUserId(userId: Int): User =
-        userRepository.findByIdOrNull(userId.toLong()) ?: throw NotFoundDataException(message = "유저를 찾을 수 없습니다.")
+    fun findByUserId(userId: Long): User =
+        userRepository.findByIdOrNull(userId) ?: throw NotFoundDataException(message = "유저를 찾을 수 없습니다.")
 
     fun findAll(): List<User> = userRepository.findAll()
 

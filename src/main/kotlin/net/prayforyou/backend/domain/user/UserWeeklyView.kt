@@ -4,8 +4,8 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import javax.persistence.*
 
-//@Entity
-//@Table(name = "user_weekly_view")
+@Entity
+@Table(name = "user_weekly_view")
 class UserWeeklyView(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,4 +26,17 @@ class UserWeeklyView(
 
     @Column(name = "created_at")
     var createdAt: LocalDateTime = LocalDateTime.now()
-)
+) {
+    fun updateViewCount() {
+        this.count += 1
+    }
+
+    companion object {
+        fun of(user: User, now: LocalDate): UserWeeklyView =
+            UserWeeklyView(
+                user = user,
+                targetedAt = now,
+                count = 0
+            )
+    }
+}

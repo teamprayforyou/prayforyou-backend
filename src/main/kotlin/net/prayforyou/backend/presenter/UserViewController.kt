@@ -13,7 +13,6 @@ class UserViewController(
 
     @GetMapping("/daily")
     fun getDaily() {
-        userViewService.getDaily()
     }
 
     @GetMapping("/weekly")

@@ -19,7 +19,7 @@ class SearchController(
 
     @GetMapping("/{userId}/place")
     fun searchPlace(
-        @PathVariable("userId") userId: Int
+        @PathVariable("userId") userId: Long
     ): CommonResponse<List<BattlePlaceRateDto>> =
         CommonResponse.convert(
             searchApplicationService.searchPlaceByUserId(userId)
@@ -36,7 +36,7 @@ class SearchController(
 
     @GetMapping("/{userId}/round")
     fun searchRound(
-        @PathVariable("userId") userId: Int
+        @PathVariable("userId") userId: Long
     ): CommonResponse<List<BattleRoundRateDto>> =
         CommonResponse.convert(
             searchApplicationService.searchRoundByUserId(userId)
@@ -44,7 +44,7 @@ class SearchController(
 
     @GetMapping("/{userId}/gun")
     fun searchGun(
-        @PathVariable("userId") userId: Int
+        @PathVariable("userId") userId: Long
     ): CommonResponse<List<BattleGunUsageDto>> =
         CommonResponse.convert(
             searchApplicationService.searchGunByUserId(userId)

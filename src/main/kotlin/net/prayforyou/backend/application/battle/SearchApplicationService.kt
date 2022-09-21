@@ -17,7 +17,7 @@ class SearchApplicationService(
     private val userProvider: UserProvider,
     private val getBattleStatsService: GetBattleStatsService
 ) {
-    fun searchPlaceByUserId(userId: Int): List<BattlePlaceRateDto> {
+    fun searchPlaceByUserId(userId: Long): List<BattlePlaceRateDto> {
         val user = userProvider.findByUserId(userId)
         val place = getBattleStatsService.getPlaceByUser(user)
         val battlePlaceList = mutableListOf<BattlePlaceRateDto>()
@@ -31,7 +31,7 @@ class SearchApplicationService(
         return battlePlaceList.sortedByDescending { it.rate }
     }
 
-    fun searchRoundByUserId(userId: Int): List<BattleRoundRateDto> {
+    fun searchRoundByUserId(userId: Long): List<BattleRoundRateDto> {
         val user = userProvider.findByUserId(userId)
         val battleRound = getBattleStatsService.getRoundByUser(user)
 
@@ -45,7 +45,7 @@ class SearchApplicationService(
         return battleRoundList.sortedByDescending { it.rate }
     }
 
-    fun searchGunByUserId(userId: Int): List<BattleGunUsageDto> {
+    fun searchGunByUserId(userId: Long): List<BattleGunUsageDto> {
         val user = userProvider.findByUserId(userId)
         val battleGun = getBattleStatsService.getGunByUser(user)
 
