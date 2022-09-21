@@ -1,10 +1,9 @@
 package net.prayforyou.backend.application.battle.dto
 
 import net.prayforyou.backend.domain.battle.BattlePlace
-import net.prayforyou.backend.domain.battle.enums.BattlePlaceType
 
 data class BattlePlaceRateDto(
-    val place: BattlePlaceType,
+    val place: String,
     val kill: Int,
     val death: Int,
     val rate: Double
@@ -12,7 +11,7 @@ data class BattlePlaceRateDto(
     companion object {
         fun from(battlePlace: BattlePlace, rate: Double): BattlePlaceRateDto =
             BattlePlaceRateDto(
-                place = battlePlace.battlePosition?.battlePlaceType!!,
+                place = battlePlace.battlePosition?.battlePlaceType!!.description,
                 kill = battlePlace.kill,
                 death = battlePlace.death,
                 rate = rate,

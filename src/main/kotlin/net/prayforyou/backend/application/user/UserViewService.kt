@@ -25,7 +25,7 @@ class UserViewService(
 
     fun getWeekly(user: User, now: LocalDate): UserWeeklyView {
         val date = DateUtil.getMondayDate(now)
-        return  userWeeklyViewProvider.findByUserAndTargetedAt(user, date)
+        return userWeeklyViewProvider.findByUserAndTargetedAt(user, date)
             ?: userWeeklyViewProvider.save(user, date)
     }
 
