@@ -10,4 +10,5 @@ import java.time.LocalDate
 @Repository
 interface UserWeeklyRepository : JpaRepository<UserWeeklyView, Long> {
     fun findByUserAndTargetedAt(user: User, targetedAt: LocalDate): UserWeeklyView?
+    fun findAllByTargetedAt(date: LocalDate): List<UserWeeklyView>
 }

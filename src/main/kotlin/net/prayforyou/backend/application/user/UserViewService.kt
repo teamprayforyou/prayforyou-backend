@@ -25,7 +25,7 @@ class UserViewService(
 
     fun getWeekly(user: User, now: LocalDate): UserWeeklyView {
         val date = DateUtil.getMondayDate(now)
-        return  userWeeklyViewProvider.findByUserAndTargetedAt(user, date)
+        return userWeeklyViewProvider.findByUserAndTargetedAt(user, date)
             ?: userWeeklyViewProvider.save(user, date)
     }
 
@@ -36,5 +36,24 @@ class UserViewService(
 
         dailyView.updateViewCount()
         weeklyView.updateViewCount()
+    }
+
+    fun getAllView(now: LocalDate = LocalDate.now()): UserViewDto {
+        val dailyView =
+            userDailyProvider.findByTargetedAt(now)
+                .sortedByDescending { it.count }
+                .take(10)
+                .map { UserViewDetailDto.from(it) }
+
+        val weeklyView =
+            userWeeklyViewProvider.findByTargetedAt(DateUtil.getMondayDate(now))
+                .sortedByDescending { it.count }
+                .take(10)
+                .map { UserViewDetailDto.from(it) }
+
+        return UserViewDto(
+            weeklyView = weeklyView,
+            dailyView = dailyView
+        )
     }
 }

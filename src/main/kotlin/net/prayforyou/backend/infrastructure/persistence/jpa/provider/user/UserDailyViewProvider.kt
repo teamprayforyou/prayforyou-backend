@@ -17,4 +17,7 @@ class UserDailyViewProvider(
 
     fun save(user: User, now: LocalDate): UserDailyView =
         userDailyViewRepository.save(UserDailyView.of(user, now))
+
+    fun findByTargetedAt(now: LocalDate): List<UserDailyView> =
+        userDailyViewRepository.findAllByTargetedAt(now)
 }

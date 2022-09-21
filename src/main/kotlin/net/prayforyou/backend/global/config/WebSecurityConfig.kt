@@ -27,7 +27,8 @@ class WebSecurityConfig(
     companion object {
         private val PERMIT_URL = arrayOf(
             "/banner/**",
-            "/search/**"
+            "/search/**",
+            "/view/**"
         )
     }
 

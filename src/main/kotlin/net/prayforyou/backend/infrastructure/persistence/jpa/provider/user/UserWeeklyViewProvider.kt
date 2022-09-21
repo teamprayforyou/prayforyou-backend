@@ -19,4 +19,7 @@ class UserWeeklyViewProvider(
 
     fun save(user: User, date: LocalDate): UserWeeklyView =
         userWeeklyRepository.save(UserWeeklyView.of(user, date))
+
+    fun findByTargetedAt(date: LocalDate): List<UserWeeklyView> =
+        userWeeklyRepository.findAllByTargetedAt(date)
 }
