@@ -49,6 +49,7 @@ jobs:
           cp Procfile deploy/Procfile
           cp -r .ebextensions deploy/.ebextensions
           cp ./whatap/whatap.agent-2.1.3.jar deploy/whatap.agent-2.1.3.jar
+          cp ./whatap/whatap.conf deploy/whatap.conf
           cd deploy && zip -r prayforyou-prod-label-${{steps.current-time.outputs.formattedTime}}-${{github.sha}} .
       - name: Deploy Consumer to EB
         uses: einaregilsson/beanstalk-deploy@v14
