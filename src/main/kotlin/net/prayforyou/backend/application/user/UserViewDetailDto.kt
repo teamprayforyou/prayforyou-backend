@@ -8,7 +8,7 @@ data class UserViewDetailDto(
     val id: Long?,
     val userId: Long?,
     val count: Int,
-    val dateTime: LocalDate
+    val dateTime: String
 ) {
     companion object {
         fun from(view: UserDailyView): UserViewDetailDto =
@@ -16,7 +16,7 @@ data class UserViewDetailDto(
                 id = view.id,
                 userId = view.user.id,
                 count = view.count,
-                dateTime = view.targetedAt
+                dateTime = view.targetedAt.toString()
             )
 
         fun from(view: UserWeeklyView): UserViewDetailDto =
@@ -24,7 +24,7 @@ data class UserViewDetailDto(
                 id = view.id,
                 userId = view.user.id,
                 count = view.count,
-                dateTime = view.targetedAt
+                dateTime = view.targetedAt.toString()
             )
     }
 }
