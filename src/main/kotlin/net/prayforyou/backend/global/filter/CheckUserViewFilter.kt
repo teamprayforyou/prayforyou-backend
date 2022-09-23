@@ -22,9 +22,6 @@ class CheckUserViewFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        logger.info("[request] ${request.method} ${request.requestURI}")
-
-
         if (request.requestURI.endsWith("/place")) {
             userViewService.updateView(
                 request.requestURI.split("/")[2].toLong()

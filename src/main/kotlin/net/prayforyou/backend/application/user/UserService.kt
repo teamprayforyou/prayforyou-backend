@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Transactional
 @ApplicationService
-class SearchUserService(
+class UserService(
     private val userProvider: UserProvider
 ) {
 
@@ -19,4 +19,7 @@ class SearchUserService(
 
         return userProvider.findContainsByNickname(nickname)
     }
+
+    fun getByUserId(userId: Long): User =
+        userProvider.findByUserId(userId)
 }
