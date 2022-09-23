@@ -1,1 +1,1 @@
-web: java prayforyou-prod-ebextensions-1.jar
+web: java -jar prayforyou-prod-ebextensions-1.jar
