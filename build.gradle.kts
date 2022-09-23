@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
 
 plugins {
     id("org.springframework.boot") version "2.7.3"
@@ -50,9 +49,14 @@ dependencies {
 
     // logging
     implementation("io.github.microutils:kotlin-logging:2.1.20")
+    implementation("org.springframework.boot:spring-boot-starter-quartz")
 
     // mockk
     testImplementation("io.mockk:mockk:1.12.8")
+
+    implementation("io.awspring.cloud:spring-cloud-starter-aws-messaging:2.4.2")
+    implementation("io.awspring.cloud:spring-cloud-starter-aws-parameter-store-config:2.4.2")
+
 
 
     sourceSets.main {

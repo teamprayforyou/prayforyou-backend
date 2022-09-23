@@ -33,4 +33,12 @@ class UserProvider(
     fun saveAllUser(users: List<User>) {
         userRepository.saveAll(users)
     }
+
+    fun saveUser(user: User): User {
+        return userRepository.saveAndFlush(user)
+    }
+
+    fun findByUserNexonId(id: Int): User? {
+        return userRepository.findByUserNexonId(id)
+    }
 }

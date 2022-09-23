@@ -21,18 +21,16 @@ class CrawlerBattleLogService(
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    fun saveBattleLogByUserId(user: List<User>, userType: UserType) {
-        user.map { targetUser ->
-            val fetchBattleLog = battleLogClient.fetchBattleLog(targetUser.userNexonId)
+    fun saveBattleLogByUserId(user: User, userType: UserType) {
+        val fetchBattleLog = battleLogClient.fetchBattleLog(user.userNexonId)
 
-            if (fetchBattleLog.isNotEmpty()) {
-                // 유저닉네임 저장
-                targetUser.updateNickname(fetchBattleLog[FIRST_INDEX].user_nick!!)
-                userRepository.save(targetUser)
+        if (fetchBattleLog.isNotEmpty()) {
+            // 유저닉네임 저장
+            user.updateNickname(fetchBattleLog[FIRST_INDEX].user_nick!!)
+            userRepository.save(user)
 
-                fetchBattleLog.forEach { log ->
-                    saveBattleStatsService.save(log, targetUser)
-                }
+            fetchBattleLog.forEach { log ->
+                saveBattleStatsService.save(log, user)
             }
         }
     }
