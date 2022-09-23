@@ -1,1 +1,1 @@
-web: java -javaagent:/root/whatap/whatap.agent-2.1.3.jar -Dwhatap.name=bootTest -Dwhatap.okind=test -Dwhatap.server.home=/root/whatap -Dwhatap.conf.path=/root/whatap -jar /var/app/current/prayforyou-prod-ebextensions-1.jar
+web: java prayforyou-prod-ebextensions-1.jar
