@@ -14,11 +14,12 @@ class AwsSqsListener(
     private val crawlerSuddenBattleService: CrawlerSuddenBattleService
 ) {
 
-    @SqsListener(value = ["\${cloud.aws.sqs.queue.name}"], deletionPolicy = SqsMessageDeletionPolicy.NEVER)
-    fun listen(@Payload userId: String?, @Headers headers: Map<String?, String?>?, ack: Acknowledgment) {
-        //수신후 삭제처리
-        ack.acknowledge()
-
-        crawlerSuddenBattleService.crawSuddenBattleLog(userId!!.toInt(), SUDDEN_BATTLE)
-    }
+//    @SqsListener(value = ["\${cloud.aws.sqs.queue.name}"], deletionPolicy = SqsMessageDeletionPolicy.NEVER)
+//    fun listen(@Payload userId: String?, @Headers headers: Map<String?, String?>?, ack: Acknowledgment) {
+//        //수신후 삭제처리
+//        println(userId)
+//        ack.acknowledge()
+//
+//        crawlerSuddenBattleService.crawSuddenBattleLog(userId!!.toInt(), SUDDEN_BATTLE)
+//    }
 }
