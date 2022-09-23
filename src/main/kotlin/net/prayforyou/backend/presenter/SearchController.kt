@@ -4,8 +4,7 @@ import net.prayforyou.backend.application.battle.SearchApplicationService
 import net.prayforyou.backend.application.battle.dto.BattleGunUsageDto
 import net.prayforyou.backend.application.battle.dto.BattlePlaceRateDto
 import net.prayforyou.backend.application.battle.dto.BattleRoundRateDto
-import net.prayforyou.backend.application.user.SearchUserService
-import net.prayforyou.backend.domain.user.User
+import net.prayforyou.backend.application.user.UserService
 import net.prayforyou.backend.global.common.CommonResponse
 import net.prayforyou.backend.presenter.response.SearchUserResponse
 import org.springframework.web.bind.annotation.*
@@ -13,18 +12,9 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/search")
 class SearchController(
-    private val searchUserService: SearchUserService,
+    private val searchUserService: UserService,
     private val searchApplicationService: SearchApplicationService
 ) {
-
-    @GetMapping("/{userId}/place")
-    fun searchPlace(
-        @PathVariable("userId") userId: Long
-    ): CommonResponse<List<BattlePlaceRateDto>> =
-        CommonResponse.convert(
-            searchApplicationService.searchPlaceByUserId(userId)
-        )
-
     @GetMapping("/user")
     fun searchUser(
         @RequestParam("nickname") nickname: String
@@ -32,6 +22,14 @@ class SearchController(
         CommonResponse.convert(
             searchUserService.searchByNickname(nickname)
                 .map { SearchUserResponse.convert(it) }
+        )
+
+    @GetMapping("/{userId}/place")
+    fun searchPlace(
+        @PathVariable("userId") userId: Long
+    ): CommonResponse<List<BattlePlaceRateDto>> =
+        CommonResponse.convert(
+            searchApplicationService.searchPlaceByUserId(userId)
         )
 
     @GetMapping("/{userId}/round")
