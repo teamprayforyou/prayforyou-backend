@@ -2,13 +2,13 @@ package net.prayforyou.backend.application.user
 
 import net.prayforyou.backend.domain.user.UserDailyView
 import net.prayforyou.backend.domain.user.UserWeeklyView
-import java.time.LocalDate
 
 data class UserViewDetailDto(
     val id: Long?,
     val userId: Long?,
-    val count: Int,
-    val dateTime: String
+    val nickname: String?,
+    val nexonId: Int,
+    val count: Int
 ) {
     companion object {
         fun from(view: UserDailyView): UserViewDetailDto =
@@ -16,7 +16,8 @@ data class UserViewDetailDto(
                 id = view.id,
                 userId = view.user.id,
                 count = view.count,
-                dateTime = view.targetedAt.toString()
+                nickname = view.user.nickname,
+                nexonId = view.user.userNexonId
             )
 
         fun from(view: UserWeeklyView): UserViewDetailDto =
@@ -24,7 +25,8 @@ data class UserViewDetailDto(
                 id = view.id,
                 userId = view.user.id,
                 count = view.count,
-                dateTime = view.targetedAt.toString()
+                nickname = view.user.nickname,
+                nexonId = view.user.userNexonId
             )
     }
 }
