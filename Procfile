@@ -1,1 +1,1 @@
-web: sudo java -javaagent:"whatap.agent-2.1.3.jar" -Dwhatap.name=bootTest -Dwhatap.okind=test -Dwhatap.server.home=/var/app/current -Dwhatap.conf.path=/var/app/current -jar prayforyou-prod-ebextensions-1.jar
+web: sudo java -javaagent:/root/whatap/whatap.agent-2.1.3.jar -Dwhatap.name=bootTest -Dwhatap.okind=test -Dwhatap.server.home=/var/app/current -Dwhatap.conf.path=/var/app/current -jar prayforyou-prod-ebextensions-1.jar
