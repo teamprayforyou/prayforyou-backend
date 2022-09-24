@@ -2,11 +2,14 @@ package net.prayforyou.backend.domain.battle
 
 import net.prayforyou.backend.domain.battle.enums.BattleGunType
 import net.prayforyou.backend.infrastructure.crawler.webclient.dto.BattleLog
+import org.springframework.data.annotation.LastModifiedDate
+import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
 @Table(name = "battle_gun")
+@EntityListeners(AuditingEntityListener::class)
 class BattleGun(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +26,7 @@ class BattleGun(
     @Column(name = "use_count")
     var useCount: Int,
 
+    @LastModifiedDate
     @Column(name = "updated_at")
     var updatedAt: LocalDateTime = LocalDateTime.now()
 ) {

@@ -1,11 +1,14 @@
 package net.prayforyou.backend.domain.battle
 
 import net.prayforyou.backend.domain.battle.enums.BattlePlaceType
+import org.springframework.data.annotation.LastModifiedDate
+import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
 @Table(name = "battle_place")
+@EntityListeners(AuditingEntityListener::class)
 class BattlePlace(
 
     @Id
@@ -25,6 +28,7 @@ class BattlePlace(
     @Column(name = "death_count")
     var death: Int = 0,
 
+    @LastModifiedDate
     @Column(name = "updated_at")
     var updatedAt: LocalDateTime = LocalDateTime.now()
 ) {

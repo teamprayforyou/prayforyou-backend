@@ -1,10 +1,13 @@
 package net.prayforyou.backend.domain.battle
 
+import org.springframework.data.annotation.LastModifiedDate
+import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
 @Table(name = "battle_round")
+@EntityListeners(AuditingEntityListener::class)
 class BattleRound(
 
     @Id
@@ -24,6 +27,7 @@ class BattleRound(
     @Column(name = "death_count")
     var death: Int,
 
+    @LastModifiedDate
     @Column(name = "updated_at")
     var updatedAt: LocalDateTime = LocalDateTime.now()
 ) {

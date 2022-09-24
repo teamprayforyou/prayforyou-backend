@@ -2,11 +2,14 @@ package net.prayforyou.backend.domain.battle
 
 import net.prayforyou.backend.domain.battle.enums.BattleMapType
 import net.prayforyou.backend.domain.user.User
+import org.springframework.data.annotation.LastModifiedDate
+import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
 @Table(name = "battle_stats")
+@EntityListeners(AuditingEntityListener::class)
 class BattleStats(
 
     @Id
@@ -21,14 +24,25 @@ class BattleStats(
     @Enumerated(EnumType.STRING)
     var mapType: BattleMapType,
 
+    @Column(name = "round_count")
+    var round: Int = 0,
+
+    @Column(name = "kill_count")
+    var kill: Int = 0,
+
+    @Column(name = "death_count")
+    var death: Int = 0,
+
+    @LastModifiedDate
     @Column(name = "updated_at")
     var updatedAt: LocalDateTime = LocalDateTime.now()
 ) {
     companion object {
-        fun from(user: User, mapType: BattleMapType): BattleStats =
+        fun from(user: User, mapType: BattleMapType, round: Int): BattleStats =
             BattleStats(
                 user = user,
-                mapType = BattleMapType.ALL_SUPPLY
+                mapType = mapType,
+                round = round
             )
     }
 }

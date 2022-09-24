@@ -1,6 +1,8 @@
 package net.prayforyou.backend.domain.board
 
 import net.prayforyou.backend.domain.board.enums.BoardType
+import org.springframework.data.annotation.LastModifiedDate
+import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.time.LocalDateTime
 import javax.persistence.*
 
@@ -9,6 +11,7 @@ import javax.persistence.*
  * */
 @Entity
 @Table(name = "board_comment")
+@EntityListeners(AuditingEntityListener::class)
 class BoardComment(
 
     @Id
@@ -40,6 +43,7 @@ class BoardComment(
     @Column(name = "created_at")
     var createdAt: LocalDateTime = LocalDateTime.now(),
 
+    @LastModifiedDate
     @Column(name = "updated_at")
     var updatedAt: LocalDateTime = LocalDateTime.now()
 )

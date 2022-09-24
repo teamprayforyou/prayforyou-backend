@@ -2,11 +2,14 @@ package net.prayforyou.backend.domain.banner
 
 import net.prayforyou.backend.domain.banner.enums.BannerType
 import net.prayforyou.backend.domain.user.enums.UserType
+import org.springframework.data.annotation.LastModifiedDate
+import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
 @Table(name = "banner")
+@EntityListeners(AuditingEntityListener::class)
 class Banner(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +37,7 @@ class Banner(
     @Column(name = "created_at")
     var createdAt: LocalDateTime,
 
+    @LastModifiedDate
     @Column(name = "updated_at")
     var updatedAt: LocalDateTime
 ) {

@@ -10,6 +10,7 @@ import net.prayforyou.backend.infrastructure.crawler.webclient.dto.BattleLog
 import net.prayforyou.backend.infrastructure.persistence.jpa.provider.battle.BattleGunProvider
 import net.prayforyou.backend.infrastructure.persistence.jpa.provider.battle.BattlePlaceProvider
 import net.prayforyou.backend.infrastructure.persistence.jpa.provider.battle.BattleRoundProvider
+import net.prayforyou.backend.infrastructure.persistence.jpa.repository.battle.BattleStatsRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

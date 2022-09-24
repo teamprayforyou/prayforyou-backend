@@ -3,11 +3,12 @@ package net.prayforyou.backend.application.battle
 import net.prayforyou.backend.application.battle.dto.BattleGunUsageDto
 import net.prayforyou.backend.application.battle.dto.BattlePlaceRateDto
 import net.prayforyou.backend.application.battle.dto.BattleRoundRateDto
-import net.prayforyou.backend.domain.user.User
+import net.prayforyou.backend.application.battle.dto.BattleStatsDto
+import net.prayforyou.backend.domain.battle.enums.BattleMapType
 import net.prayforyou.backend.global.common.annotation.ApplicationService
-import net.prayforyou.backend.global.common.exception.ValidationException
 import net.prayforyou.backend.global.util.MathUtil
 import net.prayforyou.backend.infrastructure.persistence.jpa.provider.user.UserProvider
+import net.prayforyou.backend.infrastructure.persistence.jpa.repository.battle.BattleStatsRepository
 import org.springframework.transaction.annotation.Transactional
 
 
@@ -15,7 +16,8 @@ import org.springframework.transaction.annotation.Transactional
 @ApplicationService
 class SearchApplicationService(
     private val userProvider: UserProvider,
-    private val getBattleStatsService: GetBattleStatsService
+    private val getBattleStatsService: GetBattleStatsService,
+    private val battleStatsRepository: BattleStatsRepository
 ) {
     fun searchPlaceByUserId(userId: Long): List<BattlePlaceRateDto> {
         val user = userProvider.findByUserId(userId)
@@ -52,10 +54,17 @@ class SearchApplicationService(
         val battleGunList = mutableListOf<BattleGunUsageDto>()
         battleGun.forEach {
             battleGunList.add(
-                BattleGunUsageDto(it.type, it.useCount)
+                BattleGunUsageDto(it.type.description, it.useCount)
             )
         }
 
         return battleGunList.sortedByDescending { it.useCount }
+    }
+
+    fun searchStats(userId: Long): BattleStatsDto {
+        val user = userProvider.findByUserId(userId)
+        val stats = battleStatsRepository.findByUserAndMapType(user, BattleMapType.ALL_SUPPLY)
+
+        return BattleStatsDto.from(user, stats, MathUtil.getRate(stats.kill, stats.death))
     }
 }
