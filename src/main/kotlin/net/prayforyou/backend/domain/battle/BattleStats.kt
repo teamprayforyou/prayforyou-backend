@@ -37,6 +37,19 @@ class BattleStats(
     @Column(name = "updated_at")
     var updatedAt: LocalDateTime = LocalDateTime.now()
 ) {
+
+    fun increaseKill() {
+        this.kill += 1
+    }
+
+    fun increaseDeath() {
+        this.death += 1
+    }
+
+    fun increaseRound() {
+        this.round += 1
+    }
+
     companion object {
         fun from(user: User, mapType: BattleMapType, round: Int): BattleStats =
             BattleStats(

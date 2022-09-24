@@ -29,9 +29,10 @@ class SaveSubBattleStatsService(
         val battlePosition = getBattlePositionService
             .getBattlePositionByXandY(battleLog.killX!!, battleLog.killY!!)
 
+        stats.increaseKill()
+
         subBattleStats.battleRound.firstOrNull { it.isSameRound(battleLog.round?.toInt()!!) }?.updateKill()
             ?: battleRoundProvider.save(BattleRound.from(battleLog.round?.toInt()!!, stats, kill = 1, death = 0))
-
 
         subBattleStats.battlePlace.firstOrNull { it.isSamePosition(battlePosition.battlePlaceType) }?.updateKill()
             ?: battlePlaceProvider.save(BattlePlace.from(stats = stats, kill = 1, death = 0, battlePosition = battlePosition))
@@ -43,6 +44,8 @@ class SaveSubBattleStatsService(
         val subBattleStats = getBattleStatsService.getSubStatsByUser(user)
         val battlePosition = getBattlePositionService
             .getBattlePositionByXandY(battleLog.deathX!!, battleLog.deathY!!)
+
+        stats.increaseDeath()
 
         subBattleStats.battleRound.firstOrNull { it.isSameRound(battleLog.round?.toInt()!!) }?.updateDeath()
             ?: battleRoundProvider.save(BattleRound.from(battleLog.round?.toInt()!!, stats, kill = 0, death = 1))
