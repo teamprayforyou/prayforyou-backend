@@ -11,7 +11,7 @@ enum class BattlePlaceType(
     SUPPLY06("중길"),
     SUPPLY07("롱길"),
     SUPPLY08("롱녹위, 롱녹뒤"),
-    SUPPLY09("롱녹위, 롱녹뒤"),
+    SUPPLY09("롱녹깡앞"),
     SUPPLY10("머리길"),
     SUPPLY11("가로등"),
     SUPPLY12("숏앞"),
@@ -60,5 +60,5 @@ enum class BattlePlaceType(
     SUPPLY55("난간"),
     SUPPLY56("홀입구"),
     SUPPLY57("역개 털리는 자리"),
-    NO_POSITION("X");
+    NO_POSITION("미식별");
 }
