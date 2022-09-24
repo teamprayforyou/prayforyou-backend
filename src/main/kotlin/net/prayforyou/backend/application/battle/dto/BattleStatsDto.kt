@@ -11,7 +11,8 @@ data class BattleStatsDto(
     val kill: Int,
     val death: Int,
     val round: Int,
-    val rate: Double
+    val rate: Double,
+    val updatedAt: String
 ) {
     companion object {
         fun from(user: User, stats: BattleStats, rate: Double): BattleStatsDto =
@@ -23,7 +24,8 @@ data class BattleStatsDto(
                 kill = stats.kill,
                 death = stats.death,
                 round = stats.round,
-                rate = rate
+                rate = rate,
+                updatedAt = stats.updatedAt.toString()
             )
     }
 }
