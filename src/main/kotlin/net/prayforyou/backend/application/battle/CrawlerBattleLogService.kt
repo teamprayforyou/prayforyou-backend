@@ -20,9 +20,9 @@ class CrawlerBattleLogService(
         const val FIRST_INDEX = 0
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional
     fun saveBattleLogByUserId(user: User, userType: UserType) {
-        val fetchBattleLog = battleLogClient.fetchBattleLog(user.userNexonId)
+        val fetchBattleLog = battleLogClient.fetchBattleLog(user)
 
         if (fetchBattleLog.isNotEmpty()) {
             // 유저닉네임 저장
@@ -33,5 +33,6 @@ class CrawlerBattleLogService(
                 saveBattleStatsService.save(log, user)
             }
         }
+
     }
 }

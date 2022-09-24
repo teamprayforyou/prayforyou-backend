@@ -23,6 +23,9 @@ class User(
     @Column(name = "user_nexon_id")
     var userNexonId: Int,
 
+    @Column(name = "last_battle_log_id")
+    var lastBattleLogId: Long? = null,
+
     @Enumerated(EnumType.STRING)
     @Column(name = "user_type")
     var userType: UserType
@@ -30,6 +33,10 @@ class User(
 
     fun updateNickname(nickname: String) {
         this.nickname = nickname
+    }
+
+    fun updateUserLastBattleLog(lastBattleLogId: Long) {
+        this.lastBattleLogId = lastBattleLogId
     }
 
     companion object {

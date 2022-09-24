@@ -32,13 +32,16 @@ class MatchClient(
 
         while (true) {
             try {
+                // 가져온 3보급 창고 경기 수가 100개가 되면 종료
+                if (resultList.size == 100) {
+                    break
+                }
                 post = postMatchList(headers, num, userId)
                 num = post.body!!.message
                 resultList.addAll(post.body!!.result
                     .filter { it.map_name.equals("제3보급창고") }
-                    .filter { it.match_name.equals("클랜매치") }
+                    .filter { it.match_name.equals("클랜매치") || it.match_name.equals("용병매치") }
                     .map { it.match_key })
-                logger.log(LogRecord(Level.INFO, "크롤링 완료 데이터: ${post}"))
 
             } catch (ex: Exception) {
                 when(ex) {

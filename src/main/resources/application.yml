@@ -31,5 +31,5 @@ cloud:
       secret-key: 5w2ToHCT/lgGd+nGoehJTTg+MxRKq/WLIYp+zrmg
     sqs:
       queue:
-        name: crawler
-        url: https://sqs.ap-northeast-2.amazonaws.com/249348020310/crawler
+        name: prayforyou.fifo
+        url: https://sqs.ap-northeast-2.amazonaws.com/249348020310/prayforyou.fifo
