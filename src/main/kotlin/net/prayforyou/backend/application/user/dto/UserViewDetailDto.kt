@@ -1,4 +1,4 @@
-package net.prayforyou.backend.application.user
+package net.prayforyou.backend.application.user.dto
 
 import net.prayforyou.backend.domain.user.UserDailyView
 import net.prayforyou.backend.domain.user.UserWeeklyView

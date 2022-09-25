@@ -24,8 +24,8 @@ class BattleStats(
     @Enumerated(EnumType.STRING)
     var mapType: BattleMapType,
 
-    @Column(name = "round_count")
-    var round: Int = 0,
+    @Column(name = "game_count")
+    var gameCount: Int = 0,
 
     @Column(name = "kill_count")
     var kill: Int = 0,
@@ -46,8 +46,8 @@ class BattleStats(
         this.death += 1
     }
 
-    fun increaseRound() {
-        this.round += 1
+    fun increaseGameCount() {
+        this.gameCount += 1
     }
 
     companion object {
@@ -55,7 +55,7 @@ class BattleStats(
             BattleStats(
                 user = user,
                 mapType = mapType,
-                round = round
+                gameCount = round
             )
     }
 }

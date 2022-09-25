@@ -1,4 +1,4 @@
-package net.prayforyou.backend.application.user
+package net.prayforyou.backend.application.user.dto
 
 
 data class UserViewDto(

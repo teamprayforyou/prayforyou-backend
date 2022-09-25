@@ -1,6 +1,5 @@
 package net.prayforyou.backend.infrastructure.crawler.webclient.client
 
-import net.prayforyou.backend.domain.battle.enums.BattleMapType
 import net.prayforyou.backend.domain.battle.enums.BattleMapType.ALL_SUPPLY
 import net.prayforyou.backend.domain.user.User
 import net.prayforyou.backend.infrastructure.crawler.webclient.ApiService
@@ -52,7 +51,7 @@ class BattleLogClient(
                     gameCount++
                     if(gameCount == 1 || user.lastBattleLogId == gameListId[i]!!.toLong()) {
                         // BattleStats에 판수 추가
-                        battleStatsProvider.findByUserAndMapType(user, ALL_SUPPLY).increaseRound()
+                        battleStatsProvider.findByUserAndMapType(user, ALL_SUPPLY).increaseGameCount()
                         user.updateUserLastBattleLog(gameListId[0]!!.toLong())
                         break
                     }

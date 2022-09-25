@@ -1,8 +1,6 @@
 package net.prayforyou.backend.global.filter
 
 import net.prayforyou.backend.application.user.UserViewService
-import net.prayforyou.backend.infrastructure.persistence.jpa.provider.user.UserProvider
-import org.springframework.context.annotation.Configuration
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 import javax.servlet.FilterChain

@@ -1,26 +1,39 @@
 package net.prayforyou.backend.application.battle
 
-import net.prayforyou.backend.application.battle.dto.BattleGunUsageDto
-import net.prayforyou.backend.application.battle.dto.BattlePlaceRateDto
-import net.prayforyou.backend.application.battle.dto.BattleRoundRateDto
-import net.prayforyou.backend.application.battle.dto.BattleStatsDto
+import net.prayforyou.backend.application.battle.dto.*
 import net.prayforyou.backend.domain.battle.enums.BattleMapType
+import net.prayforyou.backend.domain.user.User
 import net.prayforyou.backend.global.common.annotation.ApplicationService
+import net.prayforyou.backend.global.common.exception.NotFoundDataException
 import net.prayforyou.backend.global.util.MathUtil
-import net.prayforyou.backend.infrastructure.persistence.jpa.provider.user.UserProvider
 import net.prayforyou.backend.infrastructure.persistence.jpa.repository.battle.BattleStatsRepository
+import net.prayforyou.backend.infrastructure.persistence.jpa.repository.user.UserRepository
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.transaction.annotation.Transactional
 
 
 @Transactional
 @ApplicationService
-class SearchApplicationService(
-    private val userProvider: UserProvider,
+class SearchUserBattleStatsService(
+    private val userRepository: UserRepository,
     private val getBattleStatsService: GetBattleStatsService,
     private val battleStatsRepository: BattleStatsRepository
 ) {
-    fun searchPlaceByUserId(userId: Long): List<BattlePlaceRateDto> {
-        val user = userProvider.findByUserId(userId)
+    fun getBattleStatsByUserId(userId: Long): SearchUserBattleStatsDto {
+        val user = userRepository.findByIdOrNull(userId) ?: throw NotFoundDataException("유저 정보를 찾을 수 없습니다.")
+        val stats =
+            battleStatsRepository.findByUserAndMapType(user, BattleMapType.ALL_SUPPLY)
+                ?: throw NotFoundDataException("전적정보가 존재하지 않습니다.")
+
+        return SearchUserBattleStatsDto.of(
+            addPlaceByDescending(user),
+            addRoundByDescending(user),
+            addGunByDescending(user),
+            user, BattleStatsDto.from(stats, MathUtil.getRate(stats.kill, stats.death))
+        )
+    }
+
+    private fun addPlaceByDescending(user: User): List<BattlePlaceRateDto> {
         val place = getBattleStatsService.getPlaceByUser(user)
         val battlePlaceList = mutableListOf<BattlePlaceRateDto>()
 
@@ -33,8 +46,7 @@ class SearchApplicationService(
         return battlePlaceList.sortedByDescending { it.rate }
     }
 
-    fun searchRoundByUserId(userId: Long): List<BattleRoundRateDto> {
-        val user = userProvider.findByUserId(userId)
+    private fun addRoundByDescending(user: User): List<BattleRoundRateDto> {
         val battleRound = getBattleStatsService.getRoundByUser(user)
 
         val battleRoundList = mutableListOf<BattleRoundRateDto>()
@@ -47,8 +59,7 @@ class SearchApplicationService(
         return battleRoundList.sortedByDescending { it.rate }
     }
 
-    fun searchGunByUserId(userId: Long): List<BattleGunUsageDto> {
-        val user = userProvider.findByUserId(userId)
+    private fun addGunByDescending(user: User): List<BattleGunUsageDto> {
         val battleGun = getBattleStatsService.getGunByUser(user)
 
         val battleGunList = mutableListOf<BattleGunUsageDto>()
@@ -59,12 +70,5 @@ class SearchApplicationService(
         }
 
         return battleGunList.sortedByDescending { it.useCount }
-    }
-
-    fun searchStats(userId: Long): BattleStatsDto {
-        val user = userProvider.findByUserId(userId)
-        val stats = battleStatsRepository.findByUserAndMapType(user, BattleMapType.ALL_SUPPLY)
-
-        return BattleStatsDto.from(user, stats, MathUtil.getRate(stats.kill, stats.death))
     }
 }

@@ -20,7 +20,4 @@ class BattleStatsProvider(
 
     fun save(stats: BattleStats): BattleStats =
         battleStatsRepository.save(stats)
-
-    fun findAllByUserIdIn(userId: Collection<Long>): List<BattleStats> =
-        battleStatsRepository.findAllByUserIdIn(userId)
 }

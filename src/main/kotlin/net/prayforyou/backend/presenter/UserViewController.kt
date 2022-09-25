@@ -17,8 +17,8 @@ class UserViewController(
         val allView = userViewService.getAllView()
 
         return UserViewResponse(
-            dailyView = allView.dailyView,
-            weeklyView = allView.weeklyView
+            allView.dailyView,
+            allView.weeklyView
         )
     }
 }
