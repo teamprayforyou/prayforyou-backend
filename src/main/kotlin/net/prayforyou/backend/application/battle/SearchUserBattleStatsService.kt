@@ -1,6 +1,7 @@
 package net.prayforyou.backend.application.battle
 
 import net.prayforyou.backend.application.battle.dto.*
+import net.prayforyou.backend.application.user.UserViewService
 import net.prayforyou.backend.domain.battle.enums.BattleMapType
 import net.prayforyou.backend.domain.user.User
 import net.prayforyou.backend.global.common.annotation.ApplicationService
@@ -17,13 +18,15 @@ import org.springframework.transaction.annotation.Transactional
 class SearchUserBattleStatsService(
     private val userRepository: UserRepository,
     private val getBattleStatsService: GetBattleStatsService,
-    private val battleStatsRepository: BattleStatsRepository
+    private val battleStatsRepository: BattleStatsRepository,
+    private val userViewService: UserViewService
 ) {
     fun getBattleStatsByUserId(userId: Long): SearchUserBattleStatsDto {
         val user = userRepository.findByIdOrNull(userId) ?: throw NotFoundDataException("유저 정보를 찾을 수 없습니다.")
-        val stats =
-            battleStatsRepository.findByUserAndMapType(user, BattleMapType.ALL_SUPPLY)
-                ?: throw NotFoundDataException("전적정보가 존재하지 않습니다.")
+        val stats = battleStatsRepository.findByUserAndMapType(user, BattleMapType.ALL_SUPPLY)
+
+        // 검색 업데이트
+        userViewService.updateView(userId)
 
         return SearchUserBattleStatsDto.of(
             addPlaceByDescending(user),
