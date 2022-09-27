@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController
 class BattleController(
     private val getBattlePositionService: GetBattlePositionService
 ) {
-
     @GetMapping("/positions")
     fun positions(): CommonResponse<List<BattlePositionResponse>> {
         return CommonResponse.convert(getBattlePositionService.getSupplyBattlePosition()
