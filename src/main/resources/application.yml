@@ -2,7 +2,7 @@ spring:
 
   # 운영 디비임
   datasource:
-    url: jdbc:mysql://prayforyou-prod.chz2rw6hxdnq.ap-northeast-2.rds.amazonaws.com:3306/supply?useSSL=false&allowPublicKeyRetrieval=true&tinyInt1isBit=false
+    url: jdbc:mysql://database-1.chz2rw6hxdnq.ap-northeast-2.rds.amazonaws.com:3306/supply?useSSL=false&allowPublicKeyRetrieval=true&tinyInt1isBit=false
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: admin
     password: rladudtjr1!
@@ -22,14 +22,3 @@ decorator:
     p6spy:
       enable-logging: true
 
-cloud:
-  aws:
-    region:
-      static: ap-northeast-2
-    credentials:
-      access-key: AKIATUDSM3BLER26HJO2
-      secret-key: 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
-    sqs:
-      queue:
-        name: prayforyou.fifo
-        url: https://sqs.ap-northeast-2.amazonaws.com/249348020310/prayforyou.fifo
