@@ -2,25 +2,24 @@ spring:
 
   # 운영 디비임
   datasource:
-    url: jdbc:mysql://prayforyou-prod.chz2rw6hxdnq.ap-northeast-2.rds.amazonaws.com:3306/supply?useSSL=false&allowPublicKeyRetrieval=true&tinyInt1isBit=false
+    url: jdbc:mysql://database-1.chz2rw6hxdnq.ap-northeast-2.rds.amazonaws.com:3306/supply?useSSL=false&allowPublicKeyRetrieval=true&tinyInt1isBit=false
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: admin
-    password: rladudtjr1!
+    username: root
 
   jpa:
     open-in-view: false
     database-platform: org.hibernate.spatial.dialect.mysql.MySQL8SpatialDialect
     hibernate:
       # 반드시 none or validate 설정 할것
-      ddl-auto: none
-    show-sql: true
+      ddl-auto: update
+#    show-sql: true
     properties:
       database-platform: org.hibernate.spatial.dialect.mysql.MySQL8SpatialDialect
 
-decorator:
-  datasource:
-    p6spy:
-      enable-logging: true
+#decorator:
+#  datasource:
+#    p6spy:
+#      enable-logging: true
 
 cloud:
   aws:
