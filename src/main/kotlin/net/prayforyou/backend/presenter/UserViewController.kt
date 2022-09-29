@@ -1,6 +1,7 @@
 package net.prayforyou.backend.presenter
 
 import net.prayforyou.backend.application.user.UserViewService
+import net.prayforyou.backend.global.common.CommonResponse
 import net.prayforyou.backend.presenter.response.UserViewResponse
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -13,12 +14,11 @@ class UserViewController(
 ) {
 
     @GetMapping("/ranking")
-    fun getView(): UserViewResponse {
+    fun getView(): CommonResponse<UserViewResponse> {
         val allView = userViewService.getAllView()
 
-        return UserViewResponse(
-            allView.dailyView,
-            allView.weeklyView
+        return CommonResponse.convert(
+            UserViewResponse(allView.dailyView, allView.weeklyView)
         )
     }
 }
