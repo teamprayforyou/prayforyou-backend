@@ -14,7 +14,6 @@ class CrawlerSuddenBattleService(
     private val userRepository: UserRepository,
     private val crawlerBattleLogService: CrawlerBattleLogService,
 ) {
-
     private companion object {
         val logger = KotlinLogging.logger {}
     }
