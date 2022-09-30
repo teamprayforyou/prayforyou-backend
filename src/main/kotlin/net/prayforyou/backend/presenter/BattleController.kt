@@ -14,8 +14,7 @@ class BattleController(
     private val getBattlePositionService: GetBattlePositionService
 ) {
     @GetMapping("/positions")
-    fun positions(): CommonResponse<List<BattlePositionResponse>> {
-        return CommonResponse.convert(getBattlePositionService.getSupplyBattlePosition()
+    fun positions(): CommonResponse<List<BattlePositionResponse>> =
+        CommonResponse.convert(getBattlePositionService.getSupplyBattlePosition()
             .map { BattlePositionResponse(it.polygon.toString(), it.battlePlaceType.description) })
-    }
 }
