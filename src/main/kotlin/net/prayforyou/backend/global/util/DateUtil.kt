@@ -1,13 +1,18 @@
 package net.prayforyou.backend.global.util
 
+import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.util.Calendar
+
 
 class DateUtil {
     companion object {
-        fun getMondayDate(now: LocalDate): LocalDate {
-            val day = now.dayOfWeek.value
-            val diff = now.dayOfMonth - day + if (day == 0) -6 else 1
-            return LocalDate.of(now.year, now.month, diff)!!
+        fun getMondayDate(): LocalDate {
+            val cal = Calendar.getInstance()
+            cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
+            return LocalDate.ofInstant(cal.toInstant(), ZoneId.systemDefault())
         }
     }
 }

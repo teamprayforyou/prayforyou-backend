@@ -27,8 +27,8 @@ class UserViewService(
         userDailyProvider.findByUserAndTargetedAt(user, now)
             ?: userDailyProvider.save(user, now)
 
-    fun getWeekly(user: User, now: LocalDate): UserWeeklyView {
-        val date = DateUtil.getMondayDate(now)
+    fun getWeekly(user: User): UserWeeklyView {
+        val date = DateUtil.getMondayDate()
         return userWeeklyViewProvider.findByUserAndTargetedAt(user, date)
             ?: userWeeklyViewProvider.save(user, date)
     }
@@ -36,7 +36,7 @@ class UserViewService(
     fun updateView(userId: Long, now: LocalDate = LocalDate.now()) {
         val user = userRepository.findByIdOrNull(userId) ?: throw NotFoundDataException("유저를 찾을 수 없습니다.")
         val dailyView = getDaily(user, now)
-        val weeklyView = getWeekly(user, now)
+        val weeklyView = getWeekly(user)
 
         dailyView.updateViewCount()
         weeklyView.updateViewCount()
@@ -50,7 +50,7 @@ class UserViewService(
                 .map { UserViewDetailDto.from(it) }
 
         val weeklyView =
-            userWeeklyViewProvider.findByTargetedAt(DateUtil.getMondayDate(now))
+            userWeeklyViewProvider.findByTargetedAt(DateUtil.getMondayDate())
                 .sortedByDescending { it.count }
                 .take(10)
                 .map { UserViewDetailDto.from(it) }
