@@ -5,6 +5,7 @@ spring:
     url: jdbc:mysql://database-1.chz2rw6hxdnq.ap-northeast-2.rds.amazonaws.com:3306/supply?useSSL=false&allowPublicKeyRetrieval=true&tinyInt1isBit=false
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: admin
+    password: rladudtjr1!
 
   jpa:
     open-in-view: true
