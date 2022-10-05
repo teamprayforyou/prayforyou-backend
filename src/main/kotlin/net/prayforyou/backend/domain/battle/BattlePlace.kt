@@ -1,6 +1,8 @@
 package net.prayforyou.backend.domain.battle
 
 import net.prayforyou.backend.domain.battle.enums.BattlePlaceType
+import net.prayforyou.backend.domain.match.MatchUser
+import net.prayforyou.backend.domain.user.User
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.time.LocalDateTime
@@ -16,8 +18,8 @@ class BattlePlace(
     var id: Long? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "battle_stats_id")
-    var battleStats: BattleStats,
+    @JoinColumn(name = "user")
+    var user: User? = null,
 
     @OneToOne(fetch = FetchType.LAZY)
     var battlePosition: BattlePosition? = null,
@@ -47,9 +49,9 @@ class BattlePlace(
         this.battlePosition?.battlePlaceType == placeType
 
     companion object {
-        fun from(stats: BattleStats, kill: Int = 0, death: Int = 0, battlePosition: BattlePosition?): BattlePlace =
+        fun from(user: User, kill: Int = 0, death: Int = 0, battlePosition: BattlePosition?): BattlePlace =
             BattlePlace(
-                battleStats = stats,
+                user = user,
                 kill = kill,
                 death = death,
                 battlePosition = battlePosition

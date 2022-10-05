@@ -1,6 +1,5 @@
 package net.prayforyou.backend.domain.board
 
-import net.prayforyou.backend.domain.battle.BattleStats
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.time.LocalDateTime

@@ -9,7 +9,6 @@ data class UserViewDetailDto(
     val userId: Long?,
     val nickname: String?,
     val userNexonId: Int,
-    val userType: UserType,
     val count: Int
 ) {
     companion object {
@@ -20,7 +19,6 @@ data class UserViewDetailDto(
                 count = view.count,
                 nickname = view.user.nickname,
                 userNexonId = view.user.userNexonId,
-                userType = view.user.userType
             )
 
         fun from(view: UserWeeklyView): UserViewDetailDto =
@@ -30,7 +28,6 @@ data class UserViewDetailDto(
                 count = view.count,
                 nickname = view.user.nickname,
                 userNexonId = view.user.userNexonId,
-                userType = view.user.userType
             )
     }
 }

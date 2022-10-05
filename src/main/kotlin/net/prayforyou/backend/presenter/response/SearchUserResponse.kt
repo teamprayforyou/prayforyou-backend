@@ -7,7 +7,7 @@ data class SearchUserResponse(
     val userId: Long,
     val nickname: String,
     val userNexonId: Int,
-    val userType: UserType
+    val clanName: String
 ) {
     companion object {
         fun convert(user: User): SearchUserResponse =
@@ -15,7 +15,8 @@ data class SearchUserResponse(
                 userId = user.id!!,
                 nickname = user.nickname!!,
                 userNexonId = user.userNexonId,
-                userType = user.userType
+                clanName = user.clanId?.clanNickname
+                    ?: "무소속"
             )
     }
 }

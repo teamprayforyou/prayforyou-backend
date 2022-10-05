@@ -53,6 +53,9 @@ dependencies {
     // mockk
     testImplementation("io.mockk:mockk:1.12.8")
 
+    // JSON in MySQL
+    implementation("com.vladmihalcea:hibernate-types-52:2.16.2")
+
 
     sourceSets.main {
         withConvention(org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet::class) {
