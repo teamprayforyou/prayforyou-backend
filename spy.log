@@ -1,3 +1,0 @@
-1663948167087|39|commit|connection 32|url jdbc:mysql://localhost:3306/supply?useSSL=false&allowPublicKeyRetrieval=true&tinyInt1isBit=false||
-1663948167090|42|commit|connection 33|url jdbc:mysql://localhost:3306/supply?useSSL=false&allowPublicKeyRetrieval=true&tinyInt1isBit=false||
-1663948167091|21407|statement|connection 34|url jdbc:mysql://localhost:3306/supply?useSSL=false&allowPublicKeyRetrieval=true&tinyInt1isBit=false|insert into battle_stats (map_type, updated_at, user_id) values (?, ?, ?)|insert into battle_stats (map_type, updated_at, user_id) values ('ALL_SUPPLY', '2022-09-24T00:49:05.681+0900', 5765)
