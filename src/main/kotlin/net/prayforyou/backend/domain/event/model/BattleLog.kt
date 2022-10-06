@@ -3,7 +3,7 @@ package net.prayforyou.backend.domain.event.model
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class BattleLog(
+class BattleLog(
     val death_x: Double?,
     val death_y: Double?,
     val event_category: String?,

@@ -37,8 +37,6 @@ class Clan (
 
     var clanLevel: String,
 
-    var ranking: Int,
-
     var score: Long,
 
     var winLosePercent: Double,

@@ -2,7 +2,6 @@ package net.prayforyou.backend.application.event
 
 import net.prayforyou.backend.application.battle.GetBattlePositionService
 import net.prayforyou.backend.domain.battle.BattlePlace
-import net.prayforyou.backend.domain.clan.Clan
 import net.prayforyou.backend.domain.clan.enums.ClanLevel
 import net.prayforyou.backend.domain.event.Event
 import net.prayforyou.backend.domain.match.ClanMatch
@@ -15,6 +14,7 @@ import net.prayforyou.backend.infrastructure.persistence.jpa.repository.clan.Cla
 import net.prayforyou.backend.infrastructure.persistence.jpa.repository.clan.ClanMatchUserRepository
 import net.prayforyou.backend.infrastructure.persistence.jpa.repository.clan.ClanRepository
 import net.prayforyou.backend.infrastructure.persistence.jpa.repository.user.UserRepository
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import kotlin.math.round
@@ -42,6 +42,7 @@ class EventService(
         val y: Double
     )
 
+    @Scheduled(fixedDelay = 30000)
     fun process() {
         val findTodoEvents = eventProvider.findTodoEvents()
         val findTodoUserJson = userJsonProvider.findTodoEvents()
@@ -88,11 +89,10 @@ class EventService(
                     redClan,
                     blueClan,
                     isRedTeamWin,
-                    findTodoEvent.matchJson.parseData!!.matchData!!.m_CLAN_match_time!!,
                     (1 * 10 + 0 - 10),
                     findTodoEvent.matchTime,
                     findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
-                    findTodoEvent.matchJson.parseData!!.matchData!!.m_CLAN_match_time!!
+                    findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!
                 )
             } else {
                 blueClan.updateWinLoseCount(0, 1)
@@ -104,11 +104,10 @@ class EventService(
                     redClan,
                     blueClan,
                     isRedTeamWin,
-                    findTodoEvent.matchJson.parseData!!.matchData!!.m_CLAN_match_time!!,
-                    (0 * 10 + 1 - 10).toInt(),
+                    (0 * 10 + 1 - 10),
                     findTodoEvent.matchTime,
                     findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
-                    findTodoEvent.matchJson.parseData!!.matchData!!.m_CLAN_match_time!!
+                    findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!
                 )
             }
 
@@ -334,9 +333,14 @@ class EventService(
                     }
 
                     val findAllClan = clanRepository.findAll()
-                    val sortedClans = findAllClan.sortedBy { it.score }.stream().limit((findAllClan.size / 2).toLong())
-                    for (sortedClan in sortedClans) {
+                    val sortedAClan = findAllClan.sortedBy { it.score }.stream().limit((findAllClan.size / 2).toLong())
+                    for (sortedClan in sortedAClan) {
                         sortedClan.clanLevel = ClanLevel.B.name
+                    }
+                    val sortedBClan = findAllClan.sortedBy { it.score }.reversed().stream().limit((findAllClan.size / 2).toLong())
+                    for (sortedClan in sortedBClan) {
+                        sortedClan.clanLevel = ClanLevel.A.name
+
                     }
 
                 }

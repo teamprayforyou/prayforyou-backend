@@ -1,6 +1,6 @@
 package net.prayforyou.backend.domain.user.model
 
-data class UserJsonModel(
+class UserJsonModel(
     val message: String?,
     val result: Int?,
     val resultClanInfo: Any?,

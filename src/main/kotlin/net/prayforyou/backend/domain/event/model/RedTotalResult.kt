@@ -1,6 +1,6 @@
 package net.prayforyou.backend.domain.event.model
 
-data class RedTotalResult(
+class RedTotalResult(
     val assist_cnt: Int?,
     val damage_cnt: String?,
     val death_cnt: Int?,

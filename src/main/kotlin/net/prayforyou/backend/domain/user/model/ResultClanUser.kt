@@ -1,6 +1,6 @@
 package net.prayforyou.backend.domain.user.model
 
-data class ResultClanUser(
+class ResultClanUser(
     val auth_flag: String?,
     val clan_exp: String?,
     val clan_level: String?,

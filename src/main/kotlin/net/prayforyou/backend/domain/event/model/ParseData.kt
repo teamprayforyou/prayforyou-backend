@@ -1,9 +1,9 @@
 package net.prayforyou.backend.domain.event.model
 
-data class ParseData(
-    val m_CLAN_enemy_clan_no: String?,
-    val m_CLAN_friendly_clan_no: String?,
-    val m_CLAN_match_key: Long?,
-    val m_CLAN_match_type: String?,
-    val matchData: MatchData?
+class ParseData(
+    var MatchData: MatchData?,
+    var M_CLAN_match_key: Long?,
+    var M_CLAN_match_type: String?,
+    var M_CLAN_enemy_clan_no: String?,
+    var M_CLAN_friendly_clan_no: String?
 )

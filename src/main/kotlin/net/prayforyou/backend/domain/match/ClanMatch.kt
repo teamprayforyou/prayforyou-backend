@@ -29,8 +29,6 @@ class ClanMatch (
 
     var isRedTeamWin: Boolean,
 
-    var matchTime: String,
-
     var plusScore: Int,
 
     var matchTimeKorean: String,

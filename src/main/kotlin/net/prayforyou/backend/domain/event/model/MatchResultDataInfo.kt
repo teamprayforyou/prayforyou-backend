@@ -1,6 +1,8 @@
 package net.prayforyou.backend.domain.event.model
 
-data class MatchResultDataInfo(
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+
+class MatchResultDataInfo(
     val blue_clan_img1: String?,
     val blue_clan_img2: String?,
     val blue_clan_name: String?,

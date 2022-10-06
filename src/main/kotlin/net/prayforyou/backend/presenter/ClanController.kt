@@ -5,6 +5,7 @@ import net.prayforyou.backend.application.match.MatchService
 import net.prayforyou.backend.domain.clan.Clan
 import net.prayforyou.backend.global.common.CommonResponse
 import net.prayforyou.backend.presenter.response.BlueTeam
+import net.prayforyou.backend.presenter.response.ClanListResponse
 import net.prayforyou.backend.presenter.response.ClanResponse
 import net.prayforyou.backend.presenter.response.DetailUser
 import net.prayforyou.backend.presenter.response.MatchDetail
@@ -25,6 +26,16 @@ class ClanController(
     private val clanService: ClanService,
     private val matchService: MatchService
 ) {
+
+    @GetMapping("/list")
+    fun getClanList(): MutableList<ClanListResponse> {
+        val clanListResponse: MutableList<ClanListResponse> = mutableListOf()
+        for (clan in clanService.findAll()) {
+            clanListResponse.add(ClanListResponse(clan.clanId.toString(), clan.clanName))
+        }
+
+        return clanListResponse
+    }
 
     @GetMapping("/{clanId}")
     fun getClanInfo(@PathVariable clanId: Long): ClanResponse {
