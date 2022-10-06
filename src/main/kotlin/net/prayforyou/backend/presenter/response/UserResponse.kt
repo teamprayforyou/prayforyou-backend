@@ -22,7 +22,7 @@ data class UserResponse(
                 killPerGame = user.killPerGame!!,
                 ladderPoint = user.score!!,
                 winLosePercent = user.winLoosePercent!!,
-                clanName = user.clanId!!.clanName,
+                clanName = user.clanId!!.clanNickname,
                 clanMarkUrl = user.clanId!!.clanMarkUrl
             )
         }
