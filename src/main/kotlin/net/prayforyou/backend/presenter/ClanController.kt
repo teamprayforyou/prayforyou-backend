@@ -2,7 +2,6 @@ package net.prayforyou.backend.presenter
 
 import net.prayforyou.backend.application.clan.ClanService
 import net.prayforyou.backend.application.match.MatchService
-import net.prayforyou.backend.domain.clan.Clan
 import net.prayforyou.backend.domain.clan.enums.ClanLevel
 import net.prayforyou.backend.global.common.CommonResponse
 import net.prayforyou.backend.global.common.PageResponse
@@ -101,7 +100,7 @@ class ClanController(
                     isWin = match.isRedTeamWin,
                     lastGameDay = match.matchTimeKorean,
                     addScore = match.plusScore,
-                    matchId = match.matchId,
+                    matchId = match.matchId.toString(),
                     redTeam = RedTeam(
                         match.redClan.clanId,
                         match.redClan.score.toInt(),

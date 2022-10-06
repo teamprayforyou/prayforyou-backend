@@ -1,7 +1,7 @@
 package net.prayforyou.backend.presenter.response
 
 data class MatchResponse(
-    val matchId: Long,
+    val matchId: String,
     val gameProgressTime: String,
     val isWin: Boolean,
     val lastGameDay: String,
