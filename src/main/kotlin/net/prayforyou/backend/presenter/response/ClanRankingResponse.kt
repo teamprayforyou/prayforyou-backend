@@ -30,7 +30,7 @@ data class ClanRankingResponse(
 
     var isDeleted: Boolean?,
 
-    var createdAt: LocalDateTime?
+    var createdAt: String?
 ) {
     companion object {
         fun from (clan: Clan): ClanRankingResponse {
@@ -48,7 +48,7 @@ data class ClanRankingResponse(
                 clan.openKakaoLink,
                 clan.clanMarkUrl,
                 clan.isDeleted,
-                clan.createdAt
+                clan.createdAt.toString()
             )
         }
     }
