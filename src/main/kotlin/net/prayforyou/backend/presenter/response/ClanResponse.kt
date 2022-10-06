@@ -14,7 +14,7 @@ data class ClanResponse(
     companion object {
         fun from(clan: Clan): ClanResponse {
             return ClanResponse(
-                name = clan.clanName,
+                name = clan.clanNickname,
                 clanLevel = clan.clanLevel,
                 ladderPoint = clan.score!!,
                 winLosePercent = clan.winLosePercent,
