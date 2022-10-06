@@ -9,8 +9,8 @@ class ClanService(
     private val clanRepository: ClanRepository
 ) {
 
-    fun getClanOrderByScore(): List<Clan> {
-        return clanRepository.findClanOrderByRanking()
+    fun getClanOrderByScore(levelName: String): List<Clan> {
+        return clanRepository.findClanOrderByRanking(levelName)
     }
 
     fun getClanById(clanId: Long): Clan? {

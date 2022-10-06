@@ -3,6 +3,7 @@ package net.prayforyou.backend.presenter
 import net.prayforyou.backend.application.clan.ClanService
 import net.prayforyou.backend.application.match.MatchService
 import net.prayforyou.backend.domain.clan.Clan
+import net.prayforyou.backend.domain.clan.enums.ClanLevel
 import net.prayforyou.backend.global.common.CommonResponse
 import net.prayforyou.backend.presenter.response.BlueTeam
 import net.prayforyou.backend.presenter.response.ClanListResponse
@@ -45,8 +46,8 @@ class ClanController(
     }
 
     @GetMapping("/ranking")
-    fun getClanInfoOrderByRanking(): CommonResponse<List<Clan>> {
-        return CommonResponse.convert(clanService.getClanOrderByScore())
+    fun getClanInfoOrderByRanking(@RequestParam("levelName") levelName: ClanLevel): CommonResponse<List<Clan>> {
+        return CommonResponse.convert(clanService.getClanOrderByScore(levelName.levelName))
     }
 
     @GetMapping("/match/detail")
