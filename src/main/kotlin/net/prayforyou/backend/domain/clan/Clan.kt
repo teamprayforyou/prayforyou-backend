@@ -35,7 +35,8 @@ class Clan (
 
     var isDownDanger: Boolean,
 
-    var clanLevel: String,
+    @Enumerated(EnumType.STRING)
+    var clanLevel: ClanLevel,
 
     var score: Long,
 

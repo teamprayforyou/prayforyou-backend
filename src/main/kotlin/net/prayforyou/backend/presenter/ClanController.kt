@@ -5,8 +5,10 @@ import net.prayforyou.backend.application.match.MatchService
 import net.prayforyou.backend.domain.clan.Clan
 import net.prayforyou.backend.domain.clan.enums.ClanLevel
 import net.prayforyou.backend.global.common.CommonResponse
+import net.prayforyou.backend.global.common.PageResponse
 import net.prayforyou.backend.presenter.response.BlueTeam
 import net.prayforyou.backend.presenter.response.ClanListResponse
+import net.prayforyou.backend.presenter.response.ClanRankingResponse
 import net.prayforyou.backend.presenter.response.ClanResponse
 import net.prayforyou.backend.presenter.response.DetailUser
 import net.prayforyou.backend.presenter.response.MatchDetail
@@ -46,8 +48,8 @@ class ClanController(
     }
 
     @GetMapping("/ranking")
-    fun getClanInfoOrderByRanking(@RequestParam("levelName") levelName: ClanLevel): CommonResponse<List<Clan>> {
-        return CommonResponse.convert(clanService.getClanOrderByScore(levelName.levelName))
+    fun getClanInfoOrderByRanking(@RequestParam("levelName") levelName: ClanLevel): CommonResponse<List<ClanRankingResponse>> {
+        return CommonResponse.convert(clanService.getClanOrderByScore(levelName).map { ClanRankingResponse.from(it) }.toList())
     }
 
     @GetMapping("/match/detail")
@@ -87,7 +89,7 @@ class ClanController(
     fun getUserMatch(
         @RequestParam("clanId") clanId: Long,
         @PageableDefault(value = 7) pageable: Pageable
-    ): CommonResponse<MutableList<MatchResponse>> {
+    ): PageResponse<MutableList<MatchResponse>> {
         val matchResponse: MutableList<MatchResponse> = mutableListOf()
         val matchList = matchService.getMatchDataByClanId(clanId, pageable)
         for (match in matchList) {
@@ -104,23 +106,21 @@ class ClanController(
                         match.redClan.clanId,
                         match.redClan.score.toInt(),
                         redUsers.map { User(it.user.nickname!!, it.user.userNexonId.toLong()) }.toList(),
-                        match.redClan.clanLevel,
+                        match.redClan.clanLevel.levelName,
                         match.redClan.clanName
                     ),
                     blueTeam = BlueTeam(
                         match.blueClan.clanId,
                         match.blueClan.score.toInt(),
                         blueUsers.map { User(it.user.nickname!!, it.user.userNexonId.toLong()) }.toList(),
-                        match.blueClan.clanLevel,
+                        match.blueClan.clanLevel.levelName,
                         match.blueClan.clanName
-                    ),
-                    isLast = matchList.isLast,
-                    totalPages = matchList.totalPages
+                    )
                 )
             )
         }
 
-        return CommonResponse.convert(matchResponse)
+        return PageResponse.convert(matchResponse, matchList.isLast, matchList.totalPages)
     }
 
 }

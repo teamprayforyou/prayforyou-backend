@@ -15,8 +15,8 @@ data class ClanResponse(
         fun from(clan: Clan): ClanResponse {
             return ClanResponse(
                 name = clan.clanNickname,
-                clanLevel = clan.clanLevel,
-                ladderPoint = clan.score!!,
+                clanLevel = clan.clanLevel.levelName,
+                ladderPoint = clan.score,
                 winLosePercent = clan.winLosePercent,
                 winCount = clan.winCount,
                 loseCount = clan.loseCount

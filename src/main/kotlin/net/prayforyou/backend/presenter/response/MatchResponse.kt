@@ -8,8 +8,6 @@ data class MatchResponse(
     val addScore: Int,
     val redTeam: RedTeam,
     val blueTeam: BlueTeam,
-    val totalPages: Int,
-    val isLast: Boolean
 )
 
 data class RedTeam (

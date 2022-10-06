@@ -335,11 +335,11 @@ class EventService(
                     val findAllClan = clanRepository.findAll()
                     val sortedAClan = findAllClan.sortedBy { it.score }.stream().limit((findAllClan.size / 2).toLong())
                     for (sortedClan in sortedAClan) {
-                        sortedClan.clanLevel = ClanLevel.B.levelName
+                        sortedClan.clanLevel = ClanLevel.B
                     }
                     val sortedBClan = findAllClan.sortedBy { it.score }.reversed().stream().limit((findAllClan.size / 2).toLong())
                     for (sortedClan in sortedBClan) {
-                        sortedClan.clanLevel = ClanLevel.A.levelName
+                        sortedClan.clanLevel = ClanLevel.A
 
                     }
 

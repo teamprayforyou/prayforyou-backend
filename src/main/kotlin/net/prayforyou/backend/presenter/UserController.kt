@@ -3,6 +3,7 @@ package net.prayforyou.backend.presenter
 import net.prayforyou.backend.application.match.MatchService
 import net.prayforyou.backend.application.user.UserService
 import net.prayforyou.backend.global.common.CommonResponse
+import net.prayforyou.backend.global.common.PageResponse
 import net.prayforyou.backend.presenter.response.BlueTeam
 import net.prayforyou.backend.presenter.response.MatchResponse
 import net.prayforyou.backend.presenter.response.RedTeam
@@ -47,7 +48,7 @@ class UserController(
     fun getUserMatch(
         @RequestParam("userNexonId") userNexonId: Long,
         pageable: Pageable
-    ): CommonResponse<MutableList<MatchResponse>> {
+    ): PageResponse<MutableList<MatchResponse>> {
         val matchResponse: MutableList<MatchResponse> = mutableListOf()
         val matchList = matchService.getMatchDataByUserNexonId(userNexonId, pageable)
         for (match in matchList) {
@@ -66,22 +67,20 @@ class UserController(
                         match.redClan.clanId,
                         match.redClan.score.toInt(),
                         redUsers.map { User(it.user.nickname!!, it.user.userNexonId.toLong()) }.toList(),
-                        match.redClan.clanLevel,
+                        match.redClan.clanLevel.levelName,
                         match.redClan.clanName
                     ),
                     blueTeam = BlueTeam(
                         match.blueClan.clanId,
                         match.blueClan.score.toInt(),
                         blueUsers.map { User(it.user.nickname!!, it.user.userNexonId.toLong()) }.toList(),
-                        match.blueClan.clanLevel,
+                        match.blueClan.clanLevel.levelName,
                         match.blueClan.clanName
-                    ),
-                    isLast = matchList.isLast,
-                    totalPages = matchList.totalPages
+                    )
                 )
             )
         }
 
-        return CommonResponse.convert(matchResponse)
+        return PageResponse.convert(matchResponse, matchList.isLast, matchList.totalPages)
     }
 }
