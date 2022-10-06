@@ -62,7 +62,7 @@ class UserController(
                     isWin = match.isRedTeamWin,
                     lastGameDay = match.matchTimeKorean,
                     addScore = plusUserScore!!,
-                    matchId = match.matchId,
+                    matchId = match.matchId.toString(),
                     redTeam = RedTeam(
                         match.redClan.clanId,
                         match.redClan.score.toInt(),
