@@ -107,14 +107,14 @@ class ClanController(
                         match.redClan.score.toInt(),
                         redUsers.map { User(it.user.nickname!!, it.user.userNexonId.toLong()) }.toList(),
                         match.redClan.clanLevel.levelName,
-                        match.redClan.clanName
+                        match.redClan.clanNickname
                     ),
                     blueTeam = BlueTeam(
                         match.blueClan.clanId,
                         match.blueClan.score.toInt(),
                         blueUsers.map { User(it.user.nickname!!, it.user.userNexonId.toLong()) }.toList(),
                         match.blueClan.clanLevel.levelName,
-                        match.blueClan.clanName
+                        match.blueClan.clanNickname
                     )
                 )
             )
