@@ -36,60 +36,63 @@ class UserController(
     @GetMapping("/search")
     fun searchUser(
         @RequestParam("nickname") nickname: String
-    ): CommonResponse<List<SearchUserResponse>> =
-        CommonResponse.convert(
-            userService.searchByNickname(nickname)
-                .map { SearchUserResponse.convert(it) }
-        )
-
-    @GetMapping("/ranking")
-    fun userRanking(pageable: Pageable): CommonResponse<Page<UserRankingResponse>> {
-        val userRankingResponse: MutableList<UserRankingResponse> = mutableListOf()
-        for (user in userService.getUserRankingByPaging(pageable)) {
-            userRankingResponse.add(UserRankingResponse.from(user))
+    ): CommonResponse<List<SearchUserResponse>> {
+        val user = userService.searchByNickname(nickname)
+        if (user.any { it.gameCount != 0 }) {
+            return CommonResponse.convert(user.map { SearchUserResponse.convert(it) })
         }
 
-        val page: Page<UserRankingResponse> = PageImpl(userRankingResponse, pageable, userRankingResponse.size.toLong())
-        return CommonResponse.convert(page)
+        return CommonResponse.convert(listOf())
     }
 
-    @GetMapping("/match")
-    fun getUserMatch(
-        @RequestParam("userNexonId") userNexonId: Long,
-        pageable: Pageable
-    ): PageResponse<MutableList<MatchResponse>> {
-        val matchResponse: MutableList<MatchResponse> = mutableListOf()
-        val matchList = matchService.getMatchDataByUserNexonId(userNexonId, pageable)
-        for (match in matchList) {
-            val redUsers = matchService.getMatchUsers(match.matchId, match.redClan.id!!)
-            val blueUsers = matchService.getMatchUsers(match.matchId, match.blueClan.id!!)
-            val plusUserScore = (redUsers.find { it.user.userNexonId.toLong() == userNexonId }?.plusScore
-                ?: blueUsers.find { it.user.userNexonId.toLong() == userNexonId }?.plusScore)
-            matchResponse.add(
-                MatchResponse(
-                    gameProgressTime = match.totalMatchTime,
-                    isWin = match.isRedTeamWin,
-                    lastGameDay = DateUtil.calculateTime(DateUtil.toDate(match.matchStartTime))!!,
-                    addScore = plusUserScore!!,
-                    matchId = match.matchId.toString(),
-                    redTeam = RedTeam(
-                        match.redClan.clanId,
-                        match.redClan.score.toInt(),
-                        redUsers.map { User(it.user.nickname!!, it.user.userNexonId.toLong()) }.toList(),
-                        match.redClan.clanLevel.levelName,
-                        match.redClan.clanNickname
-                    ),
-                    blueTeam = BlueTeam(
-                        match.blueClan.clanId,
-                        match.blueClan.score.toInt(),
-                        blueUsers.map { User(it.user.nickname!!, it.user.userNexonId.toLong()) }.toList(),
-                        match.blueClan.clanLevel.levelName,
-                        match.blueClan.clanNickname
+        @GetMapping("/ranking")
+        fun userRanking(pageable: Pageable): PageResponse<MutableList<UserRankingResponse>> {
+            val userRankingResponse: MutableList<UserRankingResponse> = mutableListOf()
+            val users = userService.getUserRankingByPaging(pageable)
+            for (user in users) {
+                userRankingResponse.add(UserRankingResponse.from(user))
+            }
+
+            return PageResponse.convert(userRankingResponse, users.isLast, users.totalPages)
+        }
+
+        @GetMapping("/match")
+        fun getUserMatch(
+            @RequestParam("userNexonId") userNexonId: Long,
+            pageable: Pageable
+        ): PageResponse<MutableList<MatchResponse>> {
+            val matchResponse: MutableList<MatchResponse> = mutableListOf()
+            val matchList = matchService.getMatchDataByUserNexonId(userNexonId, pageable)
+            for (match in matchList) {
+                val redUsers = matchService.getMatchUsers(match.matchId, match.redClan.id!!)
+                val blueUsers = matchService.getMatchUsers(match.matchId, match.blueClan.id!!)
+                val plusUserScore = (redUsers.find { it.user.userNexonId.toLong() == userNexonId }?.plusScore
+                    ?: blueUsers.find { it.user.userNexonId.toLong() == userNexonId }?.plusScore)
+                matchResponse.add(
+                    MatchResponse(
+                        gameProgressTime = match.totalMatchTime,
+                        isWin = match.isRedTeamWin,
+                        lastGameDay = DateUtil.calculateTime(DateUtil.toDate(match.matchStartTime))!!,
+                        addScore = plusUserScore!!,
+                        matchId = match.matchId.toString(),
+                        redTeam = RedTeam(
+                            match.redClan.clanId,
+                            match.redClan.score.toInt(),
+                            redUsers.map { User(it.user.nickname!!, it.user.userNexonId.toLong()) }.toList(),
+                            match.redClan.clanLevel.levelName,
+                            match.redClan.clanNickname
+                        ),
+                        blueTeam = BlueTeam(
+                            match.blueClan.clanId,
+                            match.blueClan.score.toInt(),
+                            blueUsers.map { User(it.user.nickname!!, it.user.userNexonId.toLong()) }.toList(),
+                            match.blueClan.clanLevel.levelName,
+                            match.blueClan.clanNickname
+                        )
                     )
                 )
-            )
-        }
+            }
 
-        return PageResponse.convert(matchResponse, matchList.isLast, matchList.totalPages)
+            return PageResponse.convert(matchResponse, matchList.isLast, matchList.totalPages)
+        }
     }
-}
