@@ -22,8 +22,10 @@ data class UserResponse(
                 killPerGame = user.killPerGame!!,
                 ladderPoint = user.score!!,
                 winLosePercent = user.winLoosePercent!!,
-                clanName = user.clanId!!.clanNickname,
-                clanMarkUrl = user.clanId!!.clanMarkUrl
+                clanName = user.clanId?.clanNickname
+                    ?: "무소속",
+                clanMarkUrl = user.clanId?.clanMarkUrl
+                    ?: "https://prayforyou.s3.ap-northeast-2.amazonaws.com/x+(1).svg"
             )
         }
     }
