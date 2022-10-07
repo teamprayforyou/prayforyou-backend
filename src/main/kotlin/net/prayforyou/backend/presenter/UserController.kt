@@ -12,8 +12,10 @@ import net.prayforyou.backend.presenter.response.User
 import net.prayforyou.backend.presenter.response.UserRankingResponse
 import net.prayforyou.backend.presenter.response.UserResponse
 import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
 import org.springframework.web.bind.annotation.*
+
 
 @RestController
 @RequestMapping("/user")
@@ -41,7 +43,13 @@ class UserController(
 
     @GetMapping("/ranking")
     fun userRanking(pageable: Pageable): CommonResponse<Page<UserRankingResponse>> {
-        return CommonResponse.convert(userService.getUserRankingByPaging(pageable))
+        val userRankingResponse: MutableList<UserRankingResponse> = mutableListOf()
+        for (user in userService.getUserRankingByPaging(pageable)) {
+            userRankingResponse.add(UserRankingResponse.from(user))
+        }
+
+        val page: Page<UserRankingResponse> = PageImpl(userRankingResponse, pageable, userRankingResponse.size.toLong())
+        return CommonResponse.convert(page)
     }
 
     @GetMapping("/match")

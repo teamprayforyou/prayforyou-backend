@@ -11,6 +11,6 @@ interface UserRepository : JpaRepository<User, Long> {
     fun findByUserNexonId(userId: Int): User?
     fun findByNicknameContains(nickname: String): List<User>
 
-    @Query("select new net.prayforyou.backend.presenter.response.UserRankingResponse(u.userNexonId, u.nickname, u.clanId.clanMarkUrl, u.winCount, u.gameCount, u.winLoosePercent, u.killDeath, u.killPerGame, u.score) from User u order by u.score desc")
-    fun findUserRanking(pageable: Pageable): Page<UserRankingResponse>
+    @Query("select u from User u order by u.score desc")
+    fun findUserRanking(pageable: Pageable): Page<User>
 }

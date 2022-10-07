@@ -23,7 +23,7 @@ class UserService(
         return userRepository.findByNicknameContains(nickname)
     }
 
-    fun getUserRankingByPaging(pageable: Pageable): Page<UserRankingResponse> {
+    fun getUserRankingByPaging(pageable: Pageable): Page<User> {
         return userRepository.findUserRanking(pageable)
     }
 

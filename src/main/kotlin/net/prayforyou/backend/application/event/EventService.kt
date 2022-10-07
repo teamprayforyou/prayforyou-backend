@@ -89,7 +89,7 @@ class EventService(
                     redClan,
                     blueClan,
                     isRedTeamWin,
-                    (1 * 10 + 0 - 10),
+                    10,
                     findTodoEvent.matchTime,
                     findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
                     findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!
@@ -104,7 +104,7 @@ class EventService(
                     redClan,
                     blueClan,
                     isRedTeamWin,
-                    (0 * 10 + 1 - 10),
+                    -10,
                     findTodoEvent.matchTime,
                     findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
                     findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!
