@@ -69,7 +69,7 @@ class UserController(
                 MatchResponse(
                     gameProgressTime = match.totalMatchTime,
                     isWin = match.isRedTeamWin,
-                    lastGameDay = DateUtil.calculateTime(DateUtil.toDate(match.totalMatchTime))!!,
+                    lastGameDay = DateUtil.calculateTime(DateUtil.toDate(match.matchStartTime))!!,
                     addScore = plusUserScore!!,
                     matchId = match.matchId.toString(),
                     redTeam = RedTeam(
