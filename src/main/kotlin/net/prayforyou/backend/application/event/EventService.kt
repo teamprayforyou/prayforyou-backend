@@ -14,7 +14,6 @@ import net.prayforyou.backend.infrastructure.persistence.jpa.repository.clan.Cla
 import net.prayforyou.backend.infrastructure.persistence.jpa.repository.clan.ClanMatchUserRepository
 import net.prayforyou.backend.infrastructure.persistence.jpa.repository.clan.ClanRepository
 import net.prayforyou.backend.infrastructure.persistence.jpa.repository.user.UserRepository
-import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import kotlin.math.round
@@ -56,6 +55,10 @@ class EventService(
                 if (userRepository.findByUserNexonId(userResult.user_nexon_sn!!) == null) {
                     val initialUser = User.initialUser(findClan!!, userResult.user_nexon_sn, userResult.user_nick!!)
                     userRepository.saveAndFlush(initialUser)
+                } else {
+                    // 이미 존재하는 유저가 클랜이 변경되었다면, 클랜을 바꾼다
+                    val findUser = userRepository.findByUserNexonId(userResult.user_nexon_sn)
+                    findUser?.clanId = findClan
                 }
             }
         }
