@@ -243,11 +243,11 @@ class EventService(
                         findUser.increaseDeathCount(deathCount)
                         findUser.updateNickname(userInfo.userNickName)
                         findUser.increaseGameCount()
-                        findUser.updateKillPerGame()
                         findUser.updateWinLosePercent()
                         findUser.setPrimaryUseGun(ripleCount, sniperCount)
                         findUser.calculateScore()
                         findUser.updateKillDeath()
+                        findUser.updateKillPerGame()
                         clanMatchUserRepository.save(
                             MatchUser(
                                 null,
