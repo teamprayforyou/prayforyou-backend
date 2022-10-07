@@ -61,6 +61,6 @@ class Clan (
     }
 
     fun calculateScore() {
-        this.score = (this.winCount * 10 + this.loseCount -10).toLong()
+        this.score = (this.winCount * 10 + this.loseCount * -10).toLong()
     }
 }
