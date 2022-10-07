@@ -15,4 +15,7 @@ interface ClanMatchRepository: JpaRepository<ClanMatch, Long> {
 
     @Query("select distinct c.clanMatch from MatchUser c where c.playClan.clanId =:clanId order by c.clanMatch.matchStartTime desc")
     fun findClanMatchByClanIdPageable(@Param(value = "clanId") clanId: Long, pageable: Pageable): Page<ClanMatch>
+
+    @Query("select * from supply.clan_match c order by c.match_start_time desc limit 10", nativeQuery = true)
+    fun findCLanMatchRecent(): List<ClanMatch>
 }

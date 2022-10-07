@@ -28,5 +28,7 @@ data class BlueTeam(
 
 data class User(
     val name: String,
-    val id: Long
+    val id: Long,
+    val killCount: Long,
+    val deathCount: Long
 )

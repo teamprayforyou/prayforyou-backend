@@ -78,14 +78,14 @@ class UserController(
                         redTeam = RedTeam(
                             match.redClan.clanId,
                             match.redClan.score.toInt(),
-                            redUsers.map { User(it.user.nickname!!, it.user.userNexonId.toLong()) }.toList(),
+                            redUsers.map { User(it.user.nickname!!, it.user.userNexonId.toLong(), it.killCount.toLong(), it.deathCount.toLong()) }.toList(),
                             match.redClan.clanLevel.levelName,
                             match.redClan.clanNickname
                         ),
                         blueTeam = BlueTeam(
                             match.blueClan.clanId,
                             match.blueClan.score.toInt(),
-                            blueUsers.map { User(it.user.nickname!!, it.user.userNexonId.toLong()) }.toList(),
+                            blueUsers.map { User(it.user.nickname!!, it.user.userNexonId.toLong(), it.killCount.toLong(), it.deathCount.toLong()) }.toList(),
                             match.blueClan.clanLevel.levelName,
                             match.blueClan.clanNickname
                         )

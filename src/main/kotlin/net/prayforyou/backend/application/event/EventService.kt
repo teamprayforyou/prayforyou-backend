@@ -227,9 +227,11 @@ class EventService(
                 var winlosePercent = 0.0
 
                 var winCount = 0
+                var loseCount = 1
                 if (isWinUser) {
                     winlosePercent = 100.0
                     winCount++
+                    loseCount = 0
                 }
 
                 val findClanMatch =
@@ -261,7 +263,7 @@ class EventService(
                                 deathCount,
                                 killDeath,
                                 playerTeam!!,
-                                (killCount * 5 - deathCount * 3 + winCount * 10 - winCount * 5)
+                                (killCount * 2 - deathCount * 1 + winCount * 10 - loseCount * 10)
                             )
                         )
 
@@ -311,7 +313,7 @@ class EventService(
                                 deathCount,
                                 killDeath,
                                 playerTeam!!,
-                                (killCount * 5 - deathCount * 3 + winCount * 10 - winCount * 5)
+                                (killCount * 2 - deathCount * 1 + winCount * 10 - loseCount * 10)
                             )
                         )
                         userRepository.saveAndFlush(createUser)

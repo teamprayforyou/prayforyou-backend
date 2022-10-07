@@ -14,7 +14,7 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "user")
-@Where(clause = "is_deleted = 'false'")
+@Where(clause = "is_deleted = 'false || gameCount != 0'")
 class User(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,7 +60,7 @@ class User(
     }
 
     fun calculateScore() {
-        this.score = (this.killCount!! * 5 - this.deathCount!! * 3 + this.winCount!! * 10 - this.gameCount!! - winCount!! * 5).toLong()
+        this.score = (this.killCount!! * 2 - this.deathCount!! * 1 + this.winCount!! * 10 - this.gameCount!! - winCount!! * 10).toLong()
     }
 
     fun updateKillDeath() {

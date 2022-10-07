@@ -28,4 +28,8 @@ class MatchService(
     fun getMatchDetail(matchId: Long): ClanMatch {
         return matchRepository.findByMatchId(matchId)
     }
+
+    fun getRecentMatch(): List<ClanMatch> {
+        return matchRepository.findCLanMatchRecent()
+    }
 }
