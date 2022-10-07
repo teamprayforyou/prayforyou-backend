@@ -4,6 +4,7 @@ import net.prayforyou.backend.application.match.MatchService
 import net.prayforyou.backend.application.user.UserService
 import net.prayforyou.backend.global.common.CommonResponse
 import net.prayforyou.backend.global.common.PageResponse
+import net.prayforyou.backend.global.util.DateUtil
 import net.prayforyou.backend.presenter.response.BlueTeam
 import net.prayforyou.backend.presenter.response.MatchResponse
 import net.prayforyou.backend.presenter.response.RedTeam
@@ -68,7 +69,7 @@ class UserController(
                 MatchResponse(
                     gameProgressTime = match.totalMatchTime,
                     isWin = match.isRedTeamWin,
-                    lastGameDay = match.matchTimeKorean,
+                    lastGameDay = DateUtil.calculateTime(DateUtil.toDate(match.totalMatchTime))!!,
                     addScore = plusUserScore!!,
                     matchId = match.matchId.toString(),
                     redTeam = RedTeam(

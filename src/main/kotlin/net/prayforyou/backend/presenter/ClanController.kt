@@ -5,6 +5,7 @@ import net.prayforyou.backend.application.match.MatchService
 import net.prayforyou.backend.domain.clan.enums.ClanLevel
 import net.prayforyou.backend.global.common.CommonResponse
 import net.prayforyou.backend.global.common.PageResponse
+import net.prayforyou.backend.global.util.DateUtil
 import net.prayforyou.backend.presenter.response.BlueTeam
 import net.prayforyou.backend.presenter.response.ClanListResponse
 import net.prayforyou.backend.presenter.response.ClanRankingResponse
@@ -103,7 +104,7 @@ class ClanController(
                 MatchResponse(
                     gameProgressTime = match.totalMatchTime,
                     isWin = match.isRedTeamWin,
-                    lastGameDay = match.matchTimeKorean,
+                    lastGameDay = DateUtil.calculateTime(DateUtil.toDate(match.totalMatchTime))!!,
                     addScore = match.plusScore,
                     matchId = match.matchId.toString(),
                     redTeam = RedTeam(
