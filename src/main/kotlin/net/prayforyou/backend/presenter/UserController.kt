@@ -50,9 +50,6 @@ class UserController(
             val userRankingResponse: MutableList<UserRankingResponse> = mutableListOf()
             val users = userService.getUserRankingByPaging(pageable)
             for (user in users) {
-                if (user.gameCount == 0) {
-                    continue
-                }
                 userRankingResponse.add(UserRankingResponse.from(user))
             }
 

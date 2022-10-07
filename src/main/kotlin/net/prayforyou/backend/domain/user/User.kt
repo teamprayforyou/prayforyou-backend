@@ -14,7 +14,7 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "user")
-@Where(clause = "is_deleted = 'false")
+@Where(clause = "is_deleted = 'false'")
 class User(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
