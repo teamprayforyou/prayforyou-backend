@@ -42,7 +42,7 @@ class EventService(
         val y: Double
     )
 
-    @Scheduled(fixedDelay = 1800000)
+    @Scheduled(fixedDelay = 1800)
     fun process() {
         val findTodoEvents = eventProvider.findTodoEvents()
         val findTodoUserJson = userJsonProvider.findTodoEvents()
@@ -156,10 +156,10 @@ class EventService(
                             .map { Coordinate(it.death_x!!, it.death_y!!) }
 
                     ripleCount =
-                        event.battleLogJson.battleLog!!.count { it.weapon == "riple" && it.target_user_nexon_sn == userInfo.userNexonId }
+                        event.battleLogJson.battleLog!!.count { it.target_weapon == "riple" && it.target_user_nexon_sn == userInfo.userNexonId }
 
                     sniperCount =
-                        event.battleLogJson.battleLog!!.count { it.weapon == "sniper" && it.target_user_nexon_sn == userInfo.userNexonId }
+                        event.battleLogJson.battleLog!!.count { it.target_weapon == "sniper" && it.target_user_nexon_sn == userInfo.userNexonId }
 
                     if (killCount == 0 && deathCount == 0) {
                         continue
@@ -243,12 +243,12 @@ class EventService(
                         findUser.increaseKillCount(killCount)
                         findUser.increaseDeathCount(deathCount)
                         findUser.updateNickname(userInfo.userNickName)
-                        findUser.updateKillDeath(killCount, deathCount)
                         findUser.increaseGameCount()
                         findUser.updateKillPerGame()
                         findUser.updateWinLosePercent()
                         findUser.setPrimaryUseGun(ripleCount, sniperCount)
                         findUser.calculateScore()
+                        findUser.updateKillDeath()
                         clanMatchUserRepository.save(
                             MatchUser(
                                 null,

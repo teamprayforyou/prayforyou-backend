@@ -63,9 +63,9 @@ class User(
         this.score = (this.killCount!! * 5 - this.deathCount!! * 3 + this.winCount!! * 10 - this.gameCount!! - winCount!! * 5).toLong()
     }
 
-    fun updateKillDeath(killCount: Int, deathCount: Int) {
+    fun updateKillDeath() {
         this.killDeath =
-            this.killCount!! + killCount * 100 / (this.killCount!! + killCount + this.deathCount!! + deathCount).toDouble()
+            this.killCount!! * 100 / (this.killCount!! + this.deathCount!! ).toDouble()
     }
 
     fun increaseKillCount(killCount: Int) {

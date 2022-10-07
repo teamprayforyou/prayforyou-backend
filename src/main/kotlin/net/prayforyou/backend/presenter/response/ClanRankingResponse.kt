@@ -37,8 +37,8 @@ data class ClanRankingResponse(
             return ClanRankingResponse(
                 clan.id,
                 clan.clanId,
-                clan.clanName,
                 clan.clanNickname,
+                clan.clanName,
                 clan.winCount,
                 clan.loseCount,
                 clan.isDownDanger,
