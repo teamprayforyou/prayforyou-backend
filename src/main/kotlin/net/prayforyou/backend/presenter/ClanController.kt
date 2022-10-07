@@ -39,6 +39,11 @@ class ClanController(
         return clanListResponse
     }
 
+    @GetMapping("/home")
+    fun getClanHome(): CommonResponse<List<ClanRankingResponse>> {
+        return CommonResponse.convert(clanService.getClanOrderByCreatedAt().map { ClanRankingResponse.from(it) }.toList())
+    }
+
     @GetMapping("/{clanId}")
     fun getClanInfo(@PathVariable clanId: Long): ClanResponse {
         val from = ClanResponse.from(clanService.getClanById(clanId)!!)

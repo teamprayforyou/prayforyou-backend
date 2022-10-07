@@ -14,6 +14,10 @@ class ClanService(
         return clanRepository.findClanOrderByRanking(levelName)
     }
 
+    fun getClanOrderByCreatedAt(): List<Clan> {
+        return clanRepository.findClanOrderByCreatedAt()
+    }
+
     fun getClanById(clanId: Long): Clan? {
         return clanRepository.findByClanId(clanId)
     }
