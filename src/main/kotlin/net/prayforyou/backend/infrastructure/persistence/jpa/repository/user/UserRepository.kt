@@ -11,6 +11,6 @@ interface UserRepository : JpaRepository<User, Long> {
     fun findByUserNexonId(userId: Int): User?
     fun findByNicknameContains(nickname: String): List<User>
 
-    @Query("select u from User u order by u.score desc")
+    @Query("select u from User u where u.gameCount > 0 order by u.score desc")
     fun findUserRanking(pageable: Pageable): Page<User>
 }
