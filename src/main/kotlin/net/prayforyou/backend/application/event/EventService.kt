@@ -82,14 +82,11 @@ class EventService(
             eventList.add(findTodoEvent)
             var isRedTeamWin = false
             var clanMatch: ClanMatch
-            if (!findTodoEvent.matchJson.matchResultDataInfo!!.red_result.equals("lose")) {
+            if (!findTodoEvent.matchJson.matchResultDataInfo.red_result.equals("lose")) {
                 isRedTeamWin = true
                 redClan.updateWinLoseCount(0, 1)
-                blueClan.updateWinLoseCount(1, 0)
                 redClan.calculateWinLosePercent()
                 redClan.calculateScore()
-                blueClan.calculateWinLosePercent()
-                blueClan.calculateScore()
                 clanMatch = ClanMatch(
                     null,
                     findTodoEvent.matchKey.toLong(),
@@ -103,11 +100,8 @@ class EventService(
                 )
             } else {
                 blueClan.updateWinLoseCount(1, 0)
-                redClan.updateWinLoseCount(0, 1)
                 blueClan.calculateWinLosePercent()
                 blueClan.calculateScore()
-                redClan.calculateWinLosePercent()
-                redClan.calculateScore()
                 clanMatch = ClanMatch(
                     null,
                     findTodoEvent.matchKey.toLong(),
@@ -119,6 +113,16 @@ class EventService(
                     findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
                     findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!
                 )
+            }
+
+            if (!findTodoEvent.matchJson.matchResultDataInfo.blue_result.equals("lose")) {
+                redClan.updateWinLoseCount(1, 0)
+                redClan.calculateWinLosePercent()
+                redClan.calculateScore()
+            } else {
+                blueClan.updateWinLoseCount(0, 1)
+                blueClan.calculateWinLosePercent()
+                blueClan.calculateScore()
             }
 
 
