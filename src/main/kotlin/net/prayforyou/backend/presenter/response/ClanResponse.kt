@@ -9,7 +9,8 @@ data class ClanResponse(
     val ladderPoint: Long,
     val winLosePercent: Double,
     val winCount: Int,
-    val loseCount: Int
+    val loseCount: Int,
+    val openKaKaoLink: String? = null
 ) {
     companion object {
         fun from(clan: Clan): ClanResponse {
@@ -19,7 +20,8 @@ data class ClanResponse(
                 ladderPoint = clan.score,
                 winLosePercent = clan.winLosePercent,
                 winCount = clan.winCount,
-                loseCount = clan.loseCount
+                loseCount = clan.loseCount,
+                openKaKaoLink = clan.openKakaoLink
             )
         }
     }
