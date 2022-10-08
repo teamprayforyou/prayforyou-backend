@@ -38,11 +38,8 @@ class UserController(
         @RequestParam("nickname") nickname: String
     ): CommonResponse<List<SearchUserResponse>> {
         val user = userService.searchByNickname(nickname)
-        if (user.any { it.gameCount != 0 }) {
-            return CommonResponse.convert(user.map { SearchUserResponse.convert(it) })
-        }
-
-        return CommonResponse.convert(listOf())
+        val userFilter = user.filter { x -> x.gameCount != 0 }
+        return CommonResponse.convert(userFilter.map { SearchUserResponse.convert(it) })
     }
 
         @GetMapping("/ranking")
