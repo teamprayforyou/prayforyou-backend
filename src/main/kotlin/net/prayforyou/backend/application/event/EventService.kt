@@ -42,7 +42,7 @@ class EventService(
         val y: Double
     )
 
-//    @Scheduled(fixedDelay= 1000)
+    @Scheduled(fixedDelay= 600000)
     fun process() {
         val findTodoEvents = eventProvider.findTodoEvents()
         val findTodoUserJson = userJsonProvider.findTodoEvents()
@@ -74,60 +74,92 @@ class EventService(
         // 클랜 매치 생성
         for (findTodoEvent in findTodoEvents) {
             val redClan =
-                (clanRepository.findByClanId(findTodoEvent.matchJson.matchResultDataInfo!!.red_clan_no!!.toLong())
+                (clanRepository.findByClanId(findTodoEvent.matchJson.matchResultDataInfo.red_clan_no!!.toLong())
                     ?: continue)
             val blueClan =
-                (clanRepository.findByClanId(findTodoEvent.matchJson.matchResultDataInfo!!.blue_clan_no!!.toLong())
+                (clanRepository.findByClanId(findTodoEvent.matchJson.matchResultDataInfo.blue_clan_no!!.toLong())
                     ?: continue)
             eventList.add(findTodoEvent)
             var isRedTeamWin = false
-            var clanMatch: ClanMatch
-            if (!findTodoEvent.matchJson.matchResultDataInfo.red_result.equals("lose")) {
+            var clanMatch: ClanMatch? = null
+            // 레드팀이 졌으면 - 블루팀 승리
+            if (findTodoEvent.matchJson.matchResultDataInfo.red_result.equals("win")) {
                 isRedTeamWin = true
-                redClan.updateWinLoseCount(0, 1)
-                redClan.calculateWinLosePercent()
-                redClan.calculateScore()
-                clanMatch = ClanMatch(
-                    null,
-                    findTodoEvent.matchKey.toLong(),
-                    redClan,
-                    blueClan,
-                    isRedTeamWin,
-                    10,
-                    findTodoEvent.matchTime,
-                    findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
-                    findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!
-                )
-            } else {
-                blueClan.updateWinLoseCount(1, 0)
-                blueClan.calculateWinLosePercent()
-                blueClan.calculateScore()
-                clanMatch = ClanMatch(
-                    null,
-                    findTodoEvent.matchKey.toLong(),
-                    redClan,
-                    blueClan,
-                    isRedTeamWin,
-                    -10,
-                    findTodoEvent.matchTime,
-                    findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
-                    findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!
-                )
-            }
 
-            if (!findTodoEvent.matchJson.matchResultDataInfo.blue_result.equals("lose")) {
                 redClan.updateWinLoseCount(1, 0)
                 redClan.calculateWinLosePercent()
                 redClan.calculateScore()
-            } else {
+
+                clanMatch = ClanMatch(
+                    null,
+                    findTodoEvent.matchKey.toLong(),
+                    redClan,
+                    blueClan,
+                    isRedTeamWin,
+                    0,
+                    findTodoEvent.matchTime,
+                    findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
+                    findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!
+                )
+            } else if (findTodoEvent.matchJson.matchResultDataInfo.red_result.equals("lose"))  {
+                isRedTeamWin = false
+
+                redClan.updateWinLoseCount(0, 1)
+                redClan.calculateWinLosePercent()
+                redClan.calculateScore()
+
+                clanMatch = ClanMatch(
+                    null,
+                    findTodoEvent.matchKey.toLong(),
+                    redClan,
+                    blueClan,
+                    isRedTeamWin,
+                    0,
+                    findTodoEvent.matchTime,
+                    findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
+                    findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!
+                )
+            }
+
+            if (findTodoEvent.matchJson.matchResultDataInfo.blue_result.equals("win")) {
+                isRedTeamWin = false
+
+                blueClan.updateWinLoseCount(1, 0)
+                blueClan.calculateWinLosePercent()
+                blueClan.calculateScore()
+
+                clanMatch = ClanMatch(
+                    null,
+                    findTodoEvent.matchKey.toLong(),
+                    redClan,
+                    blueClan,
+                    isRedTeamWin,
+                    0,
+                    findTodoEvent.matchTime,
+                    findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
+                    findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!
+                )
+            } else if (findTodoEvent.matchJson.matchResultDataInfo.blue_result.equals("lose")) {
+                isRedTeamWin = true
+
                 blueClan.updateWinLoseCount(0, 1)
                 blueClan.calculateWinLosePercent()
                 blueClan.calculateScore()
+
+                clanMatch = ClanMatch(
+                    null,
+                    findTodoEvent.matchKey.toLong(),
+                    redClan,
+                    blueClan,
+                    isRedTeamWin,
+                    0,
+                    findTodoEvent.matchTime,
+                    findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
+                    findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!
+                )
             }
 
-
-
-            clanMatchRepository.saveAndFlush(clanMatch)
+            clanMatchRepository.saveAndFlush(clanMatch!!)
 
         }
 

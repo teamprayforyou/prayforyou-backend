@@ -48,7 +48,7 @@ class ClanController(
     @GetMapping("/{clanId}")
     fun getClanInfo(@PathVariable clanId: Long): ClanResponse {
         val from = ClanResponse.from(clanService.getClanById(clanId)!!)
-        from.ranking = clanService.findAll().sortedBy { it.score }.indexOf(clanService.getClanById(clanId)) + 1
+        from.ranking = clanService.findAll().sortedBy { it.score }.reversed().indexOf(clanService.getClanById(clanId)) + 1
         return from
     }
 
@@ -148,13 +148,19 @@ class ClanController(
         ): PageResponse<MutableList<MatchResponse>> {
             val matchResponse: MutableList<MatchResponse> = mutableListOf()
             val matchList = matchService.getMatchDataByClanId(clanId, pageable)
+            var isWin = false
             for (match in matchList) {
                 val redUsers = matchService.getMatchUsers(match.matchId, match.redClan.id!!)
                 val blueUsers = matchService.getMatchUsers(match.matchId, match.blueClan.id!!)
+
+                if(match.redClan.id == clanId) {
+                    isWin = match.isRedTeamWin
+                }
+
                 matchResponse.add(
                     MatchResponse(
                         gameProgressTime = match.totalMatchTime,
-                        isWin = match.isRedTeamWin,
+                        isWin = isWin,
                         lastGameDay = DateUtil.calculateTime(DateUtil.toDate(match.matchStartTime))!!,
                         addScore = match.plusScore,
                         matchId = match.matchId.toString(),
