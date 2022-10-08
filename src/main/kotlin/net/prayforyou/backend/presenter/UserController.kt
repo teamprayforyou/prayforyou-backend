@@ -65,10 +65,20 @@ class UserController(
                 val blueUsers = matchService.getMatchUsers(match.matchId, match.blueClan.id!!)
                 val plusUserScore = (redUsers.find { it.user.userNexonId.toLong() == userNexonId }?.plusScore
                     ?: blueUsers.find { it.user.userNexonId.toLong() == userNexonId }?.plusScore)
+
+                val matchUser = matchService.getMatchUser(userNexonId, match)
+
+                var isWin = false
+                if (match.redClan.clanId == matchUser.playClan.clanId) {
+                    isWin = match.isRedTeamWin
+                } else if (match.blueClan.clanId == matchUser.playClan.clanId) {
+                    isWin = !match.isRedTeamWin
+                }
+
                 matchResponse.add(
                     MatchResponse(
                         gameProgressTime = match.totalMatchTime,
-                        isWin = match.isRedTeamWin,
+                        isWin = isWin,
                         lastGameDay = DateUtil.calculateTime(DateUtil.toDate(match.matchStartTime))!!,
                         addScore = plusUserScore!!,
                         matchId = match.matchId.toString(),

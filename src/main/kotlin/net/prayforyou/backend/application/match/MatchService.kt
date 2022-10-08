@@ -25,6 +25,10 @@ class MatchService(
         return matchUserRepository.findMatchUserList(matchId, clanId)
     }
 
+    fun getMatchUser(userNexonId: Long, clanMatch: ClanMatch): MatchUser {
+        return matchUserRepository.findByClanMatchAndUser_UserNexonId(clanMatch, userNexonId)
+    }
+
     fun getMatchDetail(matchId: Long): ClanMatch {
         return matchRepository.findByMatchId(matchId)
     }
