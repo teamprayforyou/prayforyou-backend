@@ -28,7 +28,7 @@ class UserController(
     @GetMapping("/{userNexonId}")
     fun getUser(@PathVariable userNexonId: Long): UserResponse {
         val from = UserResponse.from(userService.getUser(userNexonId)!!)
-        val rank = userService.findAll().sortedBy { it.score }.indexOf(userService.getUser(userNexonId)) + 1
+        val rank = userService.findAll().sortedBy { it.score }.reversed().indexOf(userService.getUser(userNexonId)) + 1
         from.ranking = rank
         return from
     }
