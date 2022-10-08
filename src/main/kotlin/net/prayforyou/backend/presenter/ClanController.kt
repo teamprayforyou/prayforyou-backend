@@ -148,11 +148,11 @@ class ClanController(
         ): PageResponse<MutableList<MatchResponse>> {
             val matchResponse: MutableList<MatchResponse> = mutableListOf()
             val matchList = matchService.getMatchDataByClanId(clanId, pageable)
-            var isWin = false
             for (match in matchList) {
                 val redUsers = matchService.getMatchUsers(match.matchId, match.redClan.id!!)
                 val blueUsers = matchService.getMatchUsers(match.matchId, match.blueClan.id!!)
 
+                var isWin = false
                 if(match.redClan.id == clanId) {
                     isWin = match.isRedTeamWin
                 }
