@@ -84,9 +84,12 @@ class EventService(
             var clanMatch: ClanMatch
             if (!findTodoEvent.matchJson.matchResultDataInfo!!.red_result.equals("lose")) {
                 isRedTeamWin = true
-                redClan.updateWinLoseCount(1, 0)
+                redClan.updateWinLoseCount(0, 1)
+                blueClan.updateWinLoseCount(1, 0)
                 redClan.calculateWinLosePercent()
                 redClan.calculateScore()
+                blueClan.calculateWinLosePercent()
+                blueClan.calculateScore()
                 clanMatch = ClanMatch(
                     null,
                     findTodoEvent.matchKey.toLong(),
@@ -99,9 +102,12 @@ class EventService(
                     findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!
                 )
             } else {
-                blueClan.updateWinLoseCount(0, 1)
+                blueClan.updateWinLoseCount(1, 0)
+                redClan.updateWinLoseCount(0, 1)
                 blueClan.calculateWinLosePercent()
                 blueClan.calculateScore()
+                redClan.calculateWinLosePercent()
+                redClan.calculateScore()
                 clanMatch = ClanMatch(
                     null,
                     findTodoEvent.matchKey.toLong(),
