@@ -66,7 +66,7 @@ class UserController(
                 val plusUserScore = (redUsers.find { it.user.userNexonId.toLong() == userNexonId }?.plusScore
                     ?: blueUsers.find { it.user.userNexonId.toLong() == userNexonId }?.plusScore)
 
-                val matchUser = matchService.getMatchUser(userNexonId, match)
+                val matchUser = matchService.getMatchUser(userService.getUser(userNexonId)!!, match)
 
                 var isWin = false
                 if (match.redClan.clanId == matchUser.playClan.clanId) {

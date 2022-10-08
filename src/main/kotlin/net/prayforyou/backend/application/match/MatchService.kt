@@ -2,6 +2,7 @@ package net.prayforyou.backend.application.match
 
 import net.prayforyou.backend.domain.match.ClanMatch
 import net.prayforyou.backend.domain.match.MatchUser
+import net.prayforyou.backend.domain.user.User
 import net.prayforyou.backend.global.common.annotation.ApplicationService
 import net.prayforyou.backend.infrastructure.persistence.jpa.repository.clan.ClanMatchRepository
 import net.prayforyou.backend.infrastructure.persistence.jpa.repository.clan.ClanMatchUserRepository
@@ -25,8 +26,8 @@ class MatchService(
         return matchUserRepository.findMatchUserList(matchId, clanId)
     }
 
-    fun getMatchUser(userNexonId: Long, clanMatch: ClanMatch): MatchUser {
-        return matchUserRepository.findByClanMatchAndUser_UserNexonId(clanMatch, userNexonId)
+    fun getMatchUser(user: User, match: ClanMatch): MatchUser {
+        return matchUserRepository.findByClanMatchAndUser(match, user)
     }
 
     fun getMatchDetail(matchId: Long): ClanMatch {
