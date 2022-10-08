@@ -14,6 +14,7 @@ import net.prayforyou.backend.infrastructure.persistence.jpa.repository.clan.Cla
 import net.prayforyou.backend.infrastructure.persistence.jpa.repository.clan.ClanMatchUserRepository
 import net.prayforyou.backend.infrastructure.persistence.jpa.repository.clan.ClanRepository
 import net.prayforyou.backend.infrastructure.persistence.jpa.repository.user.UserRepository
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import kotlin.math.round
@@ -41,6 +42,7 @@ class EventService(
         val y: Double
     )
 
+    @Scheduled(fixedDelay= 100000000)
     fun process() {
         val findTodoEvents = eventProvider.findTodoEvents()
         val findTodoUserJson = userJsonProvider.findTodoEvents()
