@@ -351,7 +351,7 @@ class EventService(
                             )
                         createUser.calculateScore()
 
-                        userRepository.saveAndFlush(createUser)
+                        userRepository.save(createUser)
 
                         clanMatchUserRepository.save(
                             MatchUser(
