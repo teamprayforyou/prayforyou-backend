@@ -60,7 +60,7 @@ class User(
     }
 
     fun calculateScore() {
-        this.score = (this.killCount!! * 2 - this.deathCount!! * 1 + this.winCount!! * 10 - this.gameCount!! - winCount!! * 10).toLong()
+        this.score = ((this.killCount!! * 2 - this.deathCount!! * 1) + (this.winCount!! * 10 - (this.gameCount!! - winCount!!) * 10)).toLong()
     }
 
     fun updateKillDeath() {
