@@ -351,6 +351,7 @@ class EventService(
                             )
                         createUser.calculateScore()
 
+                        userRepository.saveAndFlush(createUser)
 
                         clanMatchUserRepository.save(
                             MatchUser(
@@ -365,7 +366,6 @@ class EventService(
                                 (killCount * 2 - deathCount * 1 + winCount * 10 - loseCount * 10)
                             )
                         )
-                        userRepository.saveAndFlush(createUser)
 
                         for (killCord in coordinateKill) {
                             val battlePosition =
