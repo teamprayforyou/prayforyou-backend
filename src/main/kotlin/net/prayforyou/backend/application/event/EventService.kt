@@ -55,8 +55,13 @@ class EventService(
             for (userResult in it.userJson.resultClanUserList!!) {
                 val findClan = clanRepository.findByClanId(it.clanId)
                 if (userRepository.findByUserNexonId(userResult.user_nexon_sn!!) == null) {
-                    val initialUser = User.initialUser(findClan!!, userResult.user_nexon_sn, userResult.user_nick!!)
-                    userRepository.saveAndFlush(initialUser)
+                    try {
+                        val initialUser = User.initialUser(findClan!!, userResult.user_nexon_sn, userResult.user_nick!!)
+                        userRepository.saveAndFlush(initialUser)
+                    }
+                    catch (_: Exception) {
+                        continue
+                    }
                 } else {
                     // 이미 존재하는 유저가 클랜이 변경되었다면, 클랜을 바꾼다
                     val findUser = userRepository.findByUserNexonId(userResult.user_nexon_sn)
