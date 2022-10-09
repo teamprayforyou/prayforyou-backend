@@ -34,7 +34,9 @@ class EventService(
 
     data class UserInfo(
         val userNexonId: Int,
-        val userNickName: String
+        val userNickName: String,
+        val targetUserNexonId: Int,
+        val targetUserNickName: String
     )
 
     data class Coordinate(
@@ -42,7 +44,7 @@ class EventService(
         val y: Double
     )
 
-    @Scheduled(fixedDelay= 200000)
+//    @Scheduled(fixedDelay= 200000)
     fun process() {
         val findTodoEvents = eventProvider.findTodoEvents()
         val findTodoUserJson = userJsonProvider.findTodoEvents()
@@ -169,48 +171,68 @@ class EventService(
         }
 
         val usersList = findTodoEvents.map { todo ->
-            todo.battleLogJson.battleLog!!.map { UserInfo(it.user_nexon_sn!!, it.user_nick!!) }.distinct()
-        }.flatten().distinctBy { it.userNexonId }
+            todo.battleLogJson.battleLog!!.map { UserInfo(it.user_nexon_sn!!, it.user_nick!!, it.target_user_nexon_sn!!, it.target_user_nick!!) }.distinct()
+        }.flatten().distinctBy { it.targetUserNickName }
+
+        val usersList2 = findTodoEvents.map { todo ->
+            todo.battleLogJson.battleLog!!.map { UserInfo(it.user_nexon_sn!!, it.user_nick!!, it.target_user_nexon_sn!!, it.target_user_nick!!) }.distinct()
+        }.flatten().distinctBy { it.userNickName }
+
+        val map = usersList.map { Pair(it.userNexonId, it.userNickName) }
+        val map1 = usersList2.map { Pair(it.targetUserNexonId, it.targetUserNickName) }
+
+
+        val userNexonIdList = mutableListOf<Int>()
+        for (i in 0..usersList.lastIndex) {
+            userNexonIdList.add(usersList2.get(i).userNexonId)
+            userNexonIdList.add(usersList.get(i).targetUserNexonId)
+        }
+
+        val userNickNameList = mutableListOf<String>()
+        for (i in 0..usersList.lastIndex) {
+            userNickNameList.add(usersList2.get(i).userNickName)
+            userNickNameList.add(usersList.get(i).targetUserNickName)
+        }
 
         for (event in eventList) {
-            for (userInfo in usersList) {
+            for (i in 0..userNickNameList.lastIndex) {
                 var killCount =
-                    event.battleLogJson.battleLog!!.count { it.event_type == "kill" && it.user_nexon_sn == userInfo.userNexonId }
+                    event.battleLogJson.battleLog!!.count { it.event_type == "kill" && it.user_nexon_sn == userNexonIdList.get(i) }
                 var deathCount =
-                    event.battleLogJson.battleLog!!.count { it.event_type == "death" && it.user_nexon_sn == userInfo.userNexonId }
+                    event.battleLogJson.battleLog!!.count { it.event_type == "death" && it.user_nexon_sn == userNexonIdList.get(i) }
 
                 var coordinateKill =
-                    event.battleLogJson.battleLog!!.filter { it.event_type == "kill" && it.user_nexon_sn == userInfo.userNexonId }
+                    event.battleLogJson.battleLog!!.filter { it.event_type == "kill" && it.user_nexon_sn == userNexonIdList.get(i) }
                         .map { Coordinate(it.kill_x!!, it.kill_y!!) }
 
                 var coordinateDeath =
-                    event.battleLogJson.battleLog!!.filter { it.event_type == "death" && it.user_nexon_sn == userInfo.userNexonId }
+                    event.battleLogJson.battleLog!!.filter { it.event_type == "death" && it.user_nexon_sn == userNexonIdList.get(i) }
                         .map { Coordinate(it.death_x!!, it.death_y!!) }
 
                 var ripleCount =
-                    event.battleLogJson.battleLog!!.count { it.weapon == "riple" && it.user_nexon_sn == userInfo.userNexonId }
+                    event.battleLogJson.battleLog!!.count { it.weapon == "riple" && it.user_nexon_sn == userNexonIdList.get(i) }
 
                 var sniperCount =
-                    event.battleLogJson.battleLog!!.count { it.weapon == "sniper" && it.user_nexon_sn == userInfo.userNexonId }
+                    event.battleLogJson.battleLog!!.count { it.weapon == "sniper" && it.user_nexon_sn == userNexonIdList.get(i) }
 
                 if (killCount == 0 && deathCount == 0) {
                     killCount =
-                        event.battleLogJson.battleLog!!.count { it.target_event_type == "kill" && it.target_user_nexon_sn == userInfo.userNexonId }
+                        event.battleLogJson.battleLog!!.count { it.target_event_type == "kill" && it.target_user_nexon_sn == userNexonIdList.get(i) }
                     deathCount =
-                        event.battleLogJson.battleLog!!.count { it.target_event_type == "death" && it.target_user_nexon_sn == userInfo.userNexonId }
+                        event.battleLogJson.battleLog!!.count { it.target_event_type == "death" && it.target_user_nexon_sn == userNexonIdList.get(i) }
                     coordinateKill =
-                        event.battleLogJson.battleLog!!.filter { it.event_type == "kill" && it.target_user_nexon_sn == userInfo.userNexonId }
+                        event.battleLogJson.battleLog!!.filter { it.event_type == "kill" && it.target_user_nexon_sn == userNexonIdList.get(i) }
                             .map { Coordinate(it.kill_x!!, it.kill_y!!) }
 
                     coordinateDeath =
-                        event.battleLogJson.battleLog!!.filter { it.event_type == "death" && it.target_user_nexon_sn == userInfo.userNexonId }
+                        event.battleLogJson.battleLog!!.filter { it.event_type == "death" && it.target_user_nexon_sn == userNexonIdList.get(i) }
                             .map { Coordinate(it.death_x!!, it.death_y!!) }
 
                     ripleCount =
-                        event.battleLogJson.battleLog!!.count { it.target_weapon == "riple" && it.target_user_nexon_sn == userInfo.userNexonId }
+                        event.battleLogJson.battleLog!!.count { it.target_weapon == "riple" && it.target_user_nexon_sn == userNexonIdList.get(i) }
 
                     sniperCount =
-                        event.battleLogJson.battleLog!!.count { it.target_weapon == "sniper" && it.target_user_nexon_sn == userInfo.userNexonId }
+                        event.battleLogJson.battleLog!!.count { it.target_weapon == "sniper" && it.target_user_nexon_sn == userNexonIdList.get(i) }
 
                     if (killCount == 0 && deathCount == 0) {
                         continue
@@ -229,9 +251,9 @@ class EventService(
 
                 var isTargetUser = false
                 var find =
-                    event.battleLogJson.battleLog!!.find { it.user_nexon_sn == userInfo.userNexonId }
+                    event.battleLogJson.battleLog!!.find { it.user_nexon_sn == userNexonIdList.get(i) }
                 if (find == null) {
-                    find = event.battleLogJson.battleLog!!.find { it.target_user_nexon_sn == userInfo.userNexonId }
+                    find = event.battleLogJson.battleLog!!.find { it.target_user_nexon_sn == userNexonIdList.get(i)}
                     isTargetUser = true
                     if (find == null) {
                         continue
@@ -271,7 +293,7 @@ class EventService(
                     playerTeamNo = loseTeamNo!!
                 }
 
-                val findUser = userRepository.findByUserNexonId(userInfo.userNexonId)
+                val findUser = userRepository.findByUserNexonId(userNexonIdList.get(i))
 
                 var winlosePercent = 0.0
 
@@ -288,14 +310,14 @@ class EventService(
 
                 val playerTeam = clanRepository.findByClanId(playerTeamNo.toLong())
 
-                if (userInfo.userNickName.isNotEmpty()) {
+                if (userNickNameList.get(i).isNotEmpty()) {
                     if (findUser != null) {
                         if (winCount == 1) {
                             findUser.increaseWinCount()
                         }
                         findUser.increaseKillCount(killCount)
                         findUser.increaseDeathCount(deathCount)
-                        findUser.updateNickname(userInfo.userNickName)
+                        findUser.updateNickname(userNickNameList.get(i))
                         findUser.increaseGameCount()
                         findUser.updateWinLosePercent()
                         findUser.setPrimaryUseGun(ripleCount, sniperCount)
@@ -336,8 +358,8 @@ class EventService(
                         val createUser =
                             User(
                                 null,
-                                userInfo.userNickName,
-                                userInfo.userNexonId,
+                                userNickNameList.get(i),
+                                userNexonIdList.get(i),
                                 null,
                                 0L,
                                 killDeath,
