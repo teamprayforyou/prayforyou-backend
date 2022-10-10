@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional
 import kotlin.math.round
 
 @Service
+@Transactional
 class EventService(
     private val eventProvider: EventProvider,
     private val userJsonProvider: UserJsonProvider,
