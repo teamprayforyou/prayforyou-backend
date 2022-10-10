@@ -46,7 +46,7 @@ class EventService(
         val y: Double
     )
 
-//    @Scheduled(fixedDelay = 200000)
+    @Scheduled(fixedDelay = 200000)
     fun process() {
         var findTodoEvents = eventProvider.findTodoEvents()
         var findTodoUserJson = userJsonProvider.findTodoEvents()
@@ -71,7 +71,6 @@ class EventService(
                 newUserList.filterNot { new -> findAllUserNexonId.map { it.userNexonId }.contains(new.user_nexon_sn) }
 
             // 새로 가입한 유저 저장하기
-
             saveUserList.addAll(newUser.map {
                 User.initialUser(
                     findAllClan.find { clan -> todo.clanId == clan.clanId },
@@ -96,10 +95,6 @@ class EventService(
 
         entityManager.flush()
         entityManager.clear()
-
-        findTodoEvents = eventProvider.findTodoEvents()
-        findTodoUserJson = userJsonProvider.findTodoEvents()
-
 
         if (findTodoEvents.isEmpty()) {
             return
@@ -199,28 +194,28 @@ class EventService(
                 )
             }
 
-                if (findTodoEvent.matchJson.matchResultDataInfo.blue_result.equals("draw")) {
-                    isRedTeamWin = false
+            if (findTodoEvent.matchJson.matchResultDataInfo.blue_result.equals("draw")) {
+                isRedTeamWin = false
 
-                    redClan.updateWinLoseCount(0, 0)
-                    redClan.calculateWinLosePercent()
-                    redClan.calculateScore()
-                    blueClan.updateWinLoseCount(0, 0)
-                    blueClan.calculateWinLosePercent()
-                    blueClan.calculateScore()
+                redClan.updateWinLoseCount(0, 0)
+                redClan.calculateWinLosePercent()
+                redClan.calculateScore()
+                blueClan.updateWinLoseCount(0, 0)
+                blueClan.calculateWinLosePercent()
+                blueClan.calculateScore()
 
-                    clanMatch = ClanMatch(
-                        null,
-                        findTodoEvent.matchKey.toLong(),
-                        redClan,
-                        blueClan,
-                        isRedTeamWin,
-                        0,
-                        findTodoEvent.matchTime,
-                        findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
-                        findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!,
-                        true
-                    )
+                clanMatch = ClanMatch(
+                    null,
+                    findTodoEvent.matchKey.toLong(),
+                    redClan,
+                    blueClan,
+                    isRedTeamWin,
+                    0,
+                    findTodoEvent.matchTime,
+                    findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
+                    findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!,
+                    true
+                )
             }
 
             clanMatchRepository.save(clanMatch!!)
@@ -257,17 +252,20 @@ class EventService(
             val userNexonIdList = mutableListOf<Int>()
             val userNickNameList = mutableListOf<String>()
 
-            try {
-                for (i in 0..usersList.lastIndex) {
-                    userNexonIdList.add(usersList2.get(i).userNexonId)
-                    userNexonIdList.add(usersList.get(i).targetUserNexonId)
-                }
+            val index = if(usersList.lastIndex < usersList2.lastIndex) {
+                usersList2.lastIndex -1
+            } else {
+                usersList.lastIndex -1
+            }
 
-                for (i in 0..usersList.lastIndex) {
-                    userNickNameList.add(usersList2.get(i).userNickName)
-                    userNickNameList.add(usersList.get(i).targetUserNickName)
-                }
-            } catch (e: Exception) {
+            for (i in 0..index) {
+                userNexonIdList.add(usersList2.get(i).userNexonId)
+                userNexonIdList.add(usersList.get(i).targetUserNexonId)
+            }
+
+            for (i in 0..index) {
+                userNickNameList.add(usersList2.get(i).userNickName)
+                userNickNameList.add(usersList.get(i).targetUserNickName)
             }
 
             for (i in 0..userNickNameList.lastIndex) {
@@ -552,6 +550,9 @@ class EventService(
             }
 
         }
+
+        findTodoEvents = eventProvider.findTodoEvents()
+        findTodoUserJson = userJsonProvider.findTodoEvents()
 
         findTodoEvents.forEach {
             it.todo = false
