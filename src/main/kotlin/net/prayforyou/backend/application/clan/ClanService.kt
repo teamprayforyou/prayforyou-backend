@@ -22,8 +22,8 @@ class ClanService(
         return clanRepository.findByClanId(clanId)
     }
 
-    fun findAll(): MutableList<Clan> {
-        return clanRepository.findAll()
+    fun findAll(): List<Clan> {
+        return clanRepository.findAll().filter { !it.isDeleted }
     }
 
 }
