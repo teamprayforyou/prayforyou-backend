@@ -42,64 +42,79 @@ class UserController(
         return CommonResponse.convert(userFilter.map { SearchUserResponse.convert(it) })
     }
 
-        @GetMapping("/ranking")
-        fun userRanking(pageable: Pageable): PageResponse<MutableList<UserRankingResponse>> {
-            val userRankingResponse: MutableList<UserRankingResponse> = mutableListOf()
-            val users = userService.getUserRankingByPaging(pageable)
-            for (user in users) {
-                userRankingResponse.add(UserRankingResponse.from(user))
-            }
-
-            return PageResponse.convert(userRankingResponse, users.isLast, users.totalPages)
+    @GetMapping("/ranking")
+    fun userRanking(pageable: Pageable): PageResponse<MutableList<UserRankingResponse>> {
+        val userRankingResponse: MutableList<UserRankingResponse> = mutableListOf()
+        val users = userService.getUserRankingByPaging(pageable)
+        for (user in users) {
+            userRankingResponse.add(UserRankingResponse.from(user))
         }
 
-        @GetMapping("/match")
-        fun getUserMatch(
-            @RequestParam("userNexonId") userNexonId: Long,
-            pageable: Pageable
-        ): PageResponse<MutableList<MatchResponse>> {
-            val matchResponse: MutableList<MatchResponse> = mutableListOf()
-            val matchList = matchService.getMatchDataByUserNexonId(userNexonId, pageable)
-            for (match in matchList) {
-                val redUsers = matchService.getMatchUsers(match.matchId, match.redClan.id!!)
-                val blueUsers = matchService.getMatchUsers(match.matchId, match.blueClan.id!!)
-                val plusUserScore = (redUsers.find { it.user.userNexonId.toLong() == userNexonId }?.plusScore
-                    ?: blueUsers.find { it.user.userNexonId.toLong() == userNexonId }?.plusScore)
+        return PageResponse.convert(userRankingResponse, users.isLast, users.totalPages)
+    }
 
-                val matchUser = matchService.getMatchUser(userService.getUser(userNexonId)!!, match)
+    @GetMapping("/match")
+    fun getUserMatch(
+        @RequestParam("userNexonId") userNexonId: Long,
+        pageable: Pageable
+    ): PageResponse<MutableList<MatchResponse>> {
+        val matchResponse: MutableList<MatchResponse> = mutableListOf()
+        val matchList = matchService.getMatchDataByUserNexonId(userNexonId, pageable)
+        for (match in matchList) {
+            val redUsers = matchService.getMatchUsers(match.matchId, match.redClan.id!!)
+            val blueUsers = matchService.getMatchUsers(match.matchId, match.blueClan.id!!)
+            val plusUserScore = (redUsers.find { it.user.userNexonId.toLong() == userNexonId }?.plusScore
+                ?: blueUsers.find { it.user.userNexonId.toLong() == userNexonId }?.plusScore)
 
-                var isWin = false
-                if (match.redClan.clanId == matchUser.playClan.clanId) {
-                    isWin = match.isRedTeamWin
-                } else if (match.blueClan.clanId == matchUser.playClan.clanId) {
-                    isWin = !match.isRedTeamWin
-                }
+            val matchUser = matchService.getMatchUser(userService.getUser(userNexonId)!!, match)
 
-                matchResponse.add(
-                    MatchResponse(
-                        gameProgressTime = match.totalMatchTime,
-                        isWin = isWin,
-                        lastGameDay = DateUtil.calculateTime(DateUtil.toDate(match.matchStartTime))!!,
-                        addScore = plusUserScore!!,
-                        matchId = match.matchId.toString(),
-                        redTeam = RedTeam(
-                            match.redClan.clanId,
-                            match.redClan.score.toInt(),
-                            redUsers.map { User(it.user.nickname!!, it.user.userNexonId.toLong(), it.killCount.toLong(), it.deathCount.toLong()) }.toList(),
-                            match.redClan.clanLevel.levelName,
-                            match.redClan.clanNickname
-                        ),
-                        blueTeam = BlueTeam(
-                            match.blueClan.clanId,
-                            match.blueClan.score.toInt(),
-                            blueUsers.map { User(it.user.nickname!!, it.user.userNexonId.toLong(), it.killCount.toLong(), it.deathCount.toLong()) }.toList(),
-                            match.blueClan.clanLevel.levelName,
-                            match.blueClan.clanNickname
-                        )
+            var isWin = false
+            if (match.redClan.clanId == matchUser.playClan.clanId) {
+                isWin = match.isRedTeamWin
+            } else if (match.blueClan.clanId == matchUser.playClan.clanId) {
+                isWin = !match.isRedTeamWin
+            }
+
+            matchResponse.add(
+                MatchResponse(
+                    gameProgressTime = match.totalMatchTime,
+                    isWin = isWin,
+                    lastGameDay = DateUtil.calculateTime(DateUtil.toDate(match.matchStartTime))!!,
+                    addScore = plusUserScore!!,
+                    matchId = match.matchId.toString(),
+                    isDraw = match.isDraw,
+                    redTeam = RedTeam(
+                        match.redClan.clanId,
+                        match.redClan.score.toInt(),
+                        redUsers.map {
+                            User(
+                                it.user.nickname!!,
+                                it.user.userNexonId.toLong(),
+                                it.killCount.toLong(),
+                                it.deathCount.toLong()
+                            )
+                        }.toList(),
+                        match.redClan.clanLevel.levelName,
+                        match.redClan.clanNickname
+                    ),
+                    blueTeam = BlueTeam(
+                        match.blueClan.clanId,
+                        match.blueClan.score.toInt(),
+                        blueUsers.map {
+                            User(
+                                it.user.nickname!!,
+                                it.user.userNexonId.toLong(),
+                                it.killCount.toLong(),
+                                it.deathCount.toLong()
+                            )
+                        }.toList(),
+                        match.blueClan.clanLevel.levelName,
+                        match.blueClan.clanNickname
                     )
                 )
-            }
-
-            return PageResponse.convert(matchResponse, matchList.isLast, matchList.totalPages)
+            )
         }
+
+        return PageResponse.convert(matchResponse, matchList.isLast, matchList.totalPages)
     }
+}

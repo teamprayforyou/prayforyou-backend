@@ -46,7 +46,7 @@ class EventService(
         val y: Double
     )
 
-//    @Scheduled(fixedDelay = 200000)
+    @Scheduled(fixedDelay = 200000)
     fun process() {
         var findTodoEvents = eventProvider.findTodoEvents()
         var findTodoUserJson = userJsonProvider.findTodoEvents()
@@ -135,7 +135,8 @@ class EventService(
                     0,
                     findTodoEvent.matchTime,
                     findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
-                    findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!
+                    findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!,
+                    false
                 )
             } else if (findTodoEvent.matchJson.matchResultDataInfo.red_result.equals("lose")) {
                 isRedTeamWin = false
@@ -153,7 +154,8 @@ class EventService(
                     0,
                     findTodoEvent.matchTime,
                     findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
-                    findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!
+                    findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!,
+                    false
                 )
             }
 
@@ -173,7 +175,8 @@ class EventService(
                     0,
                     findTodoEvent.matchTime,
                     findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
-                    findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!
+                    findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!,
+                    false
                 )
             } else if (findTodoEvent.matchJson.matchResultDataInfo.blue_result.equals("lose")) {
                 isRedTeamWin = true
@@ -191,8 +194,33 @@ class EventService(
                     0,
                     findTodoEvent.matchTime,
                     findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
-                    findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!
+                    findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!,
+                    false
                 )
+            }
+
+                if (findTodoEvent.matchJson.matchResultDataInfo.blue_result.equals("draw")) {
+                    isRedTeamWin = false
+
+                    redClan.updateWinLoseCount(0, 0)
+                    redClan.calculateWinLosePercent()
+                    redClan.calculateScore()
+                    blueClan.updateWinLoseCount(0, 0)
+                    blueClan.calculateWinLosePercent()
+                    blueClan.calculateScore()
+
+                    clanMatch = ClanMatch(
+                        null,
+                        findTodoEvent.matchKey.toLong(),
+                        redClan,
+                        blueClan,
+                        isRedTeamWin,
+                        0,
+                        findTodoEvent.matchTime,
+                        findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
+                        findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!,
+                        true
+                    )
             }
 
             clanMatchRepository.save(clanMatch!!)

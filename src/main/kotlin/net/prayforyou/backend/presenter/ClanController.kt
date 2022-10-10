@@ -52,55 +52,6 @@ class ClanController(
         return from
     }
 
-    @GetMapping("/match/recent")
-    fun getRecentMatch(): CommonResponse<MutableList<MatchResponse>> {
-        val matchResponse: MutableList<MatchResponse> = mutableListOf()
-        val matchList = matchService.getRecentMatch()
-        for (match in matchList) {
-            val redUsers = matchService.getMatchUsers(match.matchId, match.redClan.id!!)
-            val blueUsers = matchService.getMatchUsers(match.matchId, match.blueClan.id!!)
-            matchResponse.add(
-                MatchResponse(
-                    gameProgressTime = match.totalMatchTime,
-                    isWin = match.isRedTeamWin,
-                    lastGameDay = DateUtil.calculateTime(DateUtil.toDate(match.matchStartTime))!!,
-                    addScore = match.plusScore,
-                    matchId = match.matchId.toString(),
-                    redTeam = RedTeam(
-                        match.redClan.clanId,
-                        match.redClan.score.toInt(),
-                        redUsers.map {
-                            User(
-                                it.user.nickname!!,
-                                it.user.userNexonId.toLong(),
-                                it.killCount.toLong(),
-                                it.deathCount.toLong()
-                            )
-                        }.toList(),
-                        match.redClan.clanLevel.levelName,
-                        match.redClan.clanNickname
-                    ),
-                    blueTeam = BlueTeam(
-                        match.blueClan.clanId,
-                        match.blueClan.score.toInt(),
-                        blueUsers.map {
-                            User(
-                                it.user.nickname!!,
-                                it.user.userNexonId.toLong(),
-                                it.killCount.toLong(),
-                                it.deathCount.toLong()
-                            )
-                        }.toList(),
-                        match.blueClan.clanLevel.levelName,
-                        match.blueClan.clanNickname
-                    )
-                )
-            )
-        }
-
-        return CommonResponse.convert(matchResponse)
-    }
-
         @GetMapping("/ranking")
         fun getClanInfoOrderByRanking(@RequestParam("levelName") levelName: ClanLevel): CommonResponse<List<ClanRankingResponse>> {
             return CommonResponse.convert(
@@ -193,7 +144,8 @@ class ClanController(
                             }.toList(),
                             match.blueClan.clanLevel.levelName,
                             match.blueClan.clanNickname
-                        )
+                        ),
+                        isDraw = match.isDraw
                     )
                 )
             }

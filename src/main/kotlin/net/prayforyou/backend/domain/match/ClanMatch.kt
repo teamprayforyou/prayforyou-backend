@@ -37,6 +37,8 @@ class ClanMatch (
 
     var matchStartTime: String,
 
+    var isDraw: Boolean,
+
     @Column(name = "created_at")
     var createdAt: LocalDateTime = LocalDateTime.now()
 )
