@@ -46,7 +46,7 @@ class EventService(
         val y: Double
     )
 
-    @Scheduled(fixedDelay = 200000)
+//    @Scheduled(fixedDelay = 200000)
     fun process() {
         var findTodoEvents = eventProvider.findTodoEvents()
         var findTodoUserJson = userJsonProvider.findTodoEvents()
@@ -245,17 +245,14 @@ class EventService(
                 .distinctBy { it.userNickName }
 
 
-            val map = usersList.map { Pair(it.userNexonId, it.userNickName) }
-            val map1 = usersList2.map { Pair(it.targetUserNexonId, it.targetUserNickName) }
-
 
             val userNexonIdList = mutableListOf<Int>()
             val userNickNameList = mutableListOf<String>()
 
             val index = if(usersList.lastIndex < usersList2.lastIndex) {
-                usersList2.lastIndex -1
+                usersList2.lastIndex
             } else {
-                usersList.lastIndex -1
+                usersList.lastIndex
             }
 
             for (i in 0..index) {
