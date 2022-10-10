@@ -3,11 +3,13 @@ package net.prayforyou.backend.infrastructure.persistence.jpa.repository.clan
 import net.prayforyou.backend.domain.match.ClanMatch
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.data.jpa.repository.EntityGraph
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 
 interface ClanMatchRepository: JpaRepository<ClanMatch, Long> {
+    @EntityGraph(attributePaths = ["redClan", "blueClan"])
     fun findByMatchId(matchId: Long): ClanMatch
 
     @Query("select c.clanMatch from MatchUser c where c.user.userNexonId =:userNexonId order by c.clanMatch.matchStartTime desc")

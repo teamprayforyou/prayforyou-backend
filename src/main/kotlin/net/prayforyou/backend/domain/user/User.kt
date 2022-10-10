@@ -129,10 +129,10 @@ class User(
             )
 
         fun initialUser(
-            clan: Clan,
+            clan: Clan?,
             userNexonId: Int,
             userNickname: String
         ): User =
-            User(clanId = clan, userNexonId = userNexonId, nickname = userNickname)
+            User(id = null, clanId = clan, userNexonId = userNexonId, nickname = userNickname)
     }
 }

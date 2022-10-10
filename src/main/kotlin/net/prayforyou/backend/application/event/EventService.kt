@@ -17,6 +17,7 @@ import net.prayforyou.backend.infrastructure.persistence.jpa.repository.user.Use
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import javax.persistence.EntityManager
 import kotlin.math.round
 
 @Service
@@ -29,7 +30,8 @@ class EventService(
     private val clanMatchRepository: ClanMatchRepository,
     private val clanMatchUserRepository: ClanMatchUserRepository,
     private val getBattlePositionService: GetBattlePositionService,
-    private val battlePlaceRepository: BattlePlaceRepository
+    private val battlePlaceRepository: BattlePlaceRepository,
+    private val entityManager: EntityManager
 ) {
 
     data class UserInfo(
@@ -44,33 +46,60 @@ class EventService(
         val y: Double
     )
 
-    @Scheduled(fixedDelay= 200000)
+    @Scheduled(fixedDelay = 200000)
     fun process() {
-        val findTodoEvents = eventProvider.findTodoEvents()
-        val findTodoUserJson = userJsonProvider.findTodoEvents()
+        var findTodoEvents = eventProvider.findTodoEvents()
+        var findTodoUserJson = userJsonProvider.findTodoEvents()
 
         if (findTodoEvents.isEmpty()) {
             return
         }
+        val findAllUserNexonId = userRepository.findAll()
+        val findAllClan = clanRepository.findAll()
 
-        findTodoUserJson.forEach {
-            for (userResult in it.userJson.resultClanUserList!!) {
-                val findClan = clanRepository.findByClanId(it.clanId)
-                if (userRepository.findByUserNexonId(userResult.user_nexon_sn!!) == null) {
-                    try {
-                        val initialUser = User.initialUser(findClan!!, userResult.user_nexon_sn, userResult.user_nick!!)
-                        userRepository.save(initialUser)
+        val userNexonIdList = findAllUserNexonId.map { it.userNexonId }
+
+        val saveUserList: MutableSet<User> = mutableSetOf()
+        findTodoUserJson.forEach { todo ->
+            // resultClanUserList에서 디비에서 찾아온 userNexonId가 포함되지 않은 리스트 (새로운 유저 nexonId 리스트)
+            val newUserList = todo.userJson.resultClanUserList!!.filterNot {
+                userNexonIdList.contains(it.user_nexon_sn)
+            }
+
+            // 새로 가입한 유저 찾기
+            val newUser =
+                newUserList.filterNot { new -> findAllUserNexonId.map { it.userNexonId }.contains(new.user_nexon_sn) }
+
+            // 새로 가입한 유저 저장하기
+
+            saveUserList.addAll(newUser.map {
+                User.initialUser(
+                    findAllClan.find { clan -> todo.clanId == clan.clanId },
+                    it.user_nexon_sn!!,
+                    it.user_nick!!
+                )
+            })
+            val oldUser =
+                findAllUserNexonId.filter { old -> newUserList.map { it.user_nexon_sn }.contains(old.userNexonId) }
+            if (oldUser.isNotEmpty()) {
+                // 원래 있던 유저 클랜 변경되었을 때
+                for (user in oldUser) {
+                    if (user.clanId?.clanId != todo.clanId) {
+                        user.clanId = findAllClan.find { clan -> todo.clanId == clan.clanId }
+                        userRepository.save(user)
                     }
-                    catch (_: Exception) {
-                        continue
-                    }
-                } else {
-                    // 이미 존재하는 유저가 클랜이 변경되었다면, 클랜을 바꾼다
-                    val findUser = userRepository.findByUserNexonId(userResult.user_nexon_sn)
-                    findUser?.clanId = findClan
                 }
             }
         }
+
+        userRepository.saveAll(saveUserList.distinctBy { it.userNexonId })
+
+        entityManager.flush()
+        entityManager.clear()
+
+        findTodoEvents = eventProvider.findTodoEvents()
+        findTodoUserJson = userJsonProvider.findTodoEvents()
+
 
         if (findTodoEvents.isEmpty()) {
             return
@@ -108,7 +137,7 @@ class EventService(
                     findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
                     findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!
                 )
-            } else if (findTodoEvent.matchJson.matchResultDataInfo.red_result.equals("lose"))  {
+            } else if (findTodoEvent.matchJson.matchResultDataInfo.red_result.equals("lose")) {
                 isRedTeamWin = false
 
                 redClan.updateWinLoseCount(0, 1)
@@ -170,14 +199,26 @@ class EventService(
 
         }
 
-
-
         for (event in eventList) {
 
-            val usersList = event.battleLogJson.battleLog!!.map { UserInfo(it.user_nexon_sn!!, it.user_nick!!, it.target_user_nexon_sn!!, it.target_user_nick!!) }.distinct()
+            val usersList = event.battleLogJson.battleLog!!.map {
+                UserInfo(
+                    it.user_nexon_sn!!,
+                    it.user_nick!!,
+                    it.target_user_nexon_sn!!,
+                    it.target_user_nick!!
+                )
+            }.distinct()
                 .distinctBy { it.targetUserNickName }
 
-            val usersList2 = event.battleLogJson.battleLog!!.map { UserInfo(it.user_nexon_sn!!, it.user_nick!!, it.target_user_nexon_sn!!, it.target_user_nick!!) }.distinct()
+            val usersList2 = event.battleLogJson.battleLog!!.map {
+                UserInfo(
+                    it.user_nexon_sn!!,
+                    it.user_nick!!,
+                    it.target_user_nexon_sn!!,
+                    it.target_user_nick!!
+                )
+            }.distinct()
                 .distinctBy { it.userNickName }
 
 
@@ -203,42 +244,90 @@ class EventService(
 
             for (i in 0..userNickNameList.lastIndex) {
                 var killCount =
-                    event.battleLogJson.battleLog!!.count { it.event_type == "kill" && it.user_nexon_sn == userNexonIdList.get(i) }
+                    event.battleLogJson.battleLog!!.count {
+                        it.event_type == "kill" && it.user_nexon_sn == userNexonIdList.get(
+                            i
+                        )
+                    }
                 var deathCount =
-                    event.battleLogJson.battleLog!!.count { it.event_type == "death" && it.user_nexon_sn == userNexonIdList.get(i) }
+                    event.battleLogJson.battleLog!!.count {
+                        it.event_type == "death" && it.user_nexon_sn == userNexonIdList.get(
+                            i
+                        )
+                    }
 
                 var coordinateKill =
-                    event.battleLogJson.battleLog!!.filter { it.event_type == "kill" && it.user_nexon_sn == userNexonIdList.get(i) }
+                    event.battleLogJson.battleLog!!.filter {
+                        it.event_type == "kill" && it.user_nexon_sn == userNexonIdList.get(
+                            i
+                        )
+                    }
                         .map { Coordinate(it.kill_x!!, it.kill_y!!) }
 
                 var coordinateDeath =
-                    event.battleLogJson.battleLog!!.filter { it.event_type == "death" && it.user_nexon_sn == userNexonIdList.get(i) }
+                    event.battleLogJson.battleLog!!.filter {
+                        it.event_type == "death" && it.user_nexon_sn == userNexonIdList.get(
+                            i
+                        )
+                    }
                         .map { Coordinate(it.death_x!!, it.death_y!!) }
 
                 var ripleCount =
-                    event.battleLogJson.battleLog!!.count { it.weapon == "riple" && it.user_nexon_sn == userNexonIdList.get(i) }
+                    event.battleLogJson.battleLog!!.count {
+                        it.weapon == "riple" && it.user_nexon_sn == userNexonIdList.get(
+                            i
+                        )
+                    }
 
                 var sniperCount =
-                    event.battleLogJson.battleLog!!.count { it.weapon == "sniper" && it.user_nexon_sn == userNexonIdList.get(i) }
+                    event.battleLogJson.battleLog!!.count {
+                        it.weapon == "sniper" && it.user_nexon_sn == userNexonIdList.get(
+                            i
+                        )
+                    }
 
                 if (killCount == 0 && deathCount == 0) {
                     killCount =
-                        event.battleLogJson.battleLog!!.count { it.target_event_type == "kill" && it.target_user_nexon_sn == userNexonIdList.get(i) }
+                        event.battleLogJson.battleLog!!.count {
+                            it.target_event_type == "kill" && it.target_user_nexon_sn == userNexonIdList.get(
+                                i
+                            )
+                        }
                     deathCount =
-                        event.battleLogJson.battleLog!!.count { it.target_event_type == "death" && it.target_user_nexon_sn == userNexonIdList.get(i) }
+                        event.battleLogJson.battleLog!!.count {
+                            it.target_event_type == "death" && it.target_user_nexon_sn == userNexonIdList.get(
+                                i
+                            )
+                        }
                     coordinateKill =
-                        event.battleLogJson.battleLog!!.filter { it.event_type == "kill" && it.target_user_nexon_sn == userNexonIdList.get(i) }
+                        event.battleLogJson.battleLog!!.filter {
+                            it.event_type == "kill" && it.target_user_nexon_sn == userNexonIdList.get(
+                                i
+                            )
+                        }
                             .map { Coordinate(it.kill_x!!, it.kill_y!!) }
 
                     coordinateDeath =
-                        event.battleLogJson.battleLog!!.filter { it.event_type == "death" && it.target_user_nexon_sn == userNexonIdList.get(i) }
+                        event.battleLogJson.battleLog!!.filter {
+                            it.event_type == "death" && it.target_user_nexon_sn == userNexonIdList.get(
+                                i
+                            )
+                        }
                             .map { Coordinate(it.death_x!!, it.death_y!!) }
 
                     ripleCount =
-                        event.battleLogJson.battleLog!!.count { it.target_weapon == "riple" && it.target_user_nexon_sn == userNexonIdList.get(i) }
+                        event.battleLogJson.battleLog!!.count {
+                            it.target_weapon == "riple" && it.target_user_nexon_sn == userNexonIdList.get(
+                                i
+                            )
+                        }
 
                     sniperCount =
-                        event.battleLogJson.battleLog!!.count { it.target_weapon == "sniper" && it.target_user_nexon_sn == userNexonIdList.get(i) }
+                        event.battleLogJson.battleLog!!.count {
+                            it.target_weapon == "sniper" && it.target_user_nexon_sn == userNexonIdList.get(
+                                i
+                            )
+                        }
 
                     if (killCount == 0 && deathCount == 0) {
                         continue
@@ -259,7 +348,8 @@ class EventService(
                 var find =
                     event.battleLogJson.battleLog!!.find { it.user_nexon_sn == userNexonIdList.get(i) }
                 if (find == null) {
-                    find = event.battleLogJson.battleLog!!.find { it.target_user_nexon_sn == userNexonIdList.get(i)}
+                    find =
+                        event.battleLogJson.battleLog!!.find { it.target_user_nexon_sn == userNexonIdList.get(i) }
                     isTargetUser = true
                     if (find == null) {
                         continue
@@ -348,7 +438,8 @@ class EventService(
                             val battlePosition =
                                 getBattlePositionService.getBattlePositionByXandY(killCord.x, killCord.y)
 
-                            val battlePlace = battlePlaceRepository.save(BattlePlace(null, findUser, battlePosition))
+                            val battlePlace =
+                                battlePlaceRepository.save(BattlePlace(null, findUser, battlePosition))
                             battlePlace.updateKill()
                         }
 
@@ -356,7 +447,8 @@ class EventService(
                             val battlePosition =
                                 getBattlePositionService.getBattlePositionByXandY(deathCord.x, deathCord.y)
 
-                            val battlePlace = battlePlaceRepository.save(BattlePlace(null, findUser, battlePosition))
+                            val battlePlace =
+                                battlePlaceRepository.save(BattlePlace(null, findUser, battlePosition))
                             battlePlace.updateDeath()
                         }
 
@@ -399,7 +491,8 @@ class EventService(
                             val battlePosition =
                                 getBattlePositionService.getBattlePositionByXandY(killCord.x, killCord.y)
 
-                            val battlePlace = battlePlaceRepository.save(BattlePlace(null, createUser, battlePosition))
+                            val battlePlace =
+                                battlePlaceRepository.save(BattlePlace(null, createUser, battlePosition))
                             battlePlace.updateKill()
                         }
 
@@ -407,18 +500,21 @@ class EventService(
                             val battlePosition =
                                 getBattlePositionService.getBattlePositionByXandY(deathCord.x, deathCord.y)
 
-                            val battlePlace = battlePlaceRepository.save(BattlePlace(null, createUser, battlePosition))
+                            val battlePlace =
+                                battlePlaceRepository.save(BattlePlace(null, createUser, battlePosition))
                             battlePlace.updateDeath()
                         }
 
                     }
 
                     val findAllClan = clanRepository.findAll()
-                    val sortedAClan = findAllClan.sortedBy { it.score }.stream().limit((findAllClan.size / 2).toLong())
+                    val sortedAClan =
+                        findAllClan.sortedBy { it.score }.stream().limit((findAllClan.size / 2).toLong())
                     for (sortedClan in sortedAClan) {
                         sortedClan.clanLevel = ClanLevel.B
                     }
-                    val sortedBClan = findAllClan.sortedBy { it.score }.reversed().stream().limit((findAllClan.size / 2).toLong())
+                    val sortedBClan =
+                        findAllClan.sortedBy { it.score }.reversed().stream().limit((findAllClan.size / 2).toLong())
                     for (sortedClan in sortedBClan) {
                         sortedClan.clanLevel = ClanLevel.A
 
@@ -437,4 +533,5 @@ class EventService(
             it.todo = false
         }
     }
+
 }
