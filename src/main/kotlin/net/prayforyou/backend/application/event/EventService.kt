@@ -46,7 +46,7 @@ class EventService(
         val y: Double
     )
 
-//    @Scheduled(fixedDelay = 200000)
+    @Scheduled(fixedDelay = 200000)
     fun process() {
         var findTodoEvents = eventProvider.findTodoEvents()
         var findTodoUserJson = userJsonProvider.findTodoEvents()
@@ -232,7 +232,7 @@ class EventService(
                     it.target_user_nick!!
                 )
             }.distinct()
-                .distinctBy { it.targetUserNickName }
+                .distinctBy { it.targetUserNickName }.toMutableList()
 
             val usersList2 = event.battleLogJson.battleLog!!.map {
                 UserInfo(
@@ -242,8 +242,12 @@ class EventService(
                     it.target_user_nick!!
                 )
             }.distinct()
-                .distinctBy { it.userNickName }
+                .distinctBy { it.userNickName }.toMutableList()
 
+            usersList2.removeIf { it.userNexonId == 0 }
+            usersList.removeIf { it.targetUserNexonId == 0 }
+            usersList2.removeIf { it.userNickName == "" }
+            usersList.removeIf { it.targetUserNickName == "" }
 
 
             val userNexonIdList = mutableListOf<Int>()
