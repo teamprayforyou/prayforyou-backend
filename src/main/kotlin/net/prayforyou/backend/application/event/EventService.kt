@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional
 import kotlin.math.round
 
 @Service
-@Transactional
 class EventService(
     private val eventProvider: EventProvider,
     private val userJsonProvider: UserJsonProvider,
@@ -59,7 +58,7 @@ class EventService(
                 if (userRepository.findByUserNexonId(userResult.user_nexon_sn!!) == null) {
                     try {
                         val initialUser = User.initialUser(findClan!!, userResult.user_nexon_sn, userResult.user_nick!!)
-                        userRepository.saveAndFlush(initialUser)
+                        userRepository.save(initialUser)
                     }
                     catch (_: Exception) {
                         continue
@@ -166,35 +165,41 @@ class EventService(
                 )
             }
 
-            clanMatchRepository.saveAndFlush(clanMatch!!)
+            clanMatchRepository.save(clanMatch!!)
 
         }
 
-        val usersList = findTodoEvents.map { todo ->
-            todo.battleLogJson.battleLog!!.map { UserInfo(it.user_nexon_sn!!, it.user_nick!!, it.target_user_nexon_sn!!, it.target_user_nick!!) }.distinct()
-        }.flatten().distinctBy { it.targetUserNickName }
 
-        val usersList2 = findTodoEvents.map { todo ->
-            todo.battleLogJson.battleLog!!.map { UserInfo(it.user_nexon_sn!!, it.user_nick!!, it.target_user_nexon_sn!!, it.target_user_nick!!) }.distinct()
-        }.flatten().distinctBy { it.userNickName }
-
-        val map = usersList.map { Pair(it.userNexonId, it.userNickName) }
-        val map1 = usersList2.map { Pair(it.targetUserNexonId, it.targetUserNickName) }
-
-
-        val userNexonIdList = mutableListOf<Int>()
-        for (i in 0..usersList.lastIndex) {
-            userNexonIdList.add(usersList2.get(i).userNexonId)
-            userNexonIdList.add(usersList.get(i).targetUserNexonId)
-        }
-
-        val userNickNameList = mutableListOf<String>()
-        for (i in 0..usersList.lastIndex) {
-            userNickNameList.add(usersList2.get(i).userNickName)
-            userNickNameList.add(usersList.get(i).targetUserNickName)
-        }
 
         for (event in eventList) {
+
+            val usersList = event.battleLogJson.battleLog!!.map { UserInfo(it.user_nexon_sn!!, it.user_nick!!, it.target_user_nexon_sn!!, it.target_user_nick!!) }.distinct()
+                .distinctBy { it.targetUserNickName }
+
+            val usersList2 = event.battleLogJson.battleLog!!.map { UserInfo(it.user_nexon_sn!!, it.user_nick!!, it.target_user_nexon_sn!!, it.target_user_nick!!) }.distinct()
+                .distinctBy { it.userNickName }
+
+
+            val map = usersList.map { Pair(it.userNexonId, it.userNickName) }
+            val map1 = usersList2.map { Pair(it.targetUserNexonId, it.targetUserNickName) }
+
+
+            val userNexonIdList = mutableListOf<Int>()
+            val userNickNameList = mutableListOf<String>()
+
+            try {
+                for (i in 0..usersList.lastIndex) {
+                    userNexonIdList.add(usersList2.get(i).userNexonId)
+                    userNexonIdList.add(usersList.get(i).targetUserNexonId)
+                }
+
+                for (i in 0..usersList.lastIndex) {
+                    userNickNameList.add(usersList2.get(i).userNickName)
+                    userNickNameList.add(usersList.get(i).targetUserNickName)
+                }
+            } catch (e: Exception) {
+            }
+
             for (i in 0..userNickNameList.lastIndex) {
                 var killCount =
                     event.battleLogJson.battleLog!!.count { it.event_type == "kill" && it.user_nexon_sn == userNexonIdList.get(i) }
