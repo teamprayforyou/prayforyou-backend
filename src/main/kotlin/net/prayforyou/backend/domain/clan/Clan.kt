@@ -17,7 +17,6 @@ import javax.persistence.Table
 @Table(name = "clan")
 @Entity
 @EntityListeners(AuditingEntityListener::class)
-@Where(clause = "is_deleted = 'false'")
 class Clan (
     @Id
     @GeneratedValue
