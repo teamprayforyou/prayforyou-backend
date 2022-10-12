@@ -21,4 +21,6 @@ interface UserRepository : JpaRepository<User, Long> {
 
     @EntityGraph(attributePaths = ["clanId"])
     override fun findAll(): MutableList<User>
+
+    fun findByEmail(email: String): User?
 }

@@ -23,6 +23,12 @@ class User(
     @Column(name = "nickname")
     var nickname: String?,
 
+    @Column(name = "email")
+    var email: String? = null,
+
+    @Column(name = "password")
+    var password: String? = null,
+
     @Column(name = "user_nexon_id")
     var userNexonId: Int,
 
@@ -60,12 +66,13 @@ class User(
     }
 
     fun calculateScore() {
-        this.score = ((this.killCount!! * 2 - this.deathCount!! * 1) + (this.winCount!! * 10 - (this.gameCount!! - winCount!!) * 10)).toLong()
+        this.score =
+            ((this.killCount!! * 2 - this.deathCount!! * 1) + (this.winCount!! * 10 - (this.gameCount!! - winCount!!) * 10)).toLong()
     }
 
     fun updateKillDeath() {
         this.killDeath =
-            this.killCount!! * 100 / (this.killCount!! + this.deathCount!! ).toDouble()
+            this.killCount!! * 100 / (this.killCount!! + this.deathCount!!).toDouble()
     }
 
     fun increaseKillCount(killCount: Int) {
