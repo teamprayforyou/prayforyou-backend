@@ -79,12 +79,16 @@ class EventService(
                 )
             })
             val oldUser =
-                findAllUserNexonId.filter { old -> newUserList.map { it.user_nexon_sn }.contains(old.userNexonId) }
+                findAllUserNexonId.filterNot { old -> newUserList.map { it.user_nexon_sn }.contains(old.userNexonId) }
             if (oldUser.isNotEmpty()) {
                 // 원래 있던 유저 클랜 변경되었을 때
                 for (user in oldUser) {
-                    if (user.clanId?.clanId != todo.clanId) {
-                        user.clanId = findAllClan.find { clan -> todo.clanId == clan.clanId }
+                    val findUserJson = findTodoUserJson.find {
+                        it.userJson.resultClanUserList!!.map { user -> user.user_nexon_sn }.contains(user.userNexonId)
+                    }
+
+                    if (user.clanId?.clanId != findUserJson?.clanId) {
+                        user.clanId = findAllClan.find { clan -> findUserJson?.clanId == clan.clanId }
                         userRepository.save(user)
                     }
                 }

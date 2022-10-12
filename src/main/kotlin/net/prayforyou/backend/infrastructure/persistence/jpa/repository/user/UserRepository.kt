@@ -18,4 +18,7 @@ interface UserRepository : JpaRepository<User, Long> {
 
     @Query("select u from User u where u.gameCount > 0 order by u.score desc")
     fun findUserRanking(pageable: Pageable): Page<User>
+
+    @EntityGraph(attributePaths = ["clanId"])
+    override fun findAll(): MutableList<User>
 }
