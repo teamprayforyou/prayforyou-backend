@@ -87,9 +87,11 @@ class EventService(
                         it.userJson.resultClanUserList!!.map { user -> user.user_nexon_sn }.contains(user.userNexonId)
                     }
 
-                    if (user.clanId?.clanId != findUserJson?.clanId) {
-                        user.clanId = findAllClan.find { clan -> findUserJson?.clanId == clan.clanId }
-                        userRepository.save(user)
+                    if (findUserJson != null) {
+                        if (user.clanId?.clanId != findUserJson.clanId) {
+                            user.clanId = findAllClan.find { clan -> findUserJson.clanId == clan.clanId }
+                            userRepository.save(user)
+                        }
                     }
                 }
             }
@@ -485,8 +487,7 @@ class EventService(
 
                     } else {
                         val createUser =
-                            User(
-                                null,
+                            User.from(
                                 userNickNameList.get(i),
                                 userNexonIdList.get(i),
                                 null,

@@ -117,9 +117,13 @@ class User(
             clanId: Clan?,
             score: Long,
             killDeath: Double,
+            killCount: Int,
+            deathCount: Int,
+            gameCount: Int = 0,
             killPerGame: Double,
             primaryUseGun: String,
             winLoosePercent: Double,
+            winCount: Int
         ): User =
             User(
                 nickname = userNick,
@@ -127,12 +131,13 @@ class User(
                 clanId = clanId,
                 score = score,
                 killDeath = killDeath,
+                killCount = killCount,
+                deathCount = deathCount,
+                gameCount = gameCount,
                 killPerGame = killPerGame,
                 primaryUseGun = primaryUseGun,
                 winLoosePercent = winLoosePercent,
-                killCount = 0,
-                deathCount = 0,
-                gameCount = 0
+                winCount = winCount
             )
 
         fun initialUser(
