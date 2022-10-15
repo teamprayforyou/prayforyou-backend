@@ -12,6 +12,7 @@ class SignUpUserController(
 ) {
 
     @PostMapping("/signup")
+    @CrossOrigin("*")
     fun signUp(
         @RequestBody request: SignUpUserRequest
     ): CommonResponse<Boolean> {
