@@ -29,7 +29,7 @@ class SignUpUserController(
 
     @GetMapping("/email")
     fun checkEmail(
-        @RequestParam("email") email: String
+        @RequestParam("input") email: String
     ): CommonResponse<Boolean> {
         signUpUserService.checkEmail(email)
         return CommonResponse.convert(true)
