@@ -59,8 +59,8 @@ class UserController(
         val matchResponse: MutableList<MatchResponse> = mutableListOf()
         val matchList = matchService.getMatchDataByUserNexonId(userNexonId, pageable)
         for (match in matchList) {
-            val redUsers = matchService.getMatchUsers(match.matchId, match.redClan.id!!)
-            val blueUsers = matchService.getMatchUsers(match.matchId, match.blueClan.id!!)
+            val redUsers = matchService.getMatchUsers(match.matchId, match.redClan.id!!.toString())
+            val blueUsers = matchService.getMatchUsers(match.matchId, match.blueClan.id!!.toString())
             val plusUserScore = (redUsers.find { it.user.userNexonId.toLong() == userNexonId }?.plusScore
                 ?: blueUsers.find { it.user.userNexonId.toLong() == userNexonId }?.plusScore)
 

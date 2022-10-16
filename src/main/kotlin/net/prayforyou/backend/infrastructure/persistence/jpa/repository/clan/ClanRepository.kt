@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param
 interface ClanRepository: JpaRepository<Clan, Long> {
 
     @Query("select c from Clan c where c.clanId=:clanId and c.isDeleted = false")
-    fun findByClanId(clanId: Long): Clan?
+    fun findByClanId(clanId: String): Clan?
     fun findByClanName(clanName: String): Clan?
     @Query("select c from Clan c where c.clanLevel=:levelName and c.isDeleted = false order by c.score desc")
     fun findClanOrderByRanking(@Param("levelName") levelName: ClanLevel): List<Clan>

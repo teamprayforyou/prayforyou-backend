@@ -18,11 +18,11 @@ class MatchService(
         return matchRepository.findClanMatchByUserNexonIdPageable(userNexonId.toInt(), pageable)
     }
 
-    fun getMatchDataByClanId(clanId: Long, pageable: Pageable): Page<ClanMatch> {
+    fun getMatchDataByClanId(clanId: String, pageable: Pageable): Page<ClanMatch> {
         return matchRepository.findClanMatchByClanIdPageable(clanId, pageable)
     }
 
-    fun getMatchUsers(matchId: Long, clanId: Long): List<MatchUser> {
+    fun getMatchUsers(matchId: Long, clanId: String): List<MatchUser> {
         return matchUserRepository.findMatchUserList(matchId, clanId)
     }
 

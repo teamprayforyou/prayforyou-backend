@@ -34,7 +34,7 @@ class SignUpUserService(
         // TODO 슬랙 메세지 전송
     }
 
-    fun checkClanById(clanId: Long) {
+    fun checkClanById(clanId: String) {
         clanRepository.findByClanId(clanId) ?:
         throw NotFoundDataException("클랜이 존재 하지 않습니다. 클랜 ID를 다시 입력해주세요.")
     }

@@ -18,7 +18,7 @@ class ClanService(
         return clanRepository.findClanOrderByCreatedAt()
     }
 
-    fun getClanById(clanId: Long): Clan? {
+    fun getClanById(clanId: String): Clan? {
         return clanRepository.findByClanId(clanId)
     }
 

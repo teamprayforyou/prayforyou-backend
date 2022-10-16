@@ -47,8 +47,8 @@ class ClanController(
 
     @GetMapping("/{clanId}")
     fun getClanInfo(@PathVariable clanId: Long): ClanResponse {
-        val from = ClanResponse.from(clanService.getClanById(clanId)!!)
-        from.ranking = clanService.findAll().sortedBy { it.score }.reversed().indexOf(clanService.getClanById(clanId)) + 1
+        val from = ClanResponse.from(clanService.getClanById(clanId.toString())!!)
+        from.ranking = clanService.findAll().sortedBy { it.score }.reversed().indexOf(clanService.getClanById(clanId.toString())) + 1
         return from
     }
 
@@ -62,8 +62,8 @@ class ClanController(
         @GetMapping("/match/detail")
         fun getMatchDetail(@RequestParam("matchId") matchId: Long): CommonResponse<MatchDetail> {
             val matchDetail = matchService.getMatchDetail(matchId)
-            val redUsers = matchService.getMatchUsers(matchDetail.matchId, matchDetail.redClan.id!!)
-            val blueUsers = matchService.getMatchUsers(matchDetail.matchId, matchDetail.blueClan.id!!)
+            val redUsers = matchService.getMatchUsers(matchDetail.matchId, matchDetail.redClan.id!!.toString())
+            val blueUsers = matchService.getMatchUsers(matchDetail.matchId, matchDetail.blueClan.id!!.toString())
             val matchDetailResponse: MatchDetail = MatchDetail(
                 matchDetail.matchStartTime,
                 matchDetail.isRedTeamWin,
@@ -98,10 +98,10 @@ class ClanController(
             @PageableDefault(value = 7) pageable: Pageable
         ): PageResponse<MutableList<MatchResponse>> {
             val matchResponse: MutableList<MatchResponse> = mutableListOf()
-            val matchList = matchService.getMatchDataByClanId(clanId, pageable)
+            val matchList = matchService.getMatchDataByClanId(clanId.toString(), pageable)
             for (match in matchList) {
-                val redUsers = matchService.getMatchUsers(match.matchId, match.redClan.id!!)
-                val blueUsers = matchService.getMatchUsers(match.matchId, match.blueClan.id!!)
+                val redUsers = matchService.getMatchUsers(match.matchId, match.redClan.id!!.toString())
+                val blueUsers = matchService.getMatchUsers(match.matchId, match.blueClan.id!!.toString())
 
                 var isWin = false
                 if (match.redClan.clanId == clanId.toString()) {

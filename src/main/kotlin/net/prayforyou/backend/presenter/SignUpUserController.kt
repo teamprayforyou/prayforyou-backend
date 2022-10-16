@@ -24,7 +24,7 @@ class SignUpUserController(
     fun checkClanId(
         @RequestParam("clanId") clanId: Long
     ): CommonResponse<Boolean> {
-        signUpUserService.checkClanById(clanId)
+        signUpUserService.checkClanById(clanId.toString())
         return CommonResponse.convert(true)
     }
 

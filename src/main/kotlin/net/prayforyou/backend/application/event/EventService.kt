@@ -46,7 +46,6 @@ class EventService(
         val y: Double
     )
 
-    @Scheduled(fixedDelay = 200000)
     fun process() {
         var findTodoEvents = eventProvider.findTodoEvents()
         var findTodoUserJson = userJsonProvider.findTodoEvents().filter { it.userJson.resultClanUserList != null }
@@ -116,10 +115,10 @@ class EventService(
         // 클랜 매치 생성
         for (findTodoEvent in findTodoEvents) {
             val redClan =
-                (clanRepository.findByClanId(findTodoEvent.matchJson.matchResultDataInfo.red_clan_no!!.toLong())
+                (clanRepository.findByClanId(findTodoEvent.matchJson.matchResultDataInfo.red_clan_no!!)
                     ?: continue)
             val blueClan =
-                (clanRepository.findByClanId(findTodoEvent.matchJson.matchResultDataInfo.blue_clan_no!!.toLong())
+                (clanRepository.findByClanId(findTodoEvent.matchJson.matchResultDataInfo.blue_clan_no!!)
                     ?: continue)
             eventList.add(findTodoEvent)
             var isRedTeamWin = false
@@ -442,7 +441,7 @@ class EventService(
                 val findClanMatch =
                     clanMatchRepository.findByMatchId(event.matchKey.toLong())
 
-                val playerTeam = clanRepository.findByClanId(playerTeamNo.toLong())
+                val playerTeam = clanRepository.findByClanId(playerTeamNo)
 
                 if (userNickNameList.get(i).isNotEmpty()) {
                     if (findUser != null) {
