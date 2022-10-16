@@ -27,6 +27,7 @@ class UserSignUpRequestEntity(
     val nickname: String,
 
     @Column(name = "type")
+    @Enumerated(EnumType.STRING)
     val type: UserSignUpStatus = UserSignUpStatus.WAIT,
 
     @Column(name = "created_at")

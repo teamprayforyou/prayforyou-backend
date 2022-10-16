@@ -47,6 +47,10 @@ dependencies {
     implementation("com.querydsl:querydsl-jpa")
     kapt(group = "com.querydsl", name = "querydsl-apt", classifier = "jpa")
 
+    // jwt
+    implementation("io.jsonwebtoken:jjwt:0.9.1")
+
+
     // logging
     implementation("io.github.microutils:kotlin-logging:2.1.20")
 
