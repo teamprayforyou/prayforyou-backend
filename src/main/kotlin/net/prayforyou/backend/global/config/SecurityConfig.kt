@@ -17,6 +17,7 @@ class SecurityConfig(
 
     companion object {
         val PERMIT_URL = arrayOf(
+            "/",
             "/admin/**",
             "/banner/**",
             "/battle/**",
