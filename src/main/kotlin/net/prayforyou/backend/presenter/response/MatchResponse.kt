@@ -11,8 +11,8 @@ data class MatchResponse(
     val isDraw: Boolean
 )
 
-data class RedTeam (
-    val clanId: Long,
+data class RedTeam(
+    val clanId: String,
     val ladderPoint: Int,
     val members: List<User>,
     val clanLevel: String,
@@ -20,7 +20,7 @@ data class RedTeam (
 )
 
 data class BlueTeam(
-    val clanId: Long,
+    val clanId: String,
     val ladderPoint: Int,
     val members: List<User>,
     val clanLevel: String,

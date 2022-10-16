@@ -104,9 +104,9 @@ class ClanController(
                 val blueUsers = matchService.getMatchUsers(match.matchId, match.blueClan.id!!)
 
                 var isWin = false
-                if (match.redClan.clanId == clanId) {
+                if (match.redClan.clanId == clanId.toString()) {
                     isWin = match.isRedTeamWin
-                } else if (match.blueClan.clanId == clanId) {
+                } else if (match.blueClan.clanId == clanId.toString()) {
                     isWin = !match.isRedTeamWin
                 }
 

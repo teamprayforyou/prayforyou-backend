@@ -46,9 +46,10 @@ class EventService(
         val y: Double
     )
 
+    @Scheduled(fixedDelay = 200000)
     fun process() {
         var findTodoEvents = eventProvider.findTodoEvents()
-        var findTodoUserJson = userJsonProvider.findTodoEvents()
+        var findTodoUserJson = userJsonProvider.findTodoEvents().filter { it.userJson.resultClanUserList != null }
 
         if (findTodoEvents.isEmpty()) {
             return
@@ -74,7 +75,7 @@ class EventService(
                 // 새로 가입한 유저 저장하기
                 saveUserList.addAll(newUser.map {
                     User.initialUser(
-                        findAllClan.find { clan -> todo.clanId == clan.clanId },
+                        findAllClan.find { clan -> todo.clanId.toString() == clan.clanId },
                         it.user_nexon_sn!!,
                         it.user_nick!!
                     )
@@ -89,8 +90,8 @@ class EventService(
                         }
 
                         if (findUserJson != null) {
-                            if (user.clanId?.clanId != findUserJson.clanId) {
-                                user.clanId = findAllClan.find { clan -> findUserJson.clanId == clan.clanId }
+                            if (user.clanId?.clanId != findUserJson.clanId.toString()) {
+                                user.clanId = findAllClan.find { clan -> findUserJson.clanId.toString() == clan.clanId }
                                 userRepository.save(user)
                             }
                         }

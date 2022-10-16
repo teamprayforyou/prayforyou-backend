@@ -1,12 +1,11 @@
 package net.prayforyou.backend.presenter.response
 
 import net.prayforyou.backend.domain.clan.Clan
-import java.time.LocalDateTime
 
 data class ClanRankingResponse(
     var id: Long? = null,
 
-    var clanId: Long?,
+    var clanId: String,
 
     var clanName: String?,
 

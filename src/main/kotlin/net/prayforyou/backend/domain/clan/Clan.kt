@@ -22,7 +22,7 @@ class Clan (
     @GeneratedValue
     var id: Long? = null,
 
-    var clanId: Long,
+    var clanId: String,
 
     var clanName: String,
 

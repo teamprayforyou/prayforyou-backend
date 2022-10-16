@@ -12,8 +12,6 @@ import net.prayforyou.backend.presenter.response.SearchUserResponse
 import net.prayforyou.backend.presenter.response.User
 import net.prayforyou.backend.presenter.response.UserRankingResponse
 import net.prayforyou.backend.presenter.response.UserResponse
-import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
 import org.springframework.web.bind.annotation.*
 
