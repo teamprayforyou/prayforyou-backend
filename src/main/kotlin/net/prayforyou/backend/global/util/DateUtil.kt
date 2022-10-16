@@ -3,6 +3,7 @@ package net.prayforyou.backend.global.util
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Date
 
@@ -52,6 +53,20 @@ class DateUtil {
                 msg = diffTime.toString() + "년 전"
             }
             return msg
+        }
+
+        fun getRemainDay(endSeason: LocalDate?): Long {
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+
+            val endDate = dateFormat.parse(endSeason.toString()).time
+            val today = Calendar.getInstance().apply {
+                set(Calendar.HOUR_OF_DAY, 0)
+                set(Calendar.MINUTE, 0)
+                set(Calendar.SECOND, 0)
+                set(Calendar.MILLISECOND, 0)
+            }.time.time
+
+            return (endDate - today) / (24 * 60 * 60 * 1000)
         }
     }
 }

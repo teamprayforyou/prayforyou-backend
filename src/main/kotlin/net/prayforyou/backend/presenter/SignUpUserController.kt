@@ -12,6 +12,7 @@ class SignUpUserController(
 ) {
 
     @PostMapping("/signup")
+    @CrossOrigin("*")
     fun signUp(
         @RequestBody request: SignUpUserRequest
     ): CommonResponse<Boolean> {
@@ -29,7 +30,7 @@ class SignUpUserController(
 
     @GetMapping("/email")
     fun checkEmail(
-        @RequestParam("email") email: String
+        @RequestParam("input") email: String
     ): CommonResponse<Boolean> {
         signUpUserService.checkEmail(email)
         return CommonResponse.convert(true)
