@@ -22,9 +22,9 @@ class SignUpUserController(
 
     @GetMapping("/clan")
     fun checkClanId(
-        @RequestParam("clanId") clanId: Long
+        @RequestParam("clanId") clanId: String
     ): CommonResponse<Boolean> {
-        signUpUserService.checkClanById(clanId.toString())
+        signUpUserService.checkClanById(clanId)
         return CommonResponse.convert(true)
     }
 
