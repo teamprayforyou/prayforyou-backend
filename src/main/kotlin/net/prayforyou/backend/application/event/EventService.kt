@@ -46,7 +46,6 @@ class EventService(
         val y: Double
     )
 
-    @Scheduled(fixedDelay = 200000)
     fun process() {
         var findTodoEvents = eventProvider.findTodoEvents()
         var findTodoUserJson = userJsonProvider.findTodoEvents()
