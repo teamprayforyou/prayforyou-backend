@@ -60,44 +60,49 @@ class EventService(
         val userNexonIdList = findAllUserNexonId.map { it.userNexonId }
 
         val saveUserList: MutableSet<User> = mutableSetOf()
-        findTodoUserJson.forEach { todo ->
-            // resultClanUserList에서 디비에서 찾아온 userNexonId가 포함되지 않은 리스트 (새로운 유저 nexonId 리스트)
-            val newUserList = todo.userJson.resultClanUserList!!.filterNot {
-                userNexonIdList.contains(it.user_nexon_sn)
-            }
 
-            // 새로 가입한 유저 찾기
-            val newUser =
-                newUserList.filterNot { new -> findAllUserNexonId.map { it.userNexonId }.contains(new.user_nexon_sn) }
+        if (findTodoUserJson.isNotEmpty()) {
+            findTodoUserJson.forEach { todo ->
+                // resultClanUserList에서 디비에서 찾아온 userNexonId가 포함되지 않은 리스트 (새로운 유저 nexonId 리스트)
+                val newUserList = todo.userJson.resultClanUserList!!.filterNot {
+                    userNexonIdList.contains(it.user_nexon_sn)
+                }
 
-            // 새로 가입한 유저 저장하기
-            saveUserList.addAll(newUser.map {
-                User.initialUser(
-                    findAllClan.find { clan -> todo.clanId == clan.clanId },
-                    it.user_nexon_sn!!,
-                    it.user_nick!!
-                )
-            })
-            val oldUser =
-                findAllUserNexonId.filterNot { old -> newUserList.map { it.user_nexon_sn }.contains(old.userNexonId) }
-            if (oldUser.isNotEmpty()) {
-                // 원래 있던 유저 클랜 변경되었을 때
-                for (user in oldUser) {
-                    val findUserJson = findTodoUserJson.find {
-                        it.userJson.resultClanUserList!!.map { user -> user.user_nexon_sn }.contains(user.userNexonId)
-                    }
+                // 새로 가입한 유저 찾기
+                val newUser =
+                    newUserList.filterNot { new -> findAllUserNexonId.map { it.userNexonId }.contains(new.user_nexon_sn) }
 
-                    if (findUserJson != null) {
-                        if (user.clanId?.clanId != findUserJson.clanId) {
-                            user.clanId = findAllClan.find { clan -> findUserJson.clanId == clan.clanId }
-                            userRepository.save(user)
+                // 새로 가입한 유저 저장하기
+                saveUserList.addAll(newUser.map {
+                    User.initialUser(
+                        findAllClan.find { clan -> todo.clanId == clan.clanId },
+                        it.user_nexon_sn!!,
+                        it.user_nick!!
+                    )
+                })
+                val oldUser =
+                    findAllUserNexonId.filterNot { old -> newUserList.map { it.user_nexon_sn }.contains(old.userNexonId) }
+                if (oldUser.isNotEmpty()) {
+                    // 원래 있던 유저 클랜 변경되었을 때
+                    for (user in oldUser) {
+                        val findUserJson = findTodoUserJson.find {
+                            it.userJson.resultClanUserList!!.map { user -> user.user_nexon_sn }.contains(user.userNexonId)
+                        }
+
+                        if (findUserJson != null) {
+                            if (user.clanId?.clanId != findUserJson.clanId) {
+                                user.clanId = findAllClan.find { clan -> findUserJson.clanId == clan.clanId }
+                                userRepository.save(user)
+                            }
                         }
                     }
                 }
             }
         }
 
-        userRepository.saveAll(saveUserList.distinctBy { it.userNexonId })
+        if (saveUserList.isNotEmpty()) {
+            userRepository.saveAll(saveUserList.distinctBy { it.userNexonId })
+        }
 
         entityManager.flush()
         entityManager.clear()
