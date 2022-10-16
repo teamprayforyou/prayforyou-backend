@@ -29,22 +29,9 @@ class SecurityConfig(
     override fun configure(http: HttpSecurity) {
         http
             .csrf().disable()
-            .cors().configurationSource(corsConfigurationSource())
-            .and()
             .authorizeRequests()
             .antMatchers(*(PERMIT_URL))
             .permitAll()
             .anyRequest().authenticated()
-    }
-
-    fun corsConfigurationSource(): CorsConfigurationSource? {
-        val configuration = CorsConfiguration()
-        configuration.addAllowedOrigin("*")
-        configuration.addAllowedHeader("*")
-        configuration.addAllowedMethod("*")
-        configuration.allowCredentials = true
-        val source = UrlBasedCorsConfigurationSource()
-        source.registerCorsConfiguration("/**", configuration)
-        return source
     }
 }
