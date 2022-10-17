@@ -34,7 +34,7 @@ class ClanController(
     fun getClanList(): MutableList<ClanListResponse> {
         val clanListResponse: MutableList<ClanListResponse> = mutableListOf()
         for (clan in clanService.findAll()) {
-            clanListResponse.add(ClanListResponse(clan.clanId.toString(), clan.clanName))
+            clanListResponse.add(ClanListResponse(clan.clanId, clan.clanName))
         }
 
         return clanListResponse
@@ -46,9 +46,9 @@ class ClanController(
     }
 
     @GetMapping("/{clanId}")
-    fun getClanInfo(@PathVariable clanId: Long): ClanResponse {
-        val from = ClanResponse.from(clanService.getClanById(clanId.toString())!!)
-        from.ranking = clanService.findAll().sortedBy { it.score }.reversed().indexOf(clanService.getClanById(clanId.toString())) + 1
+    fun getClanInfo(@PathVariable clanId: String): ClanResponse {
+        val from = ClanResponse.from(clanService.getClanById(clanId)!!)
+        from.ranking = clanService.findAll().sortedBy { it.score }.reversed().indexOf(clanService.getClanById(clanId)) + 1
         return from
     }
 
