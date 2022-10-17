@@ -42,114 +42,116 @@ class ClanController(
 
     @GetMapping("/home")
     fun getClanHome(): CommonResponse<List<ClanRankingResponse>> {
-        return CommonResponse.convert(clanService.getClanOrderByCreatedAt().map { ClanRankingResponse.from(it) }.toList())
+        return CommonResponse.convert(clanService.getClanOrderByCreatedAt().map { ClanRankingResponse.from(it) }
+            .toList())
     }
 
     @GetMapping("/{clanId}")
     fun getClanInfo(@PathVariable clanId: String): ClanResponse {
         val from = ClanResponse.from(clanService.getClanById(clanId)!!)
-        from.ranking = clanService.findAll().sortedBy { it.score }.reversed().indexOf(clanService.getClanById(clanId)) + 1
+        from.ranking =
+            clanService.findAll().sortedBy { it.score }.reversed().indexOf(clanService.getClanById(clanId)) + 1
         return from
     }
 
-        @GetMapping("/ranking")
-        fun getClanInfoOrderByRanking(@RequestParam("levelName") levelName: ClanLevel): CommonResponse<List<ClanRankingResponse>> {
-            return CommonResponse.convert(
-                clanService.getClanOrderByScore(levelName).map { ClanRankingResponse.from(it) }.toList()
-            )
-        }
+    @GetMapping("/ranking")
+    fun getClanInfoOrderByRanking(@RequestParam("levelName") levelName: ClanLevel): CommonResponse<List<ClanRankingResponse>> {
+        return CommonResponse.convert(
+            clanService.getClanOrderByScore(levelName).map { ClanRankingResponse.from(it) }.toList()
+        )
+    }
 
-        @GetMapping("/match/detail")
-        fun getMatchDetail(@RequestParam("matchId") matchId: Long): CommonResponse<MatchDetail> {
-            val matchDetail = matchService.getMatchDetail(matchId)
-            val redUsers = matchService.getMatchUsers(matchDetail.matchId, matchDetail.redClan.id!!.toString())
-            val blueUsers = matchService.getMatchUsers(matchDetail.matchId, matchDetail.blueClan.id!!.toString())
-            val matchDetailResponse: MatchDetail = MatchDetail(
-                matchDetail.matchStartTime,
-                matchDetail.isRedTeamWin,
-                redUsers.map {
-                    DetailUser(
-                        it.user.userNexonId.toLong(),
-                        it.user.nickname!!,
-                        it.user.score!!.toInt(),
-                        it.killCount,
-                        it.deathCount,
-                        it.isSniper
-                    )
-                }.toList(),
-                blueUsers.map {
-                    DetailUser(
-                        it.user.userNexonId.toLong(),
-                        it.user.nickname!!,
-                        it.user.score!!.toInt(),
-                        it.killCount,
-                        it.deathCount,
-                        it.isSniper
-                    )
-                }.toList()
-            )
-
-            return CommonResponse.convert(matchDetailResponse)
-        }
-
-        @GetMapping("/match")
-        fun getUserMatch(
-            @RequestParam("clanId") clanId: Long,
-            @PageableDefault(value = 7) pageable: Pageable
-        ): PageResponse<MutableList<MatchResponse>> {
-            val matchResponse: MutableList<MatchResponse> = mutableListOf()
-            val matchList = matchService.getMatchDataByClanId(clanId.toString(), pageable)
-            for (match in matchList) {
-                val redUsers = matchService.getMatchUsers(match.matchId, match.redClan.id!!.toString())
-                val blueUsers = matchService.getMatchUsers(match.matchId, match.blueClan.id!!.toString())
-
-                var isWin = false
-                if (match.redClan.clanId == clanId.toString()) {
-                    isWin = match.isRedTeamWin
-                } else if (match.blueClan.clanId == clanId.toString()) {
-                    isWin = !match.isRedTeamWin
-                }
-
-                matchResponse.add(
-                    MatchResponse(
-                        gameProgressTime = match.totalMatchTime,
-                        isWin = isWin,
-                        lastGameDay = DateUtil.calculateTime(DateUtil.toDate(match.matchStartTime))!!,
-                        addScore = match.plusScore,
-                        matchId = match.matchId.toString(),
-                        redTeam = RedTeam(
-                            match.redClan.clanId,
-                            match.redClan.score.toInt(),
-                            redUsers.map {
-                                User(
-                                    it.user.nickname!!,
-                                    it.user.userNexonId.toLong(),
-                                    it.killCount.toLong(),
-                                    it.deathCount.toLong()
-                                )
-                            }.toList(),
-                            match.redClan.clanLevel.levelName,
-                            match.redClan.clanNickname
-                        ),
-                        blueTeam = BlueTeam(
-                            match.blueClan.clanId,
-                            match.blueClan.score.toInt(),
-                            blueUsers.map {
-                                User(
-                                    it.user.nickname!!,
-                                    it.user.userNexonId.toLong(),
-                                    it.killCount.toLong(),
-                                    it.deathCount.toLong()
-                                )
-                            }.toList(),
-                            match.blueClan.clanLevel.levelName,
-                            match.blueClan.clanNickname
-                        ),
-                        isDraw = match.isDraw
-                    )
+    @GetMapping("/match/detail")
+    fun getMatchDetail(@RequestParam("matchId") matchId: Long): CommonResponse<MatchDetail> {
+        val matchDetail = matchService.getMatchDetail(matchId)
+        val redUsers = matchService.getMatchUsers(matchDetail.matchId, matchDetail.redClan.id!!.toString())
+        val blueUsers = matchService.getMatchUsers(matchDetail.matchId, matchDetail.blueClan.id!!.toString())
+        val matchDetailResponse: MatchDetail = MatchDetail(
+            matchDetail.matchStartTime,
+            matchDetail.isRedTeamWin,
+            redUsers.map {
+                DetailUser(
+                    it.user.userNexonId.toLong(),
+                    it.user.nickname!!,
+                    it.user.score!!.toInt(),
+                    it.killCount,
+                    it.deathCount,
+                    it.isSniper
                 )
+            }.toList(),
+            blueUsers.map {
+                DetailUser(
+                    it.user.userNexonId.toLong(),
+                    it.user.nickname!!,
+                    it.user.score!!.toInt(),
+                    it.killCount,
+                    it.deathCount,
+                    it.isSniper
+                )
+            }.toList()
+        )
+
+        return CommonResponse.convert(matchDetailResponse)
+    }
+
+    @GetMapping("/match")
+    fun getUserMatch(
+        @RequestParam("clanId") clanId: String,
+        @PageableDefault(value = 7) pageable: Pageable
+    ): PageResponse<MutableList<MatchResponse>> {
+        val matchResponse: MutableList<MatchResponse> = mutableListOf()
+        val matchList = matchService.getMatchDataByClanId(clanId, pageable)
+        for (match in matchList) {
+            val redUsers = matchService.getMatchUsers(match.matchId, match.redClan.id!!.toString())
+            val blueUsers = matchService.getMatchUsers(match.matchId, match.blueClan.id!!.toString())
+
+            var isWin = false
+            if (match.redClan.clanId == clanId) {
+                isWin = match.isRedTeamWin
+            } else if (match.blueClan.clanId == clanId) {
+                isWin = !match.isRedTeamWin
             }
 
-            return PageResponse.convert(matchResponse, matchList.isLast, matchList.totalPages)
+            matchResponse.add(
+                MatchResponse(
+                    gameProgressTime = match.totalMatchTime,
+                    isWin = isWin,
+                    lastGameDay = DateUtil.calculateTime(DateUtil.toDate(match.matchStartTime))!!,
+                    addScore = match.plusScore,
+                    matchId = match.matchId.toString(),
+                    redTeam = RedTeam(
+                        match.redClan.clanId,
+                        match.redClan.score.toInt(),
+                        redUsers.map {
+                            User(
+                                it.user.nickname!!,
+                                it.user.userNexonId.toLong(),
+                                it.killCount.toLong(),
+                                it.deathCount.toLong()
+                            )
+                        }.toList(),
+                        match.redClan.clanLevel.levelName,
+                        match.redClan.clanNickname
+                    ),
+                    blueTeam = BlueTeam(
+                        match.blueClan.clanId,
+                        match.blueClan.score.toInt(),
+                        blueUsers.map {
+                            User(
+                                it.user.nickname!!,
+                                it.user.userNexonId.toLong(),
+                                it.killCount.toLong(),
+                                it.deathCount.toLong()
+                            )
+                        }.toList(),
+                        match.blueClan.clanLevel.levelName,
+                        match.blueClan.clanNickname
+                    ),
+                    isDraw = match.isDraw
+                )
+            )
+        }
+
+        return PageResponse.convert(matchResponse, matchList.isLast, matchList.totalPages)
     }
 }
