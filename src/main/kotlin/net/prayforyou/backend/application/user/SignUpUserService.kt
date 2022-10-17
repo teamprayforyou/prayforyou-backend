@@ -8,6 +8,7 @@ import net.prayforyou.backend.infrastructure.persistence.jpa.repository.user.Use
 import net.prayforyou.backend.infrastructure.persistence.jpa.repository.user.UserSignUpRepository
 import net.prayforyou.backend.presenter.request.SignUpUserRequest
 import org.springframework.data.repository.findByIdOrNull
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -16,7 +17,8 @@ import org.springframework.transaction.annotation.Transactional
 class SignUpUserService(
     private val validUserService: ValidUserService,
     private val userSignUpRepository: UserSignUpRepository,
-    private val clanRepository: ClanRepository
+    private val clanRepository: ClanRepository,
+    private val passwordEncoder: PasswordEncoder
 ) {
 
     fun signUp(request: SignUpUserRequest) {
@@ -27,7 +29,7 @@ class SignUpUserService(
                 request.clanId,
                 request.email,
                 request.nickname,
-                request.password
+                passwordEncoder.encode(request.password)
             )
         )
 

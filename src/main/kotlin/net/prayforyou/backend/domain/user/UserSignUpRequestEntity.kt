@@ -21,12 +21,13 @@ class UserSignUpRequestEntity(
     val password: String,
 
     @Column(name = "clan_unique_number")
-    val clanId: Long,
+    val clanId: String,
 
     @Column(name = "nickname")
     val nickname: String,
 
     @Column(name = "type")
+    @Enumerated(EnumType.STRING)
     val type: UserSignUpStatus = UserSignUpStatus.WAIT,
 
     @Column(name = "created_at")
@@ -37,7 +38,7 @@ class UserSignUpRequestEntity(
     var updatedAt: LocalDateTime = LocalDateTime.now()
 ) {
     companion object {
-        fun from(clanId: Long, email: String, nickname: String, password: String): UserSignUpRequestEntity =
+        fun from(clanId: String, email: String, nickname: String, password: String): UserSignUpRequestEntity =
             UserSignUpRequestEntity(
                 email = email,
                 nickname = nickname,
