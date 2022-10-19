@@ -1,6 +1,7 @@
 package net.prayforyou.backend.domain.board
 
 import net.prayforyou.backend.domain.board.enums.BoardType
+import net.prayforyou.backend.domain.user.User
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.time.LocalDateTime
@@ -21,9 +22,6 @@ class BoardComment(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
     var board: Board,
-
-    @Column(name = "author")
-    var author: String,
 
     @Column(name = "content")
     var content: String,

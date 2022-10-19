@@ -1,6 +1,7 @@
 package net.prayforyou.backend.domain.board
 
 import net.prayforyou.backend.domain.board.enums.BoardType
+import net.prayforyou.backend.domain.user.User
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.time.LocalDateTime
@@ -17,6 +18,7 @@ class Board(
     var id: Long? = null,
 
     @Column(name = "type")
+    @Enumerated(EnumType.STRING)
     var type: BoardType,
 
     @Column(name = "title")
@@ -28,8 +30,9 @@ class Board(
     @Column(name = "content")
     var content: String,
 
-    @Column(name = "author")
-    var author: String,
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    var user: User,
 
     @Column(name = "view")
     var view: Int,

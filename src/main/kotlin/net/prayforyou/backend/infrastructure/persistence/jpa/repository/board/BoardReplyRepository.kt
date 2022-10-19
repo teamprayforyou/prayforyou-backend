@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface BoardReplyRepository : JpaRepository<BoardReply, Long> {
+    fun findAllByBoardId(boardId: Long): List<BoardReply>
 }

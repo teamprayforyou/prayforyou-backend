@@ -1,5 +1,6 @@
 package net.prayforyou.backend.domain.board
 
+import net.prayforyou.backend.domain.user.User
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.time.LocalDateTime
@@ -18,11 +19,12 @@ class BoardReply(
     var id: Long? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id")
+    var board: Board,
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_comment_id")
     var boardComment: BoardComment,
-
-    @Column(name = "author")
-    var author: String,
 
     @Column(name = "content")
     var content: String,
