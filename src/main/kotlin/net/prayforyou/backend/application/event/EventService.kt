@@ -2,11 +2,13 @@ package net.prayforyou.backend.application.event
 
 import net.prayforyou.backend.application.battle.GetBattlePositionService
 import net.prayforyou.backend.domain.battle.BattlePlace
+import net.prayforyou.backend.domain.clan.Clan
 import net.prayforyou.backend.domain.clan.enums.ClanLevel
 import net.prayforyou.backend.domain.event.Event
 import net.prayforyou.backend.domain.match.ClanMatch
 import net.prayforyou.backend.domain.match.MatchUser
 import net.prayforyou.backend.domain.user.User
+import net.prayforyou.backend.domain.user.UserJson
 import net.prayforyou.backend.infrastructure.persistence.jpa.provider.event.EventProvider
 import net.prayforyou.backend.infrastructure.persistence.jpa.provider.user.UserJsonProvider
 import net.prayforyou.backend.infrastructure.persistence.jpa.repository.battle.BattlePlaceRepository
@@ -48,61 +50,18 @@ class EventService(
 
     @Scheduled(fixedDelay = 200000)
     fun process() {
-        var findTodoEvents = eventProvider.findTodoEvents()
-        var findTodoUserJson = userJsonProvider.findTodoEvents().filter { it.userJson.resultClanUserList != null }
+        val findTodoEvents = eventProvider.findTodoEvents()
+        val findTodoUserJson = userJsonProvider.findTodoEvents().filter { it.userJson.resultClanUserList != null }
 
         if (findTodoEvents.isEmpty()) {
             return
         }
-        val findAllUserNexonId = userRepository.findAll()
+
+        val findAllUser = userRepository.findAll()
         val findAllClan = clanRepository.findAll()
 
-        val userNexonIdList = findAllUserNexonId.map { it.userNexonId }
 
-        val saveUserList: MutableSet<User> = mutableSetOf()
-
-        if (findTodoUserJson.isNotEmpty()) {
-            findTodoUserJson.forEach { todo ->
-                // resultClanUserList에서 디비에서 찾아온 userNexonId가 포함되지 않은 리스트 (새로운 유저 nexonId 리스트)
-                val newUserList = todo.userJson.resultClanUserList!!.filterNot {
-                    userNexonIdList.contains(it.user_nexon_sn)
-                }
-
-                // 새로 가입한 유저 찾기
-                val newUser =
-                    newUserList.filterNot { new -> findAllUserNexonId.map { it.userNexonId }.contains(new.user_nexon_sn) }
-
-                // 새로 가입한 유저 저장하기
-                saveUserList.addAll(newUser.map {
-                    User.initialUser(
-                        findAllClan.find { clan -> todo.clanId.toString() == clan.clanId },
-                        it.user_nexon_sn!!,
-                        it.user_nick!!
-                    )
-                })
-                val oldUser =
-                    findAllUserNexonId.filterNot { old -> newUserList.map { it.user_nexon_sn }.contains(old.userNexonId) }
-                if (oldUser.isNotEmpty()) {
-                    // 원래 있던 유저 클랜 변경되었을 때
-                    for (user in oldUser) {
-                        val findUserJson = findTodoUserJson.find {
-                            it.userJson.resultClanUserList!!.map { user -> user.user_nexon_sn }.contains(user.userNexonId)
-                        }
-
-                        if (findUserJson != null) {
-                            if (user.clanId?.clanId != findUserJson.clanId.toString()) {
-                                user.clanId = findAllClan.find { clan -> findUserJson.clanId.toString() == clan.clanId }
-                                userRepository.save(user)
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if (saveUserList.isNotEmpty()) {
-            userRepository.saveAll(saveUserList.distinctBy { it.userNexonId })
-        }
+        saveGameNotPlayUser(findTodoUserJson, findAllUser, findAllClan)
 
         entityManager.flush()
         entityManager.clear()
@@ -111,128 +70,31 @@ class EventService(
             return
         }
 
-        val eventList: MutableList<Event> = mutableListOf()
+        val p4uGameList: MutableList<Event> = mutableListOf()
 
         // 클랜 매치 생성
-        for (findTodoEvent in findTodoEvents) {
-            val redClan =
-                (clanRepository.findByClanId(findTodoEvent.matchJson.matchResultDataInfo.red_clan_no!!)
-                    ?: continue)
-            val blueClan =
-                (clanRepository.findByClanId(findTodoEvent.matchJson.matchResultDataInfo.blue_clan_no!!)
-                    ?: continue)
-            eventList.add(findTodoEvent)
-            var isRedTeamWin = false
-            var clanMatch: ClanMatch? = null
-            // 레드팀이 졌으면 - 블루팀 승리
-            if (findTodoEvent.matchJson.matchResultDataInfo.red_result.equals("win")) {
-                isRedTeamWin = true
+        saveClanMatch(findTodoEvents, p4uGameList)
 
-                redClan.updateWinLoseCount(1, 0)
-                redClan.calculateWinLosePercent()
-                redClan.calculateScore()
+        processGame(p4uGameList)
 
-                clanMatch = ClanMatch(
-                    null,
-                    findTodoEvent.matchKey.toLong(),
-                    redClan,
-                    blueClan,
-                    isRedTeamWin,
-                    0,
-                    findTodoEvent.matchTime,
-                    findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
-                    findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!,
-                    false
-                )
-            } else if (findTodoEvent.matchJson.matchResultDataInfo.red_result.equals("lose")) {
-                isRedTeamWin = false
+        finishBatchTask()
+    }
 
-                redClan.updateWinLoseCount(0, 1)
-                redClan.calculateWinLosePercent()
-                redClan.calculateScore()
+    private fun finishBatchTask(
+    ) {
+        val findTodoEvent = eventProvider.findTodoEvents()
+        val findTodoUserJson = userJsonProvider.findTodoEvents()
 
-                clanMatch = ClanMatch(
-                    null,
-                    findTodoEvent.matchKey.toLong(),
-                    redClan,
-                    blueClan,
-                    isRedTeamWin,
-                    0,
-                    findTodoEvent.matchTime,
-                    findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
-                    findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!,
-                    false
-                )
-            }
-
-            if (findTodoEvent.matchJson.matchResultDataInfo.blue_result.equals("win")) {
-                isRedTeamWin = false
-
-                blueClan.updateWinLoseCount(1, 0)
-                blueClan.calculateWinLosePercent()
-                blueClan.calculateScore()
-
-                clanMatch = ClanMatch(
-                    null,
-                    findTodoEvent.matchKey.toLong(),
-                    redClan,
-                    blueClan,
-                    isRedTeamWin,
-                    0,
-                    findTodoEvent.matchTime,
-                    findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
-                    findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!,
-                    false
-                )
-            } else if (findTodoEvent.matchJson.matchResultDataInfo.blue_result.equals("lose")) {
-                isRedTeamWin = true
-
-                blueClan.updateWinLoseCount(0, 1)
-                blueClan.calculateWinLosePercent()
-                blueClan.calculateScore()
-
-                clanMatch = ClanMatch(
-                    null,
-                    findTodoEvent.matchKey.toLong(),
-                    redClan,
-                    blueClan,
-                    isRedTeamWin,
-                    0,
-                    findTodoEvent.matchTime,
-                    findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
-                    findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!,
-                    false
-                )
-            }
-
-            if (findTodoEvent.matchJson.matchResultDataInfo.blue_result.equals("draw")) {
-                isRedTeamWin = false
-
-                redClan.updateWinLoseCount(0, 0)
-                redClan.calculateWinLosePercent()
-                redClan.calculateScore()
-                blueClan.updateWinLoseCount(0, 0)
-                blueClan.calculateWinLosePercent()
-                blueClan.calculateScore()
-
-                clanMatch = ClanMatch(
-                    null,
-                    findTodoEvent.matchKey.toLong(),
-                    redClan,
-                    blueClan,
-                    isRedTeamWin,
-                    0,
-                    findTodoEvent.matchTime,
-                    findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
-                    findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!,
-                    true
-                )
-            }
-
-            clanMatchRepository.save(clanMatch!!)
-
+        findTodoEvent.forEach {
+            it.todo = false
         }
 
+        findTodoUserJson.forEach {
+            it.todo = false
+        }
+    }
+
+    private fun processGame(eventList: MutableList<Event>) {
         for (event in eventList) {
 
             val usersList = event.battleLogJson.battleLog!!.map {
@@ -264,7 +126,7 @@ class EventService(
             val userNexonIdList = mutableListOf<Int>()
             val userNickNameList = mutableListOf<String>()
 
-            val index = if(usersList.lastIndex < usersList2.lastIndex) {
+            val index = if (usersList.lastIndex < usersList2.lastIndex) {
                 usersList2.lastIndex
             } else {
                 usersList.lastIndex
@@ -561,16 +423,188 @@ class EventService(
             }
 
         }
+    }
 
-        findTodoEvents = eventProvider.findTodoEvents()
-        findTodoUserJson = userJsonProvider.findTodoEvents()
+    private fun saveClanMatch(
+        findTodoEvents: List<Event>,
+        eventList: MutableList<Event>
+    ) {
+        for (findTodoEvent in findTodoEvents) {
+            val redClan =
+                (clanRepository.findByClanId(findTodoEvent.matchJson.matchResultDataInfo.red_clan_no!!)
+                    ?: continue)
+            val blueClan =
+                (clanRepository.findByClanId(findTodoEvent.matchJson.matchResultDataInfo.blue_clan_no!!)
+                    ?: continue)
+            eventList.add(findTodoEvent)
+            var isRedTeamWin = false
+            var clanMatch: ClanMatch? = null
+            // 레드팀이 졌으면 - 블루팀 승리
+            if (findTodoEvent.matchJson.matchResultDataInfo.red_result.equals("win")) {
+                isRedTeamWin = true
 
-        findTodoEvents.forEach {
-            it.todo = false
+                redClan.updateWinLoseCount(1, 0)
+                redClan.calculateWinLosePercent()
+                redClan.calculateScore()
+
+                clanMatch = ClanMatch(
+                    null,
+                    findTodoEvent.matchKey.toLong(),
+                    redClan,
+                    blueClan,
+                    isRedTeamWin,
+                    0,
+                    findTodoEvent.matchTime,
+                    findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
+                    findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!,
+                    false
+                )
+            } else if (findTodoEvent.matchJson.matchResultDataInfo.red_result.equals("lose")) {
+                isRedTeamWin = false
+
+                redClan.updateWinLoseCount(0, 1)
+                redClan.calculateWinLosePercent()
+                redClan.calculateScore()
+
+                clanMatch = ClanMatch(
+                    null,
+                    findTodoEvent.matchKey.toLong(),
+                    redClan,
+                    blueClan,
+                    isRedTeamWin,
+                    0,
+                    findTodoEvent.matchTime,
+                    findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
+                    findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!,
+                    false
+                )
+            }
+
+            if (findTodoEvent.matchJson.matchResultDataInfo.blue_result.equals("win")) {
+                isRedTeamWin = false
+
+                blueClan.updateWinLoseCount(1, 0)
+                blueClan.calculateWinLosePercent()
+                blueClan.calculateScore()
+
+                clanMatch = ClanMatch(
+                    null,
+                    findTodoEvent.matchKey.toLong(),
+                    redClan,
+                    blueClan,
+                    isRedTeamWin,
+                    0,
+                    findTodoEvent.matchTime,
+                    findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
+                    findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!,
+                    false
+                )
+            } else if (findTodoEvent.matchJson.matchResultDataInfo.blue_result.equals("lose")) {
+                isRedTeamWin = true
+
+                blueClan.updateWinLoseCount(0, 1)
+                blueClan.calculateWinLosePercent()
+                blueClan.calculateScore()
+
+                clanMatch = ClanMatch(
+                    null,
+                    findTodoEvent.matchKey.toLong(),
+                    redClan,
+                    blueClan,
+                    isRedTeamWin,
+                    0,
+                    findTodoEvent.matchTime,
+                    findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
+                    findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!,
+                    false
+                )
+            }
+
+            if (findTodoEvent.matchJson.matchResultDataInfo.blue_result.equals("draw")) {
+                isRedTeamWin = false
+
+                redClan.updateWinLoseCount(0, 0)
+                redClan.calculateWinLosePercent()
+                redClan.calculateScore()
+                blueClan.updateWinLoseCount(0, 0)
+                blueClan.calculateWinLosePercent()
+                blueClan.calculateScore()
+
+                clanMatch = ClanMatch(
+                    null,
+                    findTodoEvent.matchKey.toLong(),
+                    redClan,
+                    blueClan,
+                    isRedTeamWin,
+                    0,
+                    findTodoEvent.matchTime,
+                    findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
+                    findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!,
+                    true
+                )
+            }
+
+            clanMatchRepository.save(clanMatch!!)
+
+        }
+    }
+
+    private fun saveGameNotPlayUser(
+        findTodoUserJson: List<UserJson>,
+        findAllUserNexonId: MutableList<User>,
+        findAllClan: List<Clan>
+    ) {
+
+        val userNexonIdList = findAllUserNexonId.map { it.userNexonId }
+
+        val saveUserList: MutableSet<User> = mutableSetOf()
+
+        if (findTodoUserJson.isNotEmpty()) {
+            findTodoUserJson.forEach { todo ->
+                // resultClanUserList에서 디비에서 찾아온 userNexonId가 포함되지 않은 리스트 (새로운 유저 nexonId 리스트)
+                val newUserList = todo.userJson.resultClanUserList!!.filterNot {
+                    userNexonIdList.contains(it.user_nexon_sn)
+                }
+
+                // 새로 가입한 유저 찾기
+                val newUser =
+                    newUserList.filterNot { new ->
+                        findAllUserNexonId.map { it.userNexonId }.contains(new.user_nexon_sn)
+                    }
+
+                // 새로 가입한 유저 저장하기
+                saveUserList.addAll(newUser.map {
+                    User.initialUser(
+                        findAllClan.find { clan -> todo.clanId.toString() == clan.clanId },
+                        it.user_nexon_sn!!,
+                        it.user_nick!!
+                    )
+                })
+                val oldUser =
+                    findAllUserNexonId.filterNot { old ->
+                        newUserList.map { it.user_nexon_sn }.contains(old.userNexonId)
+                    }
+                if (oldUser.isNotEmpty()) {
+                    // 원래 있던 유저 클랜 변경되었을 때
+                    for (user in oldUser) {
+                        val findUserJson = findTodoUserJson.find {
+                            it.userJson.resultClanUserList!!.map { user -> user.user_nexon_sn }
+                                .contains(user.userNexonId)
+                        }
+
+                        if (findUserJson != null) {
+                            if (user.clanId?.clanId != findUserJson.clanId.toString()) {
+                                user.clanId = findAllClan.find { clan -> findUserJson.clanId.toString() == clan.clanId }
+                                userRepository.save(user)
+                            }
+                        }
+                    }
+                }
+            }
         }
 
-        findTodoUserJson.forEach {
-            it.todo = false
+        if (saveUserList.isNotEmpty()) {
+            userRepository.saveAll(saveUserList.distinctBy { it.userNexonId })
         }
     }
 
