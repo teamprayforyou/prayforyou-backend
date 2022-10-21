@@ -23,6 +23,10 @@ class BoardComment(
     @JoinColumn(name = "board_id")
     var board: Board,
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    var user: User,
+
     @Column(name = "content")
     var content: String,
 

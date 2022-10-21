@@ -26,6 +26,11 @@ class BoardReply(
     @JoinColumn(name = "board_comment_id")
     var boardComment: BoardComment,
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    var user: User,
+
+
     @Column(name = "content")
     var content: String,
 

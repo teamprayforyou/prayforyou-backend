@@ -10,6 +10,8 @@ data class GetBoardCommentDto(
     val content: String,
     val view: Int,
     val good: Int,
+    val userNickName: String,
+    val clanNickName: String? = "무소속",
     @JsonProperty("isDeleted")
     val isDeleted: Boolean,
     val createdAt: String,
@@ -23,6 +25,8 @@ data class GetBoardCommentDto(
                 content = comment.content,
                 view = comment.view,
                 good = comment.good,
+                userNickName = comment.user.nickname!!,
+                clanNickName = comment.user.clanId?.clanNickname,
                 isDeleted = comment.isDeleted,
                 createdAt = DateUtil.calculateTimeByBoard(comment.createdAt),
                 updatedAt = comment.updatedAt.toString(),

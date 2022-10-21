@@ -9,6 +9,8 @@ data class GetBoardReplyDto(
     val id: Long?,
     val content: String,
     val view: Int,
+    val userNickName: String,
+    val clanNickName: String? = "무소속",
     val good: Int,
     val bad: Int,
     @JsonProperty("isDeleted")
@@ -22,6 +24,8 @@ data class GetBoardReplyDto(
                 id = boardReply.id,
                 content = boardReply.content,
                 view = boardReply.view,
+                userNickName = boardReply.user.nickname!!,
+                clanNickName = boardReply.user.clanId?.clanNickname,
                 good = boardReply.good,
                 bad = boardReply.bad,
                 isDeleted = boardReply.isDeleted,
