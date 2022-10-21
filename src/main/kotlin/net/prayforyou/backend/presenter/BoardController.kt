@@ -27,8 +27,4 @@ class BoardController(
         @PathVariable("boardId") boardId: Long
     ): CommonResponse<GetBoardDetailDto> =
         CommonResponse.convert(boardService.getById(boardId))
-
-    fun updateContent() {
-
-    }
 }
