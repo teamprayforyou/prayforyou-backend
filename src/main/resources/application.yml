@@ -23,4 +23,5 @@ decorator:
   datasource:
     p6spy:
       enable-logging: false
-
+server:
+  port : 8081
