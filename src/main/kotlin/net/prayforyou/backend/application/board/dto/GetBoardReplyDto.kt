@@ -2,6 +2,7 @@ package net.prayforyou.backend.application.board.dto
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import net.prayforyou.backend.domain.board.BoardReply
+import net.prayforyou.backend.global.util.DateUtil
 
 
 data class GetBoardReplyDto(
@@ -24,7 +25,7 @@ data class GetBoardReplyDto(
                 good = boardReply.good,
                 bad = boardReply.bad,
                 isDeleted = boardReply.isDeleted,
-                createdAt = boardReply.createdAt.toString(),
+                createdAt = DateUtil.calculateTimeByBoard(boardReply.createdAt),
                 updatedAt = boardReply.updatedAt.toString()
             )
     }

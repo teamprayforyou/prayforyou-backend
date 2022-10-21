@@ -23,4 +23,5 @@ data class BoardJoinUserDto @QueryProjection constructor(
     val view: Int,
     val email: String,
     val nickName: String,
+    val clanName: String? = "무소속"
 )

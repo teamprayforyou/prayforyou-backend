@@ -2,6 +2,8 @@ package net.prayforyou.backend.infrastructure.persistence.querydsl
 
 import com.querydsl.jpa.impl.JPAQueryFactory
 import net.prayforyou.backend.domain.board.QBoard.*
+import net.prayforyou.backend.domain.board.QBoardComment
+import net.prayforyou.backend.domain.board.QBoardComment.*
 import net.prayforyou.backend.domain.clan.QClan
 import net.prayforyou.backend.domain.clan.QClan.*
 import net.prayforyou.backend.domain.user.QUser.*
@@ -18,7 +20,6 @@ class BoardQueryDslRepository(
 ) {
 
     fun findAllByPage(pageable: Pageable): Page<BoardJoinUserDto> {
-        println("====================")
         val result =
             queryFactory
                 .select(
@@ -36,11 +37,13 @@ class BoardQueryDslRepository(
                         board.updatedAt,
                         board.view,
                         user.email,
-                        user.nickname
+                        user.nickname,
+                        clan.clanNickname
                     )
                 )
                 .from(board)
                 .join(board.user, user)
+                .rightJoin(user.clanId, clan)
                 .where(board.isDeleted.isFalse)
                 .offset(pageable.offset)
                 .limit(pageable.pageSize.toLong())

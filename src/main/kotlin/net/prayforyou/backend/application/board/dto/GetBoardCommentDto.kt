@@ -3,6 +3,7 @@ package net.prayforyou.backend.application.board.dto
 import com.fasterxml.jackson.annotation.JsonProperty
 import net.prayforyou.backend.domain.board.BoardComment
 import net.prayforyou.backend.domain.board.BoardReply
+import net.prayforyou.backend.global.util.DateUtil
 
 data class GetBoardCommentDto(
     val id: Long?,
@@ -23,7 +24,7 @@ data class GetBoardCommentDto(
                 view = comment.view,
                 good = comment.good,
                 isDeleted = comment.isDeleted,
-                createdAt = comment.createdAt.toString(),
+                createdAt = DateUtil.calculateTimeByBoard(comment.createdAt),
                 updatedAt = comment.updatedAt.toString(),
                 reply = reply.map { GetBoardReplyDto.from(it) }
             )
