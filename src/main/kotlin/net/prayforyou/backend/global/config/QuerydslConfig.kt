@@ -7,7 +7,9 @@ import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
 
 @Configuration
-class QuerydslConfig (@PersistenceContext val entityManager: EntityManager) {
+class QuerydslConfig(
+    @PersistenceContext val entityManager: EntityManager
+) {
     @Bean
     fun jpqQueryFactory() = JPAQueryFactory(entityManager)
 }

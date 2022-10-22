@@ -27,6 +27,8 @@ class SecurityConfig(
             "/clan/**",
             "/season/**",
             "/user/**",
+            // TODO 글쓰기는 막을 것
+            "/board/**"
         )
     }
 
