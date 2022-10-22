@@ -15,7 +15,6 @@ data class BoardJoinUserDto @QueryProjection constructor(
     val createdAt: LocalDateTime,
     val good: Int,
     val isDeleted: Boolean,
-    val password: String,
     val title: String,
     val type: BoardType,
     @JsonProperty("updated_at")

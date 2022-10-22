@@ -31,7 +31,6 @@ class BoardQueryDslRepository(
                         board.createdAt,
                         board.good,
                         board.isDeleted,
-                        board.password,
                         board.title,
                         board.type,
                         board.updatedAt,

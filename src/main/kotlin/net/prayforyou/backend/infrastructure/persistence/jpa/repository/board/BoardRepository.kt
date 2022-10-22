@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface BoardRepository : JpaRepository<Board, Long> {
     fun findAllByIsDeletedFalse(pageable: Pageable): List<Board>
+    fun findByIdAndIsDeletedFalse(id: Long): Board?
 }

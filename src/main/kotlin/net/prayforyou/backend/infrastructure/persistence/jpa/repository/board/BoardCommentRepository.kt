@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface BoardCommentRepository : JpaRepository<BoardComment, Long> {
     fun findAllByBoardId(id: Long): List<BoardComment>
+    fun findByIdAndIsDeletedFalse(id: Long): BoardComment?
 }

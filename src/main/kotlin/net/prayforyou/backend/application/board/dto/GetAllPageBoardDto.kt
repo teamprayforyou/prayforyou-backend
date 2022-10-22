@@ -14,7 +14,6 @@ data class GetAllPageBoardDto(
     val good: Int,
     @JsonProperty("isDeleted")
     val isDeleted: Boolean,
-    val password: String,
     val title: String,
     val type: BoardType,
     val updatedAt: String,
@@ -36,7 +35,6 @@ data class GetAllPageBoardDto(
                 ),
                 good = dto.good,
                 isDeleted = dto.isDeleted,
-                password = dto.password,
                 title = dto.title,
                 type = dto.type,
                 updatedAt = dto.updatedAt.toString(),

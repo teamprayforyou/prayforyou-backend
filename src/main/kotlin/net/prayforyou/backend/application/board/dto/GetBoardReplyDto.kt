@@ -8,7 +8,6 @@ import net.prayforyou.backend.global.util.DateUtil
 data class GetBoardReplyDto(
     val id: Long?,
     val content: String,
-    val view: Int,
     val userNickName: String,
     val clanNickName: String? = "무소속",
     val good: Int,
@@ -23,7 +22,6 @@ data class GetBoardReplyDto(
             GetBoardReplyDto(
                 id = boardReply.id,
                 content = boardReply.content,
-                view = boardReply.view,
                 userNickName = boardReply.user.nickname!!,
                 clanNickName = boardReply.user.clanId?.clanNickname,
                 good = boardReply.good,

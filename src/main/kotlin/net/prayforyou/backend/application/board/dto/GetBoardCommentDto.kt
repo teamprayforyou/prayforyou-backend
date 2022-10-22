@@ -8,7 +8,6 @@ import net.prayforyou.backend.global.util.DateUtil
 data class GetBoardCommentDto(
     val id: Long?,
     val content: String,
-    val view: Int,
     val good: Int,
     val userNickName: String,
     val clanNickName: String? = "무소속",
@@ -23,7 +22,6 @@ data class GetBoardCommentDto(
             GetBoardCommentDto(
                 id = comment.id,
                 content = comment.content,
-                view = comment.view,
                 good = comment.good,
                 userNickName = comment.user.nickname!!,
                 clanNickName = comment.user.clanId?.clanNickname,
