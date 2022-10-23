@@ -46,6 +46,7 @@ class BoardQueryDslRepository(
                 .where(board.isDeleted.isFalse)
                 .offset(pageable.offset)
                 .limit(pageable.pageSize.toLong())
+                .orderBy(board.createdAt.desc())
                 .fetch()
 
         return PageImpl(result, pageable, result.size.toLong())
