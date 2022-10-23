@@ -60,7 +60,6 @@ class EventService(
         val findAllUser = userRepository.findAll()
         val findAllClan = clanRepository.findAll()
 
-
         saveGameNotPlayUser(findTodoUserJson, findAllUser, findAllClan)
 
         entityManager.flush()
@@ -130,6 +129,10 @@ class EventService(
                 usersList2.lastIndex
             } else {
                 usersList.lastIndex
+            }
+
+            if (usersList.size != 5 || usersList2.size != 5) {
+                continue
             }
 
             for (i in 0..index) {
