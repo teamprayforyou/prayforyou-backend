@@ -38,6 +38,7 @@ class BoardService(
         val board = boardRepository.findByIdOrNull(boardId) ?: throw NotFoundDataException("존재하지 않는 게시글이에요 😭")
         val comment = boardCommentRepository.findAllByBoardId(board.id!!)
         val reply = boardReplyRepository.findAllByBoardId(board.id!!)
+            .groupBy { it.boardComment.id!! }
         return GetBoardDetailDto.of(board, comment, reply)
     }
 

@@ -1,6 +1,5 @@
 package net.prayforyou.backend.application.board.dto
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import net.prayforyou.backend.domain.board.Board
 import net.prayforyou.backend.domain.board.BoardComment
@@ -25,7 +24,7 @@ data class GetBoardDetailDto(
     val comment: List<GetBoardCommentDto>
 ) {
     companion object {
-        fun of(board: Board, comment: List<BoardComment>, reply: List<BoardReply>): GetBoardDetailDto =
+        fun of(board: Board, comment: List<BoardComment>, reply: Map<Long, List<BoardReply>>): GetBoardDetailDto =
             GetBoardDetailDto(
                 id = board.id!!,
                 title = board.title,
@@ -42,7 +41,7 @@ data class GetBoardDetailDto(
                 clanId = board.user.clanId?.id,
                 clanNickName = board.user.clanId?.clanNickname,
                 clanMarkUrl = board.user.clanId?.clanMarkUrl,
-                comment = comment.map { GetBoardCommentDto.of(it, reply) }
+                comment = comment.map { GetBoardCommentDto.of(it, reply[it.id] ?: emptyList()) }
             )
     }
 }
