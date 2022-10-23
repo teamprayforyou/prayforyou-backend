@@ -74,8 +74,6 @@ class BoardService(
         val board = boardRepository.findByIdAndIsDeletedFalse(boardId)
             ?: throw NotFoundDataException()
 
-        println(user.id)
-        println("=====================")
         validWriteUser(board, user)
 
         board.delete()
