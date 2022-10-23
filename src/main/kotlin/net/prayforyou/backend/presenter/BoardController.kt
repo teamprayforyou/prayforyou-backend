@@ -38,7 +38,7 @@ class BoardController(
         return CommonResponse.convert(true)
     }
 
-    @DeleteMapping("/{boardId}")
+    @PostMapping("/{boardId}")
     fun deleteBoard(
         @PathVariable("boardId") boardId: Long,
         @RequestBody request: DeleteBoardRequest
@@ -87,7 +87,7 @@ class BoardController(
         return CommonResponse.convert(true)
     }
 
-    @DeleteMapping("/reaction")
+    @PostMapping("/reaction")
     fun deleteReaction(
         @RequestBody request: DeleteReactionRequest
     ): CommonResponse<Boolean> {
