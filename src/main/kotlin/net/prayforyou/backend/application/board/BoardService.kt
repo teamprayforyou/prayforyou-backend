@@ -79,4 +79,10 @@ class BoardService(
 
         board.delete()
     }
+
+    fun updateView(boardId: Long) {
+        val board = boardRepository.findByIdOrNull(boardId)
+            ?: throw NotFoundDataException()
+        board.updateView()
+    }
 }

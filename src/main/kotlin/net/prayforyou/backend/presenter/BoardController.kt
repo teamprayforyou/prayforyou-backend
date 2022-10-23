@@ -94,4 +94,12 @@ class BoardController(
         boardCommentService.delete(request)
         return CommonResponse.convert(true)
     }
+
+    @PostMapping("/{boardId}/view")
+    fun updateView(
+        @PathVariable("boardId") boardId: Long,
+    ): CommonResponse<Boolean> {
+        boardService.updateView(boardId)
+        return CommonResponse.convert(true)
+    }
 }
