@@ -62,7 +62,7 @@ class BoardService(
     }
 
     private fun validWriteUser(board: Board, user: User) {
-        if (user != board) {
+        if (user.id != board.user.id) {
             throw ValidationException("유저가 등록한 글이 아닙니다")
         }
     }
@@ -74,6 +74,8 @@ class BoardService(
         val board = boardRepository.findByIdAndIsDeletedFalse(boardId)
             ?: throw NotFoundDataException()
 
+        println(user.id)
+        println("=====================")
         validWriteUser(board, user)
 
         board.delete()
