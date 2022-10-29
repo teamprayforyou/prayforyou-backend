@@ -56,10 +56,13 @@ class Clan (
     }
 
     fun calculateWinLosePercent() {
-        this.winLosePercent = (this.winCount * 100) / (this.winCount + this.loseCount).toDouble()
+        if (winCount > 0 || loseCount > 0) {
+            this.winLosePercent = (this.winCount * 100) / (this.winCount + this.loseCount).toDouble()
+        }
     }
 
     fun calculateScore() {
         this.score = (this.winCount * 10 + this.loseCount * -10).toLong()
     }
+
 }
