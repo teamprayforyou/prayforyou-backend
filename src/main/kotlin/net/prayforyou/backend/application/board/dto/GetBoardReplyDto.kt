@@ -8,6 +8,8 @@ import net.prayforyou.backend.global.util.DateUtil
 data class GetBoardReplyDto(
     val id: Long?,
     val content: String,
+    val userId: Long,
+    val boardId: Long,
     val userNickName: String,
     val clanNickName: String? = "무소속",
     val good: Int,
@@ -25,6 +27,8 @@ data class GetBoardReplyDto(
                 userNickName = boardReply.user.nickname!!,
                 clanNickName = boardReply.user.clanId?.clanNickname,
                 good = boardReply.good,
+                userId = boardReply.user.id!!,
+                boardId = boardReply.board.id!!,
                 bad = boardReply.bad,
                 isDeleted = boardReply.isDeleted,
                 createdAt = DateUtil.calculateTimeByBoard(boardReply.createdAt),

@@ -9,6 +9,8 @@ data class GetBoardCommentDto(
     val id: Long?,
     val content: String,
     val good: Int,
+    val boardId: Long,
+    val userId: Long,
     val userNickName: String,
     val clanNickName: String? = "무소속",
     @JsonProperty("isDeleted")
@@ -23,6 +25,8 @@ data class GetBoardCommentDto(
                 id = comment.id,
                 content = comment.content,
                 good = comment.good,
+                boardId = comment.board.id!!,
+                userId = comment.user.id!!,
                 userNickName = comment.user.nickname!!,
                 clanNickName = comment.user.clanId?.clanNickname,
                 isDeleted = comment.isDeleted,

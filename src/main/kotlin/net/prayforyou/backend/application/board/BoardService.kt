@@ -38,6 +38,7 @@ class BoardService(
         val board = boardRepository.findByIdOrNull(boardId) ?: throw NotFoundDataException("존재하지 않는 게시글이에요 😭")
         val comment = boardCommentRepository.findAllByBoardId(board.id!!)
         val reply = boardReplyRepository.findAllByBoardId(board.id!!)
+            .groupBy { it.boardComment.id!! }
         return GetBoardDetailDto.of(board, comment, reply)
     }
 
@@ -62,7 +63,7 @@ class BoardService(
     }
 
     private fun validWriteUser(board: Board, user: User) {
-        if (user != board) {
+        if (user.id != board.user.id) {
             throw ValidationException("유저가 등록한 글이 아닙니다")
         }
     }
@@ -77,5 +78,11 @@ class BoardService(
         validWriteUser(board, user)
 
         board.delete()
+    }
+
+    fun updateView(boardId: Long) {
+        val board = boardRepository.findByIdOrNull(boardId)
+            ?: throw NotFoundDataException()
+        board.updateView()
     }
 }

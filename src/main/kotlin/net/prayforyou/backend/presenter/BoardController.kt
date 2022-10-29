@@ -38,7 +38,7 @@ class BoardController(
         return CommonResponse.convert(true)
     }
 
-    @DeleteMapping("/{boardId}")
+    @PostMapping("/{boardId}")
     fun deleteBoard(
         @PathVariable("boardId") boardId: Long,
         @RequestBody request: DeleteBoardRequest
@@ -87,11 +87,19 @@ class BoardController(
         return CommonResponse.convert(true)
     }
 
-    @DeleteMapping("/reaction")
+    @PostMapping("/reaction")
     fun deleteReaction(
         @RequestBody request: DeleteReactionRequest
     ): CommonResponse<Boolean> {
         boardCommentService.delete(request)
+        return CommonResponse.convert(true)
+    }
+
+    @PostMapping("/{boardId}/view")
+    fun updateView(
+        @PathVariable("boardId") boardId: Long,
+    ): CommonResponse<Boolean> {
+        boardService.updateView(boardId)
         return CommonResponse.convert(true)
     }
 }

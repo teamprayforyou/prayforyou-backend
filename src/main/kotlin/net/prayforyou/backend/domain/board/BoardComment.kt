@@ -76,7 +76,7 @@ class BoardComment(
     }
 
     fun delete(user: User) {
-        if (this.user != user) {
+        if (this.user.id != user.id) {
             throw ValidationException()
         }
 
@@ -84,7 +84,7 @@ class BoardComment(
     }
 
     fun update(user: User, content: String) {
-        if (this.user != user) {
+        if (this.user.id != user.id) {
             throw ValidationException()
         }
 

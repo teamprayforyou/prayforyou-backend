@@ -79,6 +79,10 @@ class Board(
         this.isDeleted = true
     }
 
+    fun updateView() {
+        this.view += 1
+    }
+
     companion object {
         fun of(content: String, title: String, user: User): Board =
             Board(
