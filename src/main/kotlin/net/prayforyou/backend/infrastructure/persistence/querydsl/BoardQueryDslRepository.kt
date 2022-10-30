@@ -42,7 +42,7 @@ class BoardQueryDslRepository(
                 )
                 .from(board)
                 .join(board.user, user)
-                .rightJoin(user.clanId, clan)
+                .leftJoin(user.clanId, clan)
                 .offset(pageable.offset)
                 .limit(pageable.pageSize.toLong())
                 .orderBy(board.createdAt.desc())
