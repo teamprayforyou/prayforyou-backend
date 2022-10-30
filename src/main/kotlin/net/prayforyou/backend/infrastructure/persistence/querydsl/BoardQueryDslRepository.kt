@@ -43,12 +43,11 @@ class BoardQueryDslRepository(
                 .from(board)
                 .join(board.user, user)
                 .rightJoin(user.clanId, clan)
-                .where(board.isDeleted.isFalse)
                 .offset(pageable.offset)
                 .limit(pageable.pageSize.toLong())
                 .orderBy(board.createdAt.desc())
                 .fetchResults()
-        
+
         return PageImpl(result.results, pageable, result.total)
     }
 }
