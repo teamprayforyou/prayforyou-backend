@@ -110,6 +110,11 @@ class User(
         }
     }
 
+    fun updateSignUp(email: String, password: String) {
+        this.email = email
+        this.password = password
+    }
+
     companion object {
         fun from(
             userNick: String? = null,

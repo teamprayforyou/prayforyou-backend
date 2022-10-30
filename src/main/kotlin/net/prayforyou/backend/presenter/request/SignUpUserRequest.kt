@@ -9,8 +9,6 @@ data class SignUpUserRequest(
     val password: String,
     @JsonProperty("rePassword")
     val rePassword: String,
-    @JsonProperty("nickname")
-    val nickname: String,
-    @JsonProperty("clanId")
-    val clanId: String
+    @JsonProperty("userNexonId")
+    val userNexonId: Int
 )

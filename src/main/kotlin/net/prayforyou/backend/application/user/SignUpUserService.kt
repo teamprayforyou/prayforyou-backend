@@ -1,13 +1,8 @@
 package net.prayforyou.backend.application.user
 
-import net.prayforyou.backend.domain.user.UserSignUpRequestEntity
 import net.prayforyou.backend.global.common.exception.NotFoundDataException
-import net.prayforyou.backend.global.common.exception.ValidationException
-import net.prayforyou.backend.infrastructure.persistence.jpa.repository.clan.ClanRepository
 import net.prayforyou.backend.infrastructure.persistence.jpa.repository.user.UserRepository
-import net.prayforyou.backend.infrastructure.persistence.jpa.repository.user.UserSignUpRepository
 import net.prayforyou.backend.presenter.request.SignUpUserRequest
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -16,38 +11,26 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 class SignUpUserService(
     private val validUserService: ValidUserService,
-    private val userSignUpRepository: UserSignUpRepository,
-    private val clanRepository: ClanRepository,
-    private val passwordEncoder: PasswordEncoder
+    private val passwordEncoder: PasswordEncoder,
+    private val userRepository: UserRepository
 ) {
 
     fun signUp(request: SignUpUserRequest) {
         validUserService.checkPassword(request.password, request.rePassword)
+        val user = userRepository.findByUserNexonId(request.userNexonId)
+            ?: throw NotFoundDataException("존재 하지 않는 넥슨 아이디에요 다시 입력해주세요 😭")
 
-        userSignUpRepository.save(
-            UserSignUpRequestEntity.from(
-                request.clanId,
-                request.email,
-                request.nickname,
-                passwordEncoder.encode(request.password)
-            )
+        user.updateSignUp(
+            request.email,
+            passwordEncoder.encode(request.password)
         )
-
-        // TODO 슬랙 메세지 전송
-    }
-
-    fun checkClanById(clanId: String) {
-        clanRepository.findByClanId(clanId) ?:
-        throw NotFoundDataException("클랜이 존재 하지 않습니다. 클랜 ID를 다시 입력해주세요.")
     }
 
     fun checkEmail(email: String) {
         validUserService.checkEmail(email)
     }
 
-    fun userMapping(id: Long) {
-        val signUp = userSignUpRepository.findByIdOrNull(id) ?: throw NotFoundDataException("회원가입 고유번호가 존재하지 않습니다.")
-
-
+    fun checkNexonId(nexonId: Int) {
+        userRepository.findByUserNexonId(nexonId) ?: throw NotFoundDataException("존재 하지 않는 넥슨 아이디에요 다시 입력해주세요 😭")
     }
 }

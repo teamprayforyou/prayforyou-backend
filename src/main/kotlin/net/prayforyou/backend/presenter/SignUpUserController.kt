@@ -19,11 +19,11 @@ class SignUpUserController(
         return CommonResponse.convert(true)
     }
 
-    @GetMapping("/clan")
+    @GetMapping("/nexonId")
     fun checkClanId(
-        @RequestParam("clanId") clanId: String
+        @RequestParam("nexonId") nexonId: Int
     ): CommonResponse<Boolean> {
-        signUpUserService.checkClanById(clanId)
+        signUpUserService.checkNexonId(nexonId)
         return CommonResponse.convert(true)
     }
 
