@@ -8,6 +8,8 @@ data class UserRankingResponse(
     val clanMarkUrl: String? = null,
     val winCount: Int,
     val loseCount: Int,
+    val kill: Int,
+    val death: Int,
     val winLosePercent: Double,
     val killDeath: Double,
     val killPerGame: Double,
@@ -25,7 +27,9 @@ data class UserRankingResponse(
                 winLosePercent = user.winLoosePercent!!,
                 killDeath = user.killDeath!!,
                 killPerGame = user.killPerGame!!,
-                score = user.score!!
+                score = user.score!!,
+                kill = user.killCount ?: 0,
+                death = user.deathCount ?: 0
             )
         }
     }
