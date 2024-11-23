@@ -1,7 +1,5 @@
 package net.prayforyou.backend.application.event
 
-import net.prayforyou.backend.application.battle.GetBattlePositionService
-import net.prayforyou.backend.domain.battle.BattlePlace
 import net.prayforyou.backend.domain.clan.Clan
 import net.prayforyou.backend.domain.clan.enums.ClanLevel
 import net.prayforyou.backend.domain.event.Event
@@ -11,7 +9,6 @@ import net.prayforyou.backend.domain.user.User
 import net.prayforyou.backend.domain.user.UserJson
 import net.prayforyou.backend.infrastructure.persistence.jpa.provider.event.EventProvider
 import net.prayforyou.backend.infrastructure.persistence.jpa.provider.user.UserJsonProvider
-import net.prayforyou.backend.infrastructure.persistence.jpa.repository.battle.BattlePlaceRepository
 import net.prayforyou.backend.infrastructure.persistence.jpa.repository.clan.ClanMatchRepository
 import net.prayforyou.backend.infrastructure.persistence.jpa.repository.clan.ClanMatchUserRepository
 import net.prayforyou.backend.infrastructure.persistence.jpa.repository.clan.ClanRepository
@@ -31,8 +28,6 @@ class EventService(
     private val clanRepository: ClanRepository,
     private val clanMatchRepository: ClanMatchRepository,
     private val clanMatchUserRepository: ClanMatchUserRepository,
-    private val getBattlePositionService: GetBattlePositionService,
-    private val battlePlaceRepository: BattlePlaceRepository,
     private val entityManager: EntityManager
 ) {
 
@@ -337,23 +332,7 @@ class EventService(
                             )
                         )
 
-                        for (killCord in coordinateKill) {
-                            val battlePosition =
-                                getBattlePositionService.getBattlePositionByXandY(killCord.x, killCord.y)
 
-                            val battlePlace =
-                                battlePlaceRepository.save(BattlePlace(null, findUser, battlePosition))
-                            battlePlace.updateKill()
-                        }
-
-                        for (deathCord in coordinateDeath) {
-                            val battlePosition =
-                                getBattlePositionService.getBattlePositionByXandY(deathCord.x, deathCord.y)
-
-                            val battlePlace =
-                                battlePlaceRepository.save(BattlePlace(null, findUser, battlePosition))
-                            battlePlace.updateDeath()
-                        }
 
                     } else {
                         val createUser =
@@ -388,24 +367,6 @@ class EventService(
                                 (killCount * 2 - deathCount * 1 + winCount * 10 - loseCount * 10)
                             )
                         )
-
-                        for (killCord in coordinateKill) {
-                            val battlePosition =
-                                getBattlePositionService.getBattlePositionByXandY(killCord.x, killCord.y)
-
-                            val battlePlace =
-                                battlePlaceRepository.save(BattlePlace(null, createUser, battlePosition))
-                            battlePlace.updateKill()
-                        }
-
-                        for (deathCord in coordinateDeath) {
-                            val battlePosition =
-                                getBattlePositionService.getBattlePositionByXandY(deathCord.x, deathCord.y)
-
-                            val battlePlace =
-                                battlePlaceRepository.save(BattlePlace(null, createUser, battlePosition))
-                            battlePlace.updateDeath()
-                        }
 
                     }
 

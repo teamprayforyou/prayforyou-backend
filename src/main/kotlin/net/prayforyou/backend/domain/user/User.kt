@@ -13,7 +13,7 @@ import javax.persistence.ManyToOne
 import javax.persistence.Table
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 @Where(clause = "is_deleted = 'false'")
 class User(
     @Id

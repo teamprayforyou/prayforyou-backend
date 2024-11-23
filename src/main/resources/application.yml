@@ -1,25 +1,15 @@
 spring:
-
-  # 운영 디비임
   datasource:
-    url: jdbc:mysql://database-1.chz2rw6hxdnq.ap-northeast-2.rds.amazonaws.com:3306/supply?useSSL=false&allowPublicKeyRetrieval=true&tinyInt1isBit=false
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: admin
-    password: rladudtjr1!
-
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE  # 메모리 기반 H2 데이터베이스
+    driver-class-name: org.h2.Driver
+    username: sa  # 기본 사용자 이름
+    password:  # 비밀번호는 비워두어도 됩니다.
+    hikari:
+      maximum-pool-size: 10  # HikariCP 연결 풀 사이즈 설정
+  h2:
+    console:
+      enabled: true  # H2 콘솔 활성화
+      path: /h2-console  # H2 콘솔에 접근할 경로
   jpa:
-    open-in-view: true
-    database-platform: org.hibernate.spatial.dialect.mysql.MySQL8SpatialDialect
     hibernate:
-      # 반드시 none or validate 설정 할것
-      ddl-auto: none
-    show-sql: true
-    properties:
-      hibernate:
-        default_batch_fetch_size: 1000
-      database-platform: org.hibernate.spatial.dialect.mysql.MySQL8SpatialDialect
-
-decorator:
-  datasource:
-    p6spy:
-      enable-logging: false
+      ddl-auto: create  # 애플리케이션 시작 시 데이터베이스 스키마를 자동으로 업데이트

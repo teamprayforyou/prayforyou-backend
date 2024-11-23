@@ -60,6 +60,7 @@ dependencies {
 
     // JSON in MySQL
     implementation("com.vladmihalcea:hibernate-types-52:2.16.2")
+    runtimeOnly("com.h2database:h2")
 
 
     sourceSets.main {
