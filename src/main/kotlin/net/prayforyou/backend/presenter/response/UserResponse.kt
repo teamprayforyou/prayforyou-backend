@@ -25,7 +25,7 @@ data class UserResponse(
                 clanName = user.clanId?.clanNickname
                     ?: "무소속",
                 clanMarkUrl = user.clanId?.clanMarkUrl
-                    ?: "https://prayforyou.s3.ap-northeast-2.amazonaws.com/x+(1).svg"
+                    ?: "https://mark-clan.s3.ap-northeast-2.amazonaws.com/Rotipple+(2).png"
             )
         }
     }

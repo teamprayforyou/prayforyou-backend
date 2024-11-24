@@ -27,7 +27,7 @@ class DateUtil {
         }
 
         fun toDate(date: String): Date {
-            val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+            val formatter = SimpleDateFormat("yyyy.MM.dd (HH:mm)")
             return formatter.parse(date)
         }
 

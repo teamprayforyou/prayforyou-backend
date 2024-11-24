@@ -38,12 +38,7 @@ class EventService(
         val targetUserNickName: String
     )
 
-    data class Coordinate(
-        val x: Double,
-        val y: Double
-    )
-
-    @Scheduled(fixedDelay = 200000)
+    @Scheduled(fixedDelay = 20000000)
     fun process() {
         val findTodoEvents = eventProvider.findTodoEvents()
         val findTodoUserJson = userJsonProvider.findTodoEvents().filter { it.userJson.resultClanUserList != null }
@@ -154,22 +149,6 @@ class EventService(
                         )
                     }
 
-                var coordinateKill =
-                    event.battleLogJson.battleLog!!.filter {
-                        it.event_type == "kill" && it.user_nexon_sn == userNexonIdList.get(
-                            i
-                        )
-                    }
-                        .map { Coordinate(it.kill_x!!, it.kill_y!!) }
-
-                var coordinateDeath =
-                    event.battleLogJson.battleLog!!.filter {
-                        it.event_type == "death" && it.user_nexon_sn == userNexonIdList.get(
-                            i
-                        )
-                    }
-                        .map { Coordinate(it.death_x!!, it.death_y!!) }
-
                 var ripleCount =
                     event.battleLogJson.battleLog!!.count {
                         it.weapon == "riple" && it.user_nexon_sn == userNexonIdList.get(
@@ -197,22 +176,6 @@ class EventService(
                                 i
                             )
                         }
-                    coordinateKill =
-                        event.battleLogJson.battleLog!!.filter {
-                            it.event_type == "kill" && it.target_user_nexon_sn == userNexonIdList.get(
-                                i
-                            )
-                        }
-                            .map { Coordinate(it.kill_x!!, it.kill_y!!) }
-
-                    coordinateDeath =
-                        event.battleLogJson.battleLog!!.filter {
-                            it.event_type == "death" && it.target_user_nexon_sn == userNexonIdList.get(
-                                i
-                            )
-                        }
-                            .map { Coordinate(it.death_x!!, it.death_y!!) }
-
                     ripleCount =
                         event.battleLogJson.battleLog!!.count {
                             it.target_weapon == "riple" && it.target_user_nexon_sn == userNexonIdList.get(
@@ -420,7 +383,7 @@ class EventService(
                     0,
                     findTodoEvent.matchTime,
                     findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
-                    findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!,
+                    findTodoEvent.matchTime,
                     false
                 )
             } else if (findTodoEvent.matchJson.matchResultDataInfo.red_result.equals("lose")) {
@@ -439,7 +402,7 @@ class EventService(
                     0,
                     findTodoEvent.matchTime,
                     findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
-                    findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!,
+                    "time",
                     false
                 )
             }
@@ -460,7 +423,7 @@ class EventService(
                     0,
                     findTodoEvent.matchTime,
                     findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
-                    findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!,
+                    "time",
                     false
                 )
             } else if (findTodoEvent.matchJson.matchResultDataInfo.blue_result.equals("lose")) {
@@ -479,7 +442,7 @@ class EventService(
                     0,
                     findTodoEvent.matchTime,
                     findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
-                    findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!,
+                    "time",
                     false
                 )
             }
@@ -503,7 +466,7 @@ class EventService(
                     0,
                     findTodoEvent.matchTime,
                     findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
-                    findTodoEvent.matchJson.parseData.MatchData!!.M_CLAN_match_time!!,
+                    "time",
                     true
                 )
             }

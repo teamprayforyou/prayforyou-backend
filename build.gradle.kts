@@ -33,6 +33,8 @@ dependencies {
 
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    testImplementation("org.springframework.security:spring-security-test")
     runtimeOnly("mysql:mysql-connector-java")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
@@ -42,8 +44,6 @@ dependencies {
     implementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.0")
 
     implementation("org.hibernate:hibernate-spatial:5.6.2.Final")
-
-    implementation("org.springframework.boot:spring-boot-starter-security")
 
     implementation("com.querydsl:querydsl-jpa")
     kapt(group = "com.querydsl", name = "querydsl-apt", classifier = "jpa")
@@ -60,7 +60,7 @@ dependencies {
 
     // JSON in MySQL
     implementation("com.vladmihalcea:hibernate-types-52:2.16.2")
-    runtimeOnly("com.h2database:h2")
+    runtimeOnly("com.mysql:mysql-connector-j")
 
 
     sourceSets.main {

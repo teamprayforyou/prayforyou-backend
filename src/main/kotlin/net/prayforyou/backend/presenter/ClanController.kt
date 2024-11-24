@@ -17,11 +17,7 @@ import net.prayforyou.backend.presenter.response.RedTeam
 import net.prayforyou.backend.presenter.response.User
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/clan")
@@ -31,10 +27,11 @@ class ClanController(
 ) {
 
     @GetMapping("/list")
+    @CrossOrigin(origins = ["*"])  // 모든 도메인에 대해 CORS 허용
     fun getClanList(): MutableList<ClanListResponse> {
         val clanListResponse: MutableList<ClanListResponse> = mutableListOf()
         for (clan in clanService.findAll()) {
-            clanListResponse.add(ClanListResponse(clan.clanId, clan.clanName))
+            clanListResponse.add(ClanListResponse(clan.clanName, clan.clanNickname, clan.clanId))
         }
 
         return clanListResponse

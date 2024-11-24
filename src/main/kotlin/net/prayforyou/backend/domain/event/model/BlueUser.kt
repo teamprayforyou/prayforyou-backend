@@ -1,5 +1,8 @@
 package net.prayforyou.backend.domain.event.model
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 class BlueUser(
     val assist: Int?,
     val damage: String?,
