@@ -60,7 +60,7 @@ dependencies {
 
     // JSON in MySQL
     implementation("com.vladmihalcea:hibernate-types-52:2.16.2")
-    runtimeOnly("com.mysql:mysql-connector-j")
+    runtimeOnly("com.mysql:mysql-connector-j:8.0.30")
 
 
     sourceSets.main {
@@ -80,3 +80,5 @@ tasks.withType<KotlinCompile> {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
+
