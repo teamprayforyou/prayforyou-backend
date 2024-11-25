@@ -383,7 +383,7 @@ class EventService(
                     0,
                     findTodoEvent.matchTime,
                     findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
-                    findTodoEvent.matchTime,
+                    findTodoEvent.matchJson.matchResultDataInfo.match_time!!,
                     false
                 )
             } else if (findTodoEvent.matchJson.matchResultDataInfo.red_result.equals("lose")) {
@@ -402,7 +402,7 @@ class EventService(
                     0,
                     findTodoEvent.matchTime,
                     findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
-                    findTodoEvent.matchTime,
+                    findTodoEvent.matchJson.matchResultDataInfo.match_time!!,
                     false
                 )
             }
@@ -423,7 +423,7 @@ class EventService(
                     0,
                     findTodoEvent.matchTime,
                     findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
-                    findTodoEvent.matchTime,
+                    findTodoEvent.matchJson.matchResultDataInfo.match_time!!,
                     false
                 )
             } else if (findTodoEvent.matchJson.matchResultDataInfo.blue_result.equals("lose")) {
@@ -442,7 +442,7 @@ class EventService(
                     0,
                     findTodoEvent.matchTime,
                     findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
-                    findTodoEvent.matchTime,
+                    findTodoEvent.matchJson.matchResultDataInfo.match_time!!,
                     false
                 )
             }
@@ -466,7 +466,7 @@ class EventService(
                     0,
                     findTodoEvent.matchTime,
                     findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
-                    findTodoEvent.matchTime,
+                    findTodoEvent.matchJson.matchResultDataInfo.match_time!!,
                     true
                 )
             }
