@@ -48,6 +48,8 @@ class UserController(
             userRankingResponse.add(UserRankingResponse.from(user))
         }
 
+
+
         return PageResponse.convert(userRankingResponse, users.isLast, users.totalPages)
     }
 

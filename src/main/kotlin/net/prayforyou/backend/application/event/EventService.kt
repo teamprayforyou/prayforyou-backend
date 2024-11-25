@@ -402,7 +402,7 @@ class EventService(
                     0,
                     findTodoEvent.matchTime,
                     findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
-                    "time",
+                    findTodoEvent.matchTime,
                     false
                 )
             }
@@ -423,7 +423,7 @@ class EventService(
                     0,
                     findTodoEvent.matchTime,
                     findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
-                    "time",
+                    findTodoEvent.matchTime,
                     false
                 )
             } else if (findTodoEvent.matchJson.matchResultDataInfo.blue_result.equals("lose")) {
@@ -442,7 +442,7 @@ class EventService(
                     0,
                     findTodoEvent.matchTime,
                     findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
-                    "time",
+                    findTodoEvent.matchTime,
                     false
                 )
             }
@@ -466,7 +466,7 @@ class EventService(
                     0,
                     findTodoEvent.matchTime,
                     findTodoEvent.battleLogJson.battleLog!!.last().event_time!!,
-                    "time",
+                    findTodoEvent.matchTime,
                     true
                 )
             }
