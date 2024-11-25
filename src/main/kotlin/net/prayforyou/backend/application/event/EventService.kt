@@ -38,7 +38,7 @@ class EventService(
         val targetUserNickName: String
     )
 
-    @Scheduled(fixedDelay = 20000000)
+    @Scheduled(fixedDelay = 1000 * 60 * 20)
     fun process() {
         val findTodoEvents = eventProvider.findTodoEvents()
         val findTodoUserJson = userJsonProvider.findTodoEvents().filter { it.userJson.resultClanUserList != null }
