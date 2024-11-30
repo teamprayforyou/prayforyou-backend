@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Active Users</title>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
+</head>
+<body>
+<h1>WebSocket Active Users</h1>
+<button id="connectBtn">Connect</button>
+<button id="disconnectBtn">Disconnect</button>
+<p>현재 동접자 수: <span id="activeUsers">0</span></p>
+
+<script>
+    let stompClient = null;
+
+    function connect() {
+        // WebSocket 연결 설정
+        const socket = new SockJS('/ws'); // Spring Boot의 WebSocket 엔드포인트
+        stompClient = Stomp.over(socket);
+
+        stompClient.connect({}, function (frame) {
+            console.log('WebSocket 연결 성공:', frame);
+
+            // 서버에서 동접자 수 메시지를 구독
+            stompClient.subscribe('/topic/active-users', function (message) {
+                updateActiveUsers(message.body);
+            });
+        });
+    }
+
+    function disconnect() {
+        if (stompClient !== null) {
+            stompClient.disconnect();
+        }
+        console.log("WebSocket 연결 종료");
+    }
+
+    function updateActiveUsers(activeUsers) {
+        document.getElementById('activeUsers').innerText = activeUsers;
+    }
+
+    document.getElementById('connectBtn').addEventListener('click', connect);
+    document.getElementById('disconnectBtn').addEventListener('click', disconnect);
+</script>
+</body>
+</html>
