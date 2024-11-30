@@ -22,7 +22,8 @@ class SecurityConfig(
             "/season/**",
             "/user/**",
             // TODO 글쓰기는 막을 것
-            "/board/**"
+            "/board/**",
+            "/active-users"
         )
     }
 
