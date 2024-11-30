@@ -40,15 +40,16 @@ class EventService(
 
     @Scheduled(fixedDelay = 1000 * 60 * 20)
     fun process() {
+        // 처리할 데이터들 setup
         val findTodoEvents = eventProvider.findTodoEvents()
         val findTodoUserJson = userJsonProvider.findTodoEvents().filter { it.userJson.resultClanUserList != null }
+        val findAllUser = userRepository.findAll()
+        val findAllClan = clanRepository.findAll()
 
+        // 배치 Task가 없다면 종료
         if (findTodoEvents.isEmpty()) {
             return
         }
-
-        val findAllUser = userRepository.findAll()
-        val findAllClan = clanRepository.findAll()
 
         saveGameNotPlayUser(findTodoUserJson, findAllUser, findAllClan)
 
@@ -261,7 +262,9 @@ class EventService(
                     winCount++
                     loseCount = 0
                 }
-
+                println("===")
+                println(event.matchKey.toLong())
+                println("===")
                 val findClanMatch =
                     clanMatchRepository.findByMatchId(event.matchKey.toLong())
 
@@ -502,7 +505,7 @@ class EventService(
                 // 새로 가입한 유저 저장하기
                 saveUserList.addAll(newUser.map {
                     User.initialUser(
-                        findAllClan.find { clan -> todo.clanId.toString() == clan.clanId },
+                        findAllClan.find { clan -> todo.clanId == clan.clanId },
                         it.user_nexon_sn!!,
                         it.user_nick!!
                     )
@@ -520,8 +523,8 @@ class EventService(
                         }
 
                         if (findUserJson != null) {
-                            if (user.clanId?.clanId != findUserJson.clanId.toString()) {
-                                user.clanId = findAllClan.find { clan -> findUserJson.clanId.toString() == clan.clanId }
+                            if (user.clanId?.clanId != findUserJson.clanId) {
+                                user.clanId = findAllClan.find { clan -> findUserJson.clanId == clan.clanId }
                                 userRepository.save(user)
                             }
                         }

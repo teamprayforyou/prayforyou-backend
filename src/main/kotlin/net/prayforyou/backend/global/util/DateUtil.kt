@@ -68,6 +68,8 @@ class DateUtil {
         fun calculateTime(date: Date): String? {
             val curTime = System.currentTimeMillis()
             val regTime: Long = date.time
+            println(curTime)
+            println(date.toString())
             var diffTime = (curTime - regTime) / 1000
             var msg: String? = null
             if (diffTime < TIME_MAXIMUM.SEC) {
@@ -88,6 +90,7 @@ class DateUtil {
             } else {
                 msg = diffTime.toString() + "년 전"
             }
+            println(msg)
             return msg
         }
 

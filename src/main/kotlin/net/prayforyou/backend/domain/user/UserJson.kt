@@ -26,7 +26,7 @@ class UserJson (
 
     val createdAt: LocalDateTime,
 
-    val clanId: Long,
+    val clanId: String,
 
     var todo: Boolean
 )
