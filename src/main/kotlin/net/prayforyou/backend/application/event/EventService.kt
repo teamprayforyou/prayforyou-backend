@@ -38,7 +38,7 @@ class EventService(
         val targetUserNickName: String
     )
 
-    @Scheduled(fixedDelay = 1000 * 60 * 20)
+//    @Scheduled(fixedDelay = 1000 * 60 * 20)
     fun process() {
         // 처리할 데이터들 setup
         val findTodoEvents = eventProvider.findTodoEvents()
@@ -48,6 +48,7 @@ class EventService(
 
         // 배치 Task가 없다면 종료
         if (findTodoEvents.isEmpty()) {
+            println("작업할 task 없음 종료")
             return
         }
 
@@ -57,6 +58,7 @@ class EventService(
         entityManager.clear()
 
         if (findTodoEvents.isEmpty()) {
+            println("작업할 task 없음 종료")
             return
         }
 
@@ -68,6 +70,7 @@ class EventService(
         processGame(p4uGameList)
 
         finishBatchTask()
+        println("배치 1회 종료")
     }
 
     private fun finishBatchTask(
@@ -251,6 +254,7 @@ class EventService(
                     playerTeamNo = loseTeamNo!!
                 }
 
+                println(userNexonIdList.get(i))
                 val findUser = userRepository.findByUserNexonId(userNexonIdList.get(i))
 
                 var winlosePercent = 0.0
